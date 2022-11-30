@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ExerciseProviderService} from '../Services/Api/exercise-provider.service';
 
 @Component({
   selector: 'app-work-outs',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./work-outs.page.scss'],
 })
 export class WorkOutsPage implements OnInit {
+// public Exercises = new  Observable<ExerciseType[]>;
 
-  constructor() { }
+  constructor(private exerciseProviderService: ExerciseProviderService) {
 
-  ngOnInit() {
   }
+
+ async ngOnInit() {
+  // this.Exercises = this.exerciseProviderService.getExercises('','','chest','Beginner');
+
+ }
 
 }
