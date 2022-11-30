@@ -9,6 +9,18 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+  },
+  {
+    path: 'progress',
+    loadChildren: () => import('./progress/progress.module').then( m => m.ProgressPageModule)
+  },
+  {
+    path: 'work-outs',
+    loadChildren: () => import('./work-outs/work-outs.module').then( m => m.WorkOutsPageModule)
+  },
+  {
+    path: 'insight',
+    loadChildren: () => import('./insight/insight.module').then( m => m.InsightPageModule)
   }
 ];
 @NgModule({

@@ -8,27 +8,27 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'HomeTab',
-        loadChildren: () => import('../home/home.module').then(m => m.HomePageModule)
+        path: 'WorkoutTab',
+        loadChildren: () => import('../work-outs/work-outs.module').then(m => m.WorkOutsPageModule)
       },
       {
-        path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+        path: 'ProgressTab',
+        loadChildren: () => import('../progress/progress.module').then(m => m.ProgressPageModule)
       },
       {
-        path: 'tab3',
-        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+        path: 'InsightTab',
+        loadChildren: () => import('../insight/insight.module').then(m => m.InsightPageModule)
       },
       {
         path: '',
-        redirectTo: '/tabs/HomeTab',
+        redirectTo: '/tabs/WorkoutTab',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/HomeTab',
+    redirectTo: '/tabs/WorkoutTab',
     pathMatch: 'full'
   }
 ];
