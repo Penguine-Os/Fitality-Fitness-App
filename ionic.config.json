@@ -1,0 +1,7 @@
+{
+  "name": "Fitality",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
