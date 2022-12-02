@@ -1,9 +1,31 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Work-Outs</ion-title>
-  </ion-toolbar>
-</ion-header>
 
+    <ion-title>Work-Outs</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['create-workout']">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+<ion-list>
+  <ion-item>
+    <ion-button>Workout-Routine 1</ion-button>
+  </ion-item>
+  <ion-item>
+    <ion-button>Workout-Routine 2</ion-button>
+  </ion-item>
+  <ion-item>
+    <ion-button>Workout-Routine 3</ion-button>
+  </ion-item>
+  <ion-item>
+    <ion-button>Custom Workout-Routine</ion-button>
+  </ion-item>
+
+</ion-list>
 <ion-content>
 
 </ion-content>

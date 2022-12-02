@@ -1,6 +1,7 @@
 import {ExerciseType} from './ExerciseType';
 
 export interface WorkoutExercise{
+  id: string;
   workoutExercise: ExerciseType;
   sets: number;
   reps: number;

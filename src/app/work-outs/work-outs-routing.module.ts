@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: WorkOutsPage
+  },
+  {
+    path: 'create-workout',
+    loadChildren: () => import('./create-workout/create-workout.module').then( m => m.CreateWorkoutPageModule)
   }
 ];
 

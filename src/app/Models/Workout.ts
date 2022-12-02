@@ -1,6 +1,7 @@
-import {WorkoutExercise} from './WorkoutExercis';
+import {WorkoutExercise} from './WorkoutExercise';
 
 export interface Workout {
+  id: string
   name: string;
   exercises: WorkoutExercise[];
   progressiveOverload: number;
