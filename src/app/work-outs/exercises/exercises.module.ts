@@ -8,14 +8,17 @@ import { ExercisesPageRoutingModule } from './exercises-routing.module';
 
 import { ExercisesPage } from './exercises.page';
 import {FetchExerciseModalComponent} from '../../Components/fetch-exercise-modal/fetch-exercise-modal.component';
+import {ExerciseItemComponent} from '../../Components/exercise-item/exercise-item.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ExercisesPageRoutingModule
+    ExercisesPageRoutingModule,
+    DragDropModule
   ],
-    declarations: [ExercisesPage, FetchExerciseModalComponent]
+  declarations: [ExercisesPage, FetchExerciseModalComponent, ExerciseItemComponent]
 })
 export class ExercisesPageModule {}

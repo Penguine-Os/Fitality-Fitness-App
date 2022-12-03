@@ -11,11 +11,7 @@
 </ion-header>
 
 <ion-content>
-
-
   <ion-list>
-
-
     <ion-item>
       <ion-select placeholder="Select a muscle group"
                   (ionChange)="onMuscleChanged($event)">
@@ -38,8 +34,28 @@
     <ion-button class="ion-margin"
                 fill="outline"
                 (click)="fetchHandler()"
-                expand="block">Look for exercises</ion-button>
+                expand="block">Look for fetchedExercises</ion-button>
   </ion-list>
 
+<ion-item>
+<ion-list  cdkDropList
+           #chosenList="cdkDropList"
+           [cdkDropListData]="exercises"
+           [cdkDropListConnectedTo]="[fetchedList]"
+           (cdkDropListDropped)="dropHandler($event)">
+  <ion-list-header>
+  <ion-label>Drag the fetchedExercises you want to add to your workout</ion-label>
+</ion-list-header>
+
+  <app-exercise-item *ngFor="let exercise of exercises " cdkDrag [exercise]="exercise" ></app-exercise-item>
+</ion-list>
+</ion-item>
+
+<ion-list cdkDropList
+          [cdkDropListData]="fetchedExercises"
+          [cdkDropListConnectedTo]="[chosenList]"
+          #fetchedList="cdkDropList">
+  <app-exercise-item *ngFor="let exercise of fetchedExercises " cdkDrag [exercise]="exercise" ></app-exercise-item>
+</ion-list>
 
 </ion-content>

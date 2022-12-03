@@ -7,11 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: WorkOutsPage
-  },
-  {
-    path: 'create-workout',
-    loadChildren: () => import('./create-workout/create-workout.module').then( m => m.CreateWorkoutPageModule)
+  },  {
+    path: 'exercises',
+    loadChildren: () => import('./exercises/exercises.module').then( m => m.ExercisesPageModule)
   }
+
 ];
 
 @NgModule({

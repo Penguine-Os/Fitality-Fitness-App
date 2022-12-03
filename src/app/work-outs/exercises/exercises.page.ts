@@ -4,7 +4,7 @@ import {FetchExerciseModalComponent} from '../../Components/fetch-exercise-modal
 import {ModalController} from '@ionic/angular';
 
 @Component({
-  selector: 'app-exercises',
+  selector: 'app-fetchedExercises',
   templateUrl: './exercises.page.html',
   styleUrls: ['./exercises.page.scss'],
 })

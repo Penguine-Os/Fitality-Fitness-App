@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>exercises</ion-title>
+    <ion-title>fetchedExercises</ion-title>
     <ion-buttons slot="end">
-      <ion-button >
+      <ion-button (click)="openModal()" >
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -13,9 +13,9 @@
 <ion-content>
   <ion-list>
     <ion-list-header>
-      <ion-label>Select exercises</ion-label>
+      <ion-label>Select fetchedExercises</ion-label>
       <ion-button>See All</ion-button>
     </ion-list-header>
-    <ion-item></ion-item>
+    <ion-item *ngFor="let exercise of exercises">{{exercise.name}}</ion-item>
   </ion-list>
 </ion-content>

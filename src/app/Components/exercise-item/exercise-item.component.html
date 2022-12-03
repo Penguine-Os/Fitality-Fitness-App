@@ -1,3 +1,19 @@
-<p>
-  exercise-item works!
-</p>
+<ion-item-sliding>
+
+  <ion-item-options side='start'>
+    <ion-item-option color='success' >
+      <ion-icon slot="icon-only" name='add-circle-outline'></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+
+  <ion-item>
+    <ion-label >
+      {{exercise?.name}}
+    </ion-label>
+
+<!--    <ion-icon  name='checkmark-circle' color='success' ></ion-icon>-->
+    <!--    <ion-icon *ngIf='!task.done' name='checkmark'-->
+    <!--              (click)='tskService.toggleTaskStatus(task.id)'></ion-icon>-->
+  </ion-item>
+
+</ion-item-sliding>
