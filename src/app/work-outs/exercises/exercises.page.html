@@ -16,6 +16,15 @@
       <ion-label>Select fetchedExercises</ion-label>
       <ion-button>See All</ion-button>
     </ion-list-header>
-    <ion-item *ngFor="let exercise of exercises">{{exercise.name}}</ion-item>
+
+<!--    <ion-accordion-group  [multiple]="true">-->
+<!--      <ion-accordion *ngFor="let workoutEx of workoutExercises" [value]="workoutEx">-->
+<!--        <ion-item slot="header" color="light">-->
+<!--          <ion-label>{{workoutEx.workoutExercise.name}}</ion-label>-->
+<!--        </ion-item>-->
+<!--        <div class="ion-padding" slot="content">First Content</div>-->
+<!--      </ion-accordion>-->
+<!--    </ion-accordion-group>-->
+
   </ion-list>
 </ion-content>

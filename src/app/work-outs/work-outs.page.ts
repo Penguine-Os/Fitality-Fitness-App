@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ExerciseProviderService} from '../Services/Api/exercise-provider.service';
 
+
 @Component({
   selector: 'app-work-outs',
   templateUrl: './work-outs.page.html',

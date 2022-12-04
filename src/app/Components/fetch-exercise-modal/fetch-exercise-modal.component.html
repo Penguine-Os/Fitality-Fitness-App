@@ -37,19 +37,21 @@
                 expand="block">Look for fetchedExercises</ion-button>
   </ion-list>
 
-<ion-item>
+
 <ion-list  cdkDropList
            #chosenList="cdkDropList"
            [cdkDropListData]="exercises"
            [cdkDropListConnectedTo]="[fetchedList]"
            (cdkDropListDropped)="dropHandler($event)">
   <ion-list-header>
-  <ion-label>Drag the fetchedExercises you want to add to your workout</ion-label>
-</ion-list-header>
+    <ion-label>Drag the fetchedExercises you want to add to your workout</ion-label>
+  </ion-list-header>
 
-  <app-exercise-item *ngFor="let exercise of exercises " cdkDrag [exercise]="exercise" ></app-exercise-item>
+  <ion-img *ngIf="exercises.length===0" src="assets/images/placeholder.jpg"></ion-img>
+
+  <app-exercise-item *ngFor="let exercise of exercises " cdkDrag [lblColor]="lblColorSuccess" [exercise]="exercise" ></app-exercise-item>
 </ion-list>
-</ion-item>
+
 
 <ion-list cdkDropList
           [cdkDropListData]="fetchedExercises"

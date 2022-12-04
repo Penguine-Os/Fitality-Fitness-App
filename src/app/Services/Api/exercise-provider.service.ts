@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ExerciseType} from '../../Models/ExerciseType';
 import {environment} from '../../../environments/environment';
+import {WorkoutEx} from '../../Models/WorkoutEx';
 @Injectable({
   providedIn: 'root'
 })
@@ -34,4 +35,28 @@ export class ExerciseProviderService {
     )
 
    }
+
+
+  getExercisesV2  (name: string = '',
+                 type: string= '',
+                 muscle: string = '',
+                 difficulty: string = ''): Observable<WorkoutEx<ExerciseType>[]> {
+    return  this.httpClient.get<WorkoutEx<ExerciseType>[]>(
+      this.baseUrl,
+      {
+        responseType: 'json',
+        params: {
+          name,
+          type,
+          muscle,
+          difficulty
+        },
+        headers: {
+          'X-Api-Key': `${environment.exerciseApi_Key}`
+        },
+      }
+
+    ).pipe()
+
+  }
 }

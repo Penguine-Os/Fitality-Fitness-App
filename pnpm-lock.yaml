@@ -29,6 +29,7 @@ specifiers:
   '@types/node': ^12.11.1
   '@typescript-eslint/eslint-plugin': 5.3.0
   '@typescript-eslint/parser': 5.3.0
+  add: ^2.0.6
   eslint: ^7.6.0
   eslint-plugin-import: 2.22.1
   eslint-plugin-jsdoc: 30.7.6
@@ -42,10 +43,12 @@ specifiers:
   karma-coverage-istanbul-reporter: ~3.0.2
   karma-jasmine: ~5.1.0
   karma-jasmine-html-reporter: ~2.0.0
+  pnpm: ^7.18.0
   rxjs: ~7.5.0
   ts-node: ~8.3.0
   tslib: ^2.3.0
   typescript: ~4.8.4
+  uuid: ^9.0.0
   zone.js: ~0.11.4
 
 dependencies:
@@ -62,9 +65,12 @@ dependencies:
   '@capacitor/keyboard': 4.1.0_@capacitor+core@4.5.0
   '@capacitor/status-bar': 4.1.0_@capacitor+core@4.5.0
   '@ionic/angular': 6.3.8_yxxfmwx6dxmdn33d5vi23n3zwu
+  add: 2.0.6
   ionicons: 6.0.4
+  pnpm: 7.18.0
   rxjs: 7.5.7
   tslib: 2.4.1
+  uuid: 9.0.0
   zone.js: 0.11.8
 
 devDependencies:
@@ -2757,6 +2763,10 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
+
+  /add/2.0.6:
+    resolution: {integrity: sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==}
+    dev: false
 
   /adjust-sourcemap-loader/4.0.0:
     resolution: {integrity: sha512-OXwN5b9pCUXNQHJpwwD2qP40byEmSgzj8B4ydSN0uMNYWiFmJ6x6KwUllMmfk8Rwu/HJDFR7U8ubsWBoN0Xp0A==}
@@ -6804,6 +6814,12 @@ packages:
       xmlbuilder: 15.1.1
     dev: true
 
+  /pnpm/7.18.0:
+    resolution: {integrity: sha512-igZRB0ip8cn9f1glYzsPTJblxQcidY7/fSfJ++j6GYLT0pqIlijsdW9ZI4Waaxhi22SC4HZHe5vMiSa2IKoIoA==}
+    engines: {node: '>=14.6'}
+    hasBin: true
+    dev: false
+
   /postcss-loader/7.0.1_upg3rk2kpasnbk27hkqapxaxfq:
     resolution: {integrity: sha512-VRviFEyYlLjctSM93gAZtcJJ/iSkPZ79zWbN/1fSH+NisBByEiVLqpdVDrPLVSi8DX0oJo12kL/GppTBdKVXiQ==}
     engines: {node: '>= 14.15.0'}
@@ -8065,6 +8081,11 @@ packages:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
     dev: true
+
+  /uuid/9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: false
 
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}

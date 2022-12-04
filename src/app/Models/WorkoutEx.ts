@@ -1,9 +1,8 @@
-import {ExerciseType} from './ExerciseType';
 
-export interface WorkoutExercise{
+export interface WorkoutEx<T>{
   id: string;
   name: string;
-  workoutExercise: ExerciseType;
+  workoutExercise: T;
   sets: number;
   reps: number;
   weight: number;

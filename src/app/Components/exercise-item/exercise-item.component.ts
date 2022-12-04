@@ -8,6 +8,7 @@ import {ExerciseType} from '../../Models/ExerciseType';
 })
 export class ExerciseItemComponent implements OnInit {
   @Input() exercise: ExerciseType | undefined;
+  @Input() lblColor: string | undefined;
   constructor() { }
 
   ngOnInit() {}

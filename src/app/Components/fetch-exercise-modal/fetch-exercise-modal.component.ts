@@ -6,7 +6,7 @@ import {Subscription} from 'rxjs';
 import {ModalController} from '@ionic/angular';
 import {ExerciseProviderService} from '../../Services/Api/exercise-provider.service';
 import {ExerciseType} from '../../Models/ExerciseType';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-fetch-exercise-modal',
@@ -14,6 +14,7 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
   styleUrls: ['./fetch-exercise-modal.component.scss'],
 })
 export class FetchExerciseModalComponent implements OnInit {
+  lblColorSuccess = 'success'
   exercisesAreFetched = false;
   name: string = '';
   muscles = Object.keys(Muscle).map(x => {
@@ -102,6 +103,6 @@ export class FetchExerciseModalComponent implements OnInit {
       );
     }
 
-    console.log(this.exercises)
+
   }
 }
