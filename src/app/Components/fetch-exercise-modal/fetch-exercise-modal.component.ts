@@ -15,7 +15,7 @@ import { moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 })
 export class FetchExerciseModalComponent implements OnInit {
   lblColorSuccess = 'success'
-  exercisesAreFetched = false;
+  exercisesAreFetched = true;
   name: string = '';
   muscles = Object.keys(Muscle).map(x => {
 
@@ -70,7 +70,7 @@ export class FetchExerciseModalComponent implements OnInit {
 
   confirm() {
     console.log(this.exercisesAreFetched)
-    return this.modalCtrl.dismiss(this.fetchedExercises, 'confirm');
+    return this.modalCtrl.dismiss(this.exercises, 'confirm');
   }
 
   onDifficultyChanged(ev: any) {

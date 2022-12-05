@@ -34,30 +34,31 @@
     <ion-button class="ion-margin"
                 fill="outline"
                 (click)="fetchHandler()"
-                expand="block">Look for fetchedExercises</ion-button>
+                expand="block">Look For Exercises</ion-button>
   </ion-list>
 
-
-<ion-list  cdkDropList
+  <div class="chosenContainer">
+<ion-list  class="overlayContainer"
+           cdkDropList
            #chosenList="cdkDropList"
            [cdkDropListData]="exercises"
            [cdkDropListConnectedTo]="[fetchedList]"
            (cdkDropListDropped)="dropHandler($event)">
-  <ion-list-header>
-    <ion-label>Drag the fetchedExercises you want to add to your workout</ion-label>
-  </ion-list-header>
 
-  <ion-img *ngIf="exercises.length===0" src="assets/images/placeholder.jpg"></ion-img>
+  <ion-img *ngIf="exercises.length===0" src="assets/images/drag&drop.png"></ion-img>
 
-  <app-exercise-item *ngFor="let exercise of exercises " cdkDrag [lblColor]="lblColorSuccess" [exercise]="exercise" ></app-exercise-item>
+
+  <app-exercise-item  class="overlayList" *ngFor="let exercise of exercises " cdkDrag [lblColor]="lblColorSuccess" [exercise]="exercise" ></app-exercise-item>
 </ion-list>
+  </div>
+
+  <ion-list cdkDropList
+            [cdkDropListData]="fetchedExercises"
+            [cdkDropListConnectedTo]="[chosenList]"
+            #fetchedList="cdkDropList">
+    <app-exercise-item *ngFor="let exercise of fetchedExercises " cdkDrag [exercise]="exercise" ></app-exercise-item>
+  </ion-list>
 
 
-<ion-list cdkDropList
-          [cdkDropListData]="fetchedExercises"
-          [cdkDropListConnectedTo]="[chosenList]"
-          #fetchedList="cdkDropList">
-  <app-exercise-item *ngFor="let exercise of fetchedExercises " cdkDrag [exercise]="exercise" ></app-exercise-item>
-</ion-list>
 
 </ion-content>
