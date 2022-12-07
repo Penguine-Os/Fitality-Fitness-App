@@ -1,0 +1,12 @@
+<ion-row >
+  <ion-item>
+    <ion-label class="ion-text-wrap">{{propertyName}}</ion-label>
+    <ion-input slot="end" [ngClass]="{'invalid' : propertyValue<= 0}" [value]="propertyValue"></ion-input>
+    <ion-button slot="end" (click)="increaseClickHandler()">
+      <ion-icon slot="icon-only" name='add-circle-outline'></ion-icon>
+    </ion-button>
+    <ion-button slot="end"  (click)="decreaseClickHandler()">
+      <ion-icon slot="icon-only" name='remove-circle-outline'></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-row>
