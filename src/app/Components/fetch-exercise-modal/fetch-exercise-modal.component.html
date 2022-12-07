@@ -41,14 +41,14 @@
 <ion-list  class="overlayContainer"
            cdkDropList
            #chosenList="cdkDropList"
-           [cdkDropListData]="exercises"
+           [cdkDropListData]="chosenExercises"
            [cdkDropListConnectedTo]="[fetchedList]"
            (cdkDropListDropped)="dropHandler($event)">
 
-  <ion-img *ngIf="exercises.length===0" src="assets/images/drag&drop.png"></ion-img>
+  <ion-img *ngIf="chosenExercises.length===0" src="assets/images/drag&drop.png"></ion-img>
 
 
-  <app-exercise-item  class="overlayList" *ngFor="let exercise of exercises " cdkDrag [lblColor]="lblColorSuccess" [exercise]="exercise" ></app-exercise-item>
+  <app-exercise-item  class="overlayList" *ngFor="let exercise of chosenExercises " cdkDrag [lblColor]="lblColorSuccess" [exercise]="exercise" ></app-exercise-item>
 </ion-list>
   </div>
 

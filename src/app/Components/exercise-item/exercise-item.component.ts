@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ExerciseType} from '../../Models/ExerciseType';
+import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 
 @Component({
   selector: 'app-exercise-item',
@@ -9,8 +10,10 @@ import {ExerciseType} from '../../Models/ExerciseType';
 export class ExerciseItemComponent implements OnInit {
   @Input() exercise: ExerciseType | undefined;
   @Input() lblColor: string | undefined;
-  constructor() { }
+  constructor(private stateManagerService: WorkoutExerciseStateManagerService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+  }
 
 }

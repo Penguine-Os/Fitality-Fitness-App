@@ -1,7 +1,6 @@
 export enum Muscle {
   abdominals = 'abdominals',
   abductors = 'abductors',
-  adductors = 'adductors',
   biceps = 'biceps',
   calves = 'calves',
   chest = 'chest',

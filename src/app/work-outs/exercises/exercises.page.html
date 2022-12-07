@@ -5,6 +5,9 @@
       <ion-button (click)="openModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
+      <ion-button *ngIf="workoutExercises.length>0" (click)="openModal()">
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -19,60 +22,30 @@
 
     <ion-item-sliding *ngFor="let workoutEx of workoutExercises">
       <ion-item-options side="start">
-        <ion-item-option color="success">
+        <ion-item-option color="danger"  (click)='removeWorkOutExerciseHandler(workoutEx.workoutExercise)'>
           <ion-icon slot="icon-only" name="trash"></ion-icon>
         </ion-item-option>
       </ion-item-options>
 
 
-      <ion-accordion-group >
-        <ion-accordion [value]="workoutEx">
+      <ion-accordion-group (ionChange)="accordionHandler($event)">
+        <ion-accordion>
           <ion-item slot="header" color="light">
             <ion-label>{{workoutEx.workoutExercise.name}}</ion-label>
           </ion-item>
+          <ion-grid slot="content">
+            <app-workout-exercise-input [propertyName]="('Sets:')"
+                                        [propertyValue]="workoutEx.sets"></app-workout-exercise-input>
 
-          <ion-item slot="content">
-            <ion-grid>
-              <ion-row>
-                <ion-item>
-                  <ion-label>Sets:</ion-label>
-                  <ion-input slot="end" [value]="workoutEx.sets" ></ion-input>
-                  <ion-button slot="end" (click)="increaseSetsHandler('sets',workoutEx)">
-                    <ion-icon slot="icon-only" name='add-circle-outline'></ion-icon>
-                  </ion-button>
-                  <ion-button slot="end" (click)="decreaseSetsHandler('sets',workoutEx)" >
-                    <ion-icon slot="icon-only" name='remove-circle-outline'></ion-icon>
-                  </ion-button>
-                </ion-item>
-              </ion-row>
-              <ion-row>
-                <ion-item>
-                  <ion-label>Reps:</ion-label>
-                  <ion-input slot="end" [value]="workoutEx.reps"  ></ion-input>
-                  <ion-button slot="end" (click)="increaseRepsHandler('reps',workoutEx)">
-                    <ion-icon slot="icon-only" name='add-circle-outline'></ion-icon>
-                  </ion-button>
-                  <ion-button slot="end"  (click)="decreaseRepsHandler('reps',workoutEx)">
-                    <ion-icon slot="icon-only" name='remove-circle-outline'></ion-icon>
-                  </ion-button>
-                </ion-item>
-              </ion-row>
-              <ion-row>
-                <ion-item>
-                  <ion-label>Weight:</ion-label>
-                  <ion-input slot="end" [value]="workoutEx.weight" ></ion-input>
-                  <ion-button slot="end" (click)="increaseWeightHandler('weight',workoutEx)">
-                    <ion-icon slot="icon-only" name='add-circle-outline'></ion-icon>
-                  </ion-button>
-                  <ion-button slot="end"  (click)="decreaseWeightHandler('weight',workoutEx)">
-                    <ion-icon slot="icon-only" name='remove-circle-outline'></ion-icon>
-                  </ion-button>
-                </ion-item>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
+            <app-workout-exercise-input [propertyName]="('Reps:')"
+                                        [propertyValue]="workoutEx.reps"></app-workout-exercise-input>
 
+            <app-workout-exercise-input [propertyName]="('Weight Kg:')"
+                                        [propertyValue]="workoutEx.weight"></app-workout-exercise-input>
 
+            <app-workout-exercise-input [propertyName]="('Rest between sets:')"
+                                                      [propertyValue]="workoutEx.restDuration"></app-workout-exercise-input>
+          </ion-grid>
         </ion-accordion>
       </ion-accordion-group>
     </ion-item-sliding>

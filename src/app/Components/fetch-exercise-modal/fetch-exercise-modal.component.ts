@@ -7,6 +7,7 @@ import {ModalController} from '@ionic/angular';
 import {ExerciseProviderService} from '../../Services/Api/exercise-provider.service';
 import {ExerciseType} from '../../Models/ExerciseType';
 import { moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 
 @Component({
   selector: 'app-fetch-exercise-modal',
@@ -42,14 +43,19 @@ export class FetchExerciseModalComponent implements OnInit {
 
   apiSubscription = new Subscription()
   fetchedExercises: ExerciseType[] = [];
-  exercises: ExerciseType[] = [];
-
+  chosenExercises: ExerciseType[] = [];
+  sub = new Subscription()
   constructor(private modalCtrl: ModalController,
-              private exerciseProvider: ExerciseProviderService) {
+              private exerciseProvider: ExerciseProviderService,
+              private stateManagerService: WorkoutExerciseStateManagerService) {
 
   }
 
   ngOnInit() {
+    // this.sub = this.stateManagerService.observableExercises
+    //   .subscribe(
+    //     value => this.exercises = value
+    //   )
   }
 
   async fetchHandler() {
@@ -57,10 +63,13 @@ export class FetchExerciseModalComponent implements OnInit {
       '',
       this.activityVal,
       this.muscleVal,
-      this.difficultyVal).subscribe(value => {
-      this.fetchedExercises = value;
-      this.exercisesAreFetched = true;
+      this.difficultyVal)
+      .subscribe(value => {
+        this.fetchedExercises = value;
+        this.exercisesAreFetched = true;
+
     });
+
 
   }
 
@@ -69,8 +78,9 @@ export class FetchExerciseModalComponent implements OnInit {
   }
 
   confirm() {
-    console.log(this.exercisesAreFetched)
-    return this.modalCtrl.dismiss(this.exercises, 'confirm');
+
+    this.stateManagerService.populateExercises(this.chosenExercises)
+    return this.modalCtrl.dismiss(this.chosenExercises, 'confirm');
   }
 
   onDifficultyChanged(ev: any) {

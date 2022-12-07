@@ -5,9 +5,8 @@ export interface Workout {
   name: string;
   exercises: WorkoutExercise[];
   progressiveOverload: number;
-  executionDate: Date;
-  startWorkout: Date;
-  endWorkout: Date;
+  startWorkout: Date | undefined;
+  endWorkout: Date | undefined;
   isCompleted: boolean;
   note: string;
 }

@@ -1,21 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ExerciseType} from '../../Models/ExerciseType';
 import {FetchExerciseModalComponent} from '../../Components/fetch-exercise-modal/fetch-exercise-modal.component';
-import {ModalController} from '@ionic/angular';
+import {ModalController, NavController} from '@ionic/angular';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
+import {SplitStrategy} from '../../Models/SplitStrategy';
+import {WorkoutFrequency} from '../../Models/WorkoutFrequency';
+import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
+import {Subscription} from 'rxjs';
+
 @Component({
   selector: 'app-fetchedExercises',
   templateUrl: './exercises.page.html',
   styleUrls: ['./exercises.page.scss'],
 })
 export class ExercisesPage implements OnInit {
-  exercises: ExerciseType[]=[]
-  workoutExercises: WorkoutExercise[]= []
+  get exercises(): ExerciseType[] {
+    return this._exercises;
+  }
 
-  constructor(private modalCtrl: ModalController) { }
+  set exercises(value: ExerciseType[]) {
+    this._exercises = value;
+  }
+
+ private _exercises: ExerciseType[]=[]
+  workoutExercises: WorkoutExercise[]= []
+  #workOutId = uuidv4();
+
+ private sub = new Subscription()
+  constructor(private modalCtrl: ModalController,
+              private stateManagerService: WorkoutExerciseStateManagerService ) { }
+
+
 
   ngOnInit() {
+    this.sub =  this.stateManagerService.observableExercises
+      .subscribe(
+        value => {
+          this._exercises = value;
+
+        }
+      )
+
   }
   async openModal() {
     const modal = await this.modalCtrl.create({
@@ -30,82 +56,46 @@ export class ExercisesPage implements OnInit {
       if (data === null)
         return;
 
-       this.exercises = [...data];
+       //this.exercises = [...data];
 
-      // this.exercises.map((val, index)=> this.workoutExercises[index].workoutExercise = val )
 
-      this.exercises.forEach((exVal, index) => {
-
-        let workoutEx: WorkoutExercise = {
-          id: uuidv4 (),
-          name: '',
-          workoutExercise: exVal,
-          sets: 0,
-          reps: 0,
-          weight: 0,
-          startExercise: new Date(),
-          endExercise:new Date() ,
-          isCompleted: false,
-
-        }
-
-        this.workoutExercises.push(workoutEx);
-      })
-    }
-
-  }
-
-  private increaser(propType: string, workoutEx: WorkoutExercise) {
-
-    switch (propType) {
-      case 'weight':
-        workoutEx.weight++
-        break;
-      case 'sets':
-        workoutEx.sets++
-        break;
-      case 'reps':
-        workoutEx.reps++
-        break;
-
-    }
-  }
-  private decreaser(propType: string, workoutEx: WorkoutExercise) {
-
-    switch (propType) {
-      case 'weight':
-        workoutEx.weight = workoutEx.weight <= 0 ? 0 : --workoutEx.weight
-        break;
-      case 'sets':
-        workoutEx.sets = workoutEx.sets <= 0 ? 0 : --workoutEx.sets
-        console.log(workoutEx.sets)
-        break;
-      case 'reps':
-        workoutEx.reps = workoutEx.reps <= 0 ? 0 : --workoutEx.reps
-        break;
+      this.mapExerciseTypesToWorkoutExercises();
 
     }
   }
 
-  increaseWeightHandler(propType: string, workoutEx: WorkoutExercise) {
-    this.increaser(propType, workoutEx);
-  }
-  decreaseWeightHandler(propType: string, workoutEx: WorkoutExercise) {
-    this.decreaser(propType, workoutEx);
-  }
+  mapExerciseTypesToWorkoutExercises(){
+    this._exercises.forEach((exVal, index) => {
 
-  increaseRepsHandler(propType: string, workoutEx: WorkoutExercise) {
-    this.increaser(propType, workoutEx);
-  }
-  decreaseRepsHandler(propType: string, workoutEx: WorkoutExercise) {
-    this.decreaser(propType, workoutEx);
-  }
+      let workoutEx: WorkoutExercise = {
+        id: uuidv4 (),
+        workOutId: this.#workOutId,
+        name: '',
+        workoutExercise: exVal,
+        sets: 0,
+        reps: 0,
+        weight: 0,
+        restDuration: 0,
+        getRestsBetweenSets(){
+          return this.restDuration === 0 ? [] : new Array(this.sets).fill(this.restDuration)
+        },
+        startExercise: undefined,
+        endExercise: undefined,
+        isCompleted: false,
+        splitLabel: undefined
+      }
+      this.workoutExercises.push(workoutEx);
+    })
+}
 
-  increaseSetsHandler(propType: string, workoutEx: WorkoutExercise) {
-    this.increaser(propType, workoutEx);
+  accordionHandler(event: any) {
+    // <ion-slide-page class=“swiper-no-swiping”>
+     // console.log(event.detail.value)
   }
-  decreaseSetsHandler(propType: string, workoutEx: WorkoutExercise) {
-    this.decreaser(propType, workoutEx);
+  removeWorkOutExerciseHandler(ex: ExerciseType) {
+    this.stateManagerService.deleteExercise(ex)
+    this.workoutExercises= this.workoutExercises.filter(x => x.workoutExercise !== ex)
+
   }
 }
 

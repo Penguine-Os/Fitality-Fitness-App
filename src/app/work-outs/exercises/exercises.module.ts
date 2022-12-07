@@ -10,6 +10,7 @@ import { ExercisesPage } from './exercises.page';
 import {FetchExerciseModalComponent} from '../../Components/fetch-exercise-modal/fetch-exercise-modal.component';
 import {ExerciseItemComponent} from '../../Components/exercise-item/exercise-item.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {WorkoutExerciseInputComponent} from '../../Components/workout-exercise-input/workout-exercise-input.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,6 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     ExercisesPageRoutingModule,
     DragDropModule
   ],
-  declarations: [ExercisesPage, FetchExerciseModalComponent, ExerciseItemComponent]
+    declarations: [ExercisesPage, FetchExerciseModalComponent, ExerciseItemComponent, WorkoutExerciseInputComponent]
 })
 export class ExercisesPageModule {}
