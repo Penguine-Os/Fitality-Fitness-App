@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Muscle} from '../../Models/Muscle';
 import {ActivityType} from '../../Models/ActivityType';
 import {Difficulty} from '../../Models/Difficulty';
@@ -14,9 +14,9 @@ import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercis
   templateUrl: './fetch-exercise-modal.component.html',
   styleUrls: ['./fetch-exercise-modal.component.scss'],
 })
-export class FetchExerciseModalComponent implements OnInit {
+export class FetchExerciseModalComponent implements OnInit, OnDestroy {
   lblColorSuccess = 'success'
-  exercisesAreFetched = true;
+  exercisesAreFetched = false;
   name: string = '';
   muscles = Object.keys(Muscle).map(x => {
 
@@ -45,7 +45,7 @@ export class FetchExerciseModalComponent implements OnInit {
   fetchedExercises: ExerciseType[] = [];
   chosenExercises: ExerciseType[] = [];
   sub = new Subscription()
-  constructor(private modalCtrl: ModalController,
+  constructor  (private modalCtrl: ModalController,
               private exerciseProvider: ExerciseProviderService,
               private stateManagerService: WorkoutExerciseStateManagerService) {
 
@@ -54,7 +54,7 @@ export class FetchExerciseModalComponent implements OnInit {
   ngOnInit() {
     // this.sub = this.stateManagerService.observableExercises
     //   .subscribe(
-    //     value => this.exercises = value
+    //     value => this.chosenExercises = value
     //   )
   }
 
@@ -66,7 +66,6 @@ export class FetchExerciseModalComponent implements OnInit {
       this.difficultyVal)
       .subscribe(value => {
         this.fetchedExercises = value;
-        this.exercisesAreFetched = true;
 
     });
 
@@ -78,8 +77,8 @@ export class FetchExerciseModalComponent implements OnInit {
   }
 
   confirm() {
-
     this.stateManagerService.populateExercises(this.chosenExercises)
+
     return this.modalCtrl.dismiss(this.chosenExercises, 'confirm');
   }
 
@@ -102,15 +101,19 @@ export class FetchExerciseModalComponent implements OnInit {
   }
 
   dropHandler(event: any) {
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+
+      this.exercisesAreFetched =  event.container.data.length>=0
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex,
       );
+
     }
 
 

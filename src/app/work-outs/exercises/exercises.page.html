@@ -5,7 +5,9 @@
       <ion-button (click)="openModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="workoutExercises.length>0" (click)="openModal()">
+      <ion-button [disabled]="workoutExercises.length<=0"
+                  [color]="workoutExercises.length<=0 ? '' : 'success'"
+                  [routerLink]="['','']">
         <ion-icon name="arrow-forward-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
