@@ -17,18 +17,19 @@ export class WorkoutExerciseStateManagerService {
   workout = new Observable<Workout>()
 
   constructor() {
-    console.log(this.#exercises)
   }
 
-  getExercises(){
-    return this.#exercises
-  }
+  // getExercises(){
+  //   return this.#exercises
+  // }
   deleteExercise(deletedExercise: ExerciseType) {
     this.#exercises = this.#exercises.filter(x => x !== deletedExercise)
+    this.#workoutExercises = this.#workoutExercises.filter(x => x.workoutExercise !== deletedExercise)
     this.observableExercises.next(this.#exercises);
+    this.observableWorkoutExercises.next(this.#workoutExercises)
   }
 
-  populateExercises(data: ExerciseType[]) {
+  addExercises(data: ExerciseType[]) {
 
     data.forEach(x =>{
       if (!this.#exercises.find(y => x.name ===  y.name)) {
@@ -38,6 +39,7 @@ export class WorkoutExerciseStateManagerService {
     })
 
     this.observableExercises.next(this.#exercises)
+    this.observableWorkoutExercises.next(this.#workoutExercises)
   }
   mapExerciseTypesToWorkoutExercises(exVal: ExerciseType) {
 

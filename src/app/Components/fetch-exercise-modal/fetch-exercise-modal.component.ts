@@ -77,7 +77,7 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
   }
 
   confirm() {
-    this.stateManagerService.populateExercises(this.chosenExercises)
+    this.stateManagerService.addExercises(this.chosenExercises)
 
     return this.modalCtrl.dismiss(this.chosenExercises, 'confirm');
   }

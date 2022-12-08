@@ -24,7 +24,8 @@ export class ExercisesPage implements OnInit, OnDestroy{
   private _exercises: ExerciseType[] = []
   workoutExercises: WorkoutExercise[] = []
   #workOutId = uuidv4();
-  private sub = new Subscription()
+  private exerciseSubscription = new Subscription()
+  private workoutExerciseSubscription = new Subscription()
 
   constructor(private modalCtrl: ModalController,
               private stateManagerService: WorkoutExerciseStateManagerService) {
@@ -32,13 +33,12 @@ export class ExercisesPage implements OnInit, OnDestroy{
 
 
   ngOnInit() {
-    this.sub = this.stateManagerService.observableExercises
-      .subscribe(
-        value => {
-          this._exercises = value;
+    this.exerciseSubscription  = this.stateManagerService.observableExercises
+      .subscribe(value => this._exercises = value)
 
-        }
-      )
+    this.workoutExerciseSubscription  = this.stateManagerService.observableWorkoutExercises
+      .subscribe(value => this.workoutExercises = value)
+
   }
 
   async openModal() {
@@ -56,7 +56,7 @@ export class ExercisesPage implements OnInit, OnDestroy{
 
       //this.exercises = [...data];
 
-      this.mapExerciseTypesToWorkoutExercises();
+     // this.mapExerciseTypesToWorkoutExercises();
 
     }
   }
@@ -99,7 +99,7 @@ export class ExercisesPage implements OnInit, OnDestroy{
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe()
+    this.exerciseSubscription.unsubscribe()
   }
 }
 
