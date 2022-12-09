@@ -11,13 +11,13 @@ const routes: Routes = [
     loadChildren: () => import('./progress/progress.module').then( m => m.ProgressPageModule)
   },
   {
-    path: 'work-outs',
-    loadChildren: () => import('./work-outs/work-outs.module').then( m => m.WorkOutsPageModule)
-  },
-  {
     path: 'insight',
     loadChildren: () => import('./insight/insight.module').then( m => m.InsightPageModule)
+  },  {
+    path: 'workout-navigator',
+    loadChildren: () => import('./workout-navigator/workout-navigator.module').then( m => m.WorkoutNavigatorPageModule)
   }
+
 ];
 @NgModule({
   imports: [

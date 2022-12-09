@@ -1,13 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Work-Out Exercises</ion-title>
+
+    <ion-title>Add Exercises</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
       <ion-button [disabled]="workoutExercises.length<=0"
                   [color]="workoutExercises.length<=0 ? '' : 'success'"
-                  [routerLink]="['','']">
+                  [routerLink]="['create-workout']">
         <ion-icon name="arrow-forward-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -16,11 +17,8 @@
 
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>
-      <ion-label>Select fetchedExercises</ion-label>
-      <ion-button>See All</ion-button>
-    </ion-list-header>
+  <ion-list *ngIf="workoutExercises.length>0">
+
 
     <ion-item-sliding *ngFor="let workoutEx of workoutExercises">
       <ion-item-options side="start">
@@ -46,7 +44,7 @@
                                         [propertyValue]="workoutEx.weight"></app-workout-exercise-input>
 
             <app-workout-exercise-input [propertyName]="('Rest between sets:')"
-                                                      [propertyValue]="workoutEx.restDuration"></app-workout-exercise-input>
+                                        [propertyValue]="workoutEx.restDuration"></app-workout-exercise-input>
           </ion-grid>
         </ion-accordion>
       </ion-accordion-group>

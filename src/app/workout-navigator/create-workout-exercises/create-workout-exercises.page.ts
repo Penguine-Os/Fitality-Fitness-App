@@ -1,18 +1,18 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ExerciseType} from '../../Models/ExerciseType';
-import {FetchExerciseModalComponent} from '../../Components/fetch-exercise-modal/fetch-exercise-modal.component';
 import {ModalController} from '@ionic/angular';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
 import {v4 as uuidv4} from 'uuid';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 import {Subscription} from 'rxjs';
+import {FetchExerciseModalComponent} from '../../shared/fetch-exercise-modal/fetch-exercise-modal.component';
 
 @Component({
-  selector: 'app-fetchedExercises',
-  templateUrl: './exercises.page.html',
-  styleUrls: ['./exercises.page.scss'],
+  selector: 'app-create-workout-exercises',
+  templateUrl: './create-workout-exercises.page.html',
+  styleUrls: ['./create-workout-exercises.page.scss'],
 })
-export class ExercisesPage implements OnInit, OnDestroy{
+export class CreateWorkoutExercisesPage implements OnInit {
   get exercises(): ExerciseType[] {
     return this._exercises;
   }
@@ -31,7 +31,6 @@ export class ExercisesPage implements OnInit, OnDestroy{
               private stateManagerService: WorkoutExerciseStateManagerService) {
   }
 
-
   ngOnInit() {
     this.exerciseSubscription  = this.stateManagerService.observableExercises
       .subscribe(value => this._exercises = value)
@@ -40,7 +39,6 @@ export class ExercisesPage implements OnInit, OnDestroy{
       .subscribe(value => this.workoutExercises = value)
 
   }
-
   async openModal() {
     const modal = await this.modalCtrl.create({
       component: FetchExerciseModalComponent,
@@ -56,35 +54,8 @@ export class ExercisesPage implements OnInit, OnDestroy{
 
       //this.exercises = [...data];
 
-     // this.mapExerciseTypesToWorkoutExercises();
 
     }
-  }
-
-  mapExerciseTypesToWorkoutExercises() {
-    this._exercises.forEach((exVal) => {
-
-      let workoutEx: WorkoutExercise = {
-        id: uuidv4(),
-        workOutId: this.#workOutId,
-        name: '',
-        workoutExercise: exVal,
-        sets: 0,
-        reps: 0,
-        weight: 0,
-        restDuration: 0,
-        getRestsBetweenSets() {
-          return this.restDuration === 0 ? [] : new Array(this.sets).fill(this.restDuration)
-        },
-        startExercise: undefined,
-        endExercise: undefined,
-        isCompleted: false,
-        splitLabel: undefined
-      }
-
-      if (!this.workoutExercises.find(x => x.workoutExercise.name === exVal.name))
-        this.workoutExercises.push(workoutEx);
-    })
   }
 
   accordionHandler(event: any) {
@@ -101,6 +72,5 @@ export class ExercisesPage implements OnInit, OnDestroy{
   ngOnDestroy() {
     this.exerciseSubscription.unsubscribe()
   }
+
 }
-
-

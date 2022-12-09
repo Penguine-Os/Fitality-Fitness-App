@@ -19,9 +19,9 @@ export class WorkoutExerciseStateManagerService {
   constructor() {
   }
 
-  // getExercises(){
-  //   return this.#exercises
-  // }
+  getWorkoutExercises(){
+    return this.#workoutExercises
+  }
   deleteExercise(deletedExercise: ExerciseType) {
     this.#exercises = this.#exercises.filter(x => x !== deletedExercise)
     this.#workoutExercises = this.#workoutExercises.filter(x => x.workoutExercise !== deletedExercise)
