@@ -6,18 +6,26 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./workout-exercise-input.component.scss'],
 })
 export class WorkoutExerciseInputComponent implements OnInit {
-  @Input('propertyName')propertyName = '';
-  @Input('propertyValue')propertyValue = 0;
+  @Input('propertyName') propertyName = '';
+  @Input('propertyValue') propertyValue = 0;
 
-  constructor() { }
+  constructor() {
 
-  ngOnInit() {}
+  }
+
+  ngOnInit() {
+  }
 
   increaseClickHandler() {
     this.propertyValue++;
   }
 
   decreaseClickHandler() {
-    this.propertyValue = this.propertyValue <=0 ? 0 : --this.propertyValue;
+    if (this.propertyName === 'Month') {
+      this.propertyValue = this.propertyValue <= 1 ? 1 : --this.propertyValue;
+      return;
+    }
+
+    this.propertyValue = this.propertyValue <= 0 ? 0 : --this.propertyValue;
   }
 }

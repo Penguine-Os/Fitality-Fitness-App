@@ -7,9 +7,10 @@ const routes: Routes = [
     path: 'tabs',
     component: TabsPage,
     children: [
+
       {
-        path: 'WorkoutTab',
-        loadChildren: () => import('../work-outs/work-outs.module').then(m => m.WorkOutsPageModule)
+        path: 'WorkoutNavTab',
+        loadChildren: () => import('../workout-navigator/workout-navigator.module').then(m => m.WorkoutNavigatorPageModule)
       },
       {
         path: 'ProgressTab',
@@ -21,14 +22,14 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/WorkoutTab',
+        redirectTo: '/tabs/WorkoutNavTab',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/WorkoutTab',
+    redirectTo: '/tabs/WorkoutNavTab',
     pathMatch: 'full'
   }
 ];

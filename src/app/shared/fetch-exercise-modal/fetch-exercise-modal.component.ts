@@ -14,7 +14,7 @@ import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercis
   templateUrl: './fetch-exercise-modal.component.html',
   styleUrls: ['./fetch-exercise-modal.component.scss'],
 })
-export class FetchExerciseModalComponent implements OnInit, OnDestroy {
+export class FetchExerciseModalComponent implements OnInit {
   lblColorSuccess = 'success'
   exercisesAreFetched = false;
   name: string = '';
@@ -45,18 +45,12 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
   fetchedExercises: ExerciseType[] = [];
   chosenExercises: ExerciseType[] = [];
   sub = new Subscription()
-  constructor  (private modalCtrl: ModalController,
+  constructor(private modalCtrl: ModalController,
               private exerciseProvider: ExerciseProviderService,
               private stateManagerService: WorkoutExerciseStateManagerService) {
 
   }
-
-  ngOnInit() {
-    // this.sub = this.stateManagerService.observableExercises
-    //   .subscribe(
-    //     value => this.chosenExercises = value
-    //   )
-  }
+  ngOnInit() {}
 
   async fetchHandler() {
     this.apiSubscription = this.exerciseProvider.getExercises(
@@ -67,7 +61,7 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
       .subscribe(value => {
         this.fetchedExercises = value;
 
-    });
+      });
 
 
   }
@@ -81,7 +75,6 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
 
     return this.modalCtrl.dismiss(this.chosenExercises, 'confirm');
   }
-
   onDifficultyChanged(ev: any) {
     this.difficultyVal = Object.values(Difficulty)[ev.detail.value.i]
   }
@@ -118,4 +111,5 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
 
 
   }
+
 }

@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create Workout</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Routine Parameters</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-label>Select your training days!</ion-label>
+      <ion-grid>
+        <ion-row>
+          <ion-col *ngFor="let tDay of weekRoutine; let i =  index">
+            <ion-list>
+              <ion-label class="lbl" slot="middle">{{weekdays[i]}}</ion-label>
+              <ion-checkbox [checked]="weekRoutine[i]" (ionChange)="checkHandler($event)"></ion-checkbox>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-label>Specify the span of this routine!</ion-label>
+      <app-workout-exercise-input propertyName="Month" [propertyValue]="duration"></app-workout-exercise-input>
+
+    </ion-card-content>
+
+
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Progressive Overload</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-range (ionChange)="rangeHandler($event)" [value]="maxOverload"
+                 [ticks]="true" [pin]="true" [snaps]="true" step="50" [min]="50" [max]="250">
+
+        <ion-label slot="start">0.5</ion-label>
+        <ion-label slot="end">2.5</ion-label>
+      </ion-range>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Split Strategy</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-select interface="action-sheet" placeholder="Select split strategy for your weekly routine">
+          <ion-select-option value="oranges">Push-Pull</ion-select-option>
+          <ion-select-option value="apples">Full-Body</ion-select-option>
+          <ion-select-option value="bananas">Upper-Body Lower-Body</ion-select-option>
+        </ion-select>
+      </ion-list>
+    </ion-card-content>
+
+
+  </ion-card>
+</ion-content>

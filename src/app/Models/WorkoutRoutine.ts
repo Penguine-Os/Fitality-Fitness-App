@@ -2,8 +2,9 @@ import {Workout} from './Workout';
 import {WorkoutFrequency} from './WorkoutFrequency';
 
 export interface WorkoutRoutine{
-  routineStartDate: Date,
-  routineEndDate: Date,
-  routineWorkouts: Workout[]
+  span: number
+  routineStartDate: Date| undefined,
+  routineEndDate: Date| undefined,
+  weeklyWorkouts: Workout[]
   workoutDays : WorkoutFrequency
 }
