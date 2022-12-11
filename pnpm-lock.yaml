@@ -1,5 +1,8 @@
 lockfileVersion: 5.4
 
+overrides:
+  tslib: ^2.3.1
+
 specifiers:
   '@angular-devkit/build-angular': ^15.0.0
   '@angular-eslint/builder': ^14.0.0
@@ -55,7 +58,7 @@ specifiers:
   protractor: ^7.0.0
   rxjs: ~7.5.0
   ts-node: ~8.3.0
-  tslib: ^2.4.1
+  tslib: ^2.3.1
   typescript: ~4.8.4
   uuid: ^9.0.0
   uuidv4: ^6.2.13
@@ -9024,14 +9027,14 @@ packages:
     dependencies:
       firebase: 9.15.0
       rxjs: 7.5.7
-      tslib: 1.14.1
+      tslib: 2.4.1
     dev: false
 
   /rxjs/6.6.7:
     resolution: {integrity: sha512-hTdwr+7yYNIT5n4AMYp85KA6yw2Va0FLa3Rguvbpa4W3I5xynaBZo41cM3XM+4Q6fRMj3sBYIR1VAmZMXYJvRQ==}
     engines: {npm: '>=2.0.0'}
     dependencies:
-      tslib: 1.14.1
+      tslib: 2.4.1
 
   /rxjs/7.5.7:
     resolution: {integrity: sha512-z9MzKh/UcOqB3i20H6rtrlaE/CgjLOvheWK/9ILrbhROGTweAi1BaFsTT9FbwZi5Trr1qNRs+MXkhmR06awzQA==}
@@ -9804,9 +9807,6 @@ packages:
       strip-bom: 3.0.0
     dev: true
 
-  /tslib/1.14.1:
-    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-
   /tslib/2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
 
@@ -9816,7 +9816,7 @@ packages:
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
     dependencies:
-      tslib: 1.14.1
+      tslib: 2.4.1
       typescript: 4.8.4
     dev: true
 

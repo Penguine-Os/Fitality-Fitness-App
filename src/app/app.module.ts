@@ -25,13 +25,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     DragDropModule,
     // Firebase main import.
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    // Database
-    // provideFirestore(() => {
-    //   const firestore = getFirestore();
-    //   // Enable offline persistence.
-    //   enableMultiTabIndexedDbPersistence(firestore);
-    //   return firestore;
-    // }),
+   // Database
+    provideFirestore(() => {
+      const firestore = getFirestore();
+      // Enable offline persistence.
+      enableMultiTabIndexedDbPersistence(firestore);
+      return firestore;
+    }),
     provideAuth(() => getAuth()),
     BrowserAnimationsModule,],
   providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy}],

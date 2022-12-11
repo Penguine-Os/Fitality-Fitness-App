@@ -10,10 +10,10 @@ android {
         keyAlias 'fitkey'
       }
     }
-  namespace 'io.ionic.starter'
+  namespace 'be.fitality.ionic'
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "io.ionic.starter"
+        applicationId "be.fitality.ionic"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

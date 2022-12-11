@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "784556763903-pfj6344i07t6gu3ihkkb5ou7tnmface8.apps.googleusercontent.com",
+          "client_id": "784556763903-mqhar56d4evtjqpig5ocfi67j9ch97hn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "be.fitality.ionic",
-            "certificate_hash": "6462c88f84eefb5040398388fae878da61d372d7"
+            "certificate_hash": "47f48baec6d05526e15925798197332b9799014c"
           }
         },
         {
