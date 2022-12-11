@@ -1,14 +1,16 @@
 <ion-header>
   <ion-toolbar>
-
-    <ion-title>Add Exercises</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Add Exercises</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
       <ion-button [disabled]="workoutExercises.length<=0"
                   [color]="workoutExercises.length<=0 ? '' : 'success'"
-                  [routerLink]="['create-workout']">
+                  (click)="goToNextPage()">
         <ion-icon name="arrow-forward-outline"></ion-icon>
       </ion-button>
     </ion-buttons>

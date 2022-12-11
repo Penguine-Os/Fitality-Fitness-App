@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {WorkoutFrequency} from '../../../Models/WorkoutFrequency';
+import {MatSliderModule} from '@angular/material/slider';
 
 @Component({
   selector: 'app-create-workout',
@@ -8,7 +9,7 @@ import {WorkoutFrequency} from '../../../Models/WorkoutFrequency';
 })
 export class CreateWorkoutPage implements OnInit {
 
-  weekdays : string[] =['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+  weekdays: string[] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
   trainingDays: WorkoutFrequency = {
     monday: false,
     tuesday: false,
@@ -17,26 +18,25 @@ export class CreateWorkoutPage implements OnInit {
     friday: false,
     saturday: false,
     sunday: false
-  }
-  weekRoutine: boolean[]= Object.values(this.trainingDays)
-  maxOverload: number = 0.5;
-  duration: number = 1;
+  };
+  weekRoutine: boolean[] = Object.values(this.trainingDays);
+  progressiveOverload: number;
+  duration = 1;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
   rangeHandler(event: any) {
-
-    event.detail.value =    event.detail.value/100
-     console.log(event.detail.value)
-     console.log(this.maxOverload)
-
+    this.progressiveOverload = event.detail.value / 100;
   }
 
   checkHandler(event: any) {
-    console.log(this.trainingDays)
-    console.log(this.weekRoutine)
+    console.log(this.trainingDays);
+    console.log(this.weekRoutine);
   }
+
+
 }

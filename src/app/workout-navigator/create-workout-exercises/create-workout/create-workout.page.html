@@ -1,9 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Create Workout</ion-title>
+    <ion-title class="ion-text-center">Create Workout</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -39,12 +40,13 @@
     </ion-card-header>
 
     <ion-card-content>
-      <ion-range (ionChange)="rangeHandler($event)" [value]="maxOverload"
-                 [ticks]="true" [pin]="true" [snaps]="true" step="50" [min]="50" [max]="250">
+            <ion-range (ionChange)="rangeHandler($event)" [value]="1"
+                       [ticks]="true" [snaps]="true" step="50" [min]="50" [max]="250">
 
-        <ion-label slot="start">0.5</ion-label>
-        <ion-label slot="end">2.5</ion-label>
-      </ion-range>
+              <ion-label slot="start">0.5</ion-label>
+              <ion-label slot="end">2.5</ion-label>
+            </ion-range>
+
     </ion-card-content>
   </ion-card>
   <ion-card>

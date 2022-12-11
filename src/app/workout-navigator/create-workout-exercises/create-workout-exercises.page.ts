@@ -6,39 +6,41 @@ import {v4 as uuidv4} from 'uuid';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 import {Subscription} from 'rxjs';
 import {FetchExerciseModalComponent} from '../../shared/fetch-exercise-modal/fetch-exercise-modal.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-workout-exercises',
   templateUrl: './create-workout-exercises.page.html',
   styleUrls: ['./create-workout-exercises.page.scss'],
 })
-export class CreateWorkoutExercisesPage implements OnInit {
+export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
+  workoutExercises: WorkoutExercise[] = [];
+  #workOutId = uuidv4();
+  private ex: ExerciseType[] = [];
+  private exerciseSubscription = new Subscription();
+  private workoutExerciseSubscription = new Subscription();
+
+  constructor(private modalCtrl: ModalController,
+              private stateManagerService: WorkoutExerciseStateManagerService,
+              private router: Router) {
+  }
+
   get exercises(): ExerciseType[] {
-    return this._exercises;
+    return this.ex;
   }
 
   set exercises(value: ExerciseType[]) {
-    this._exercises = value;
+    this.ex = value;
   }
-
-  private _exercises: ExerciseType[] = []
-  workoutExercises: WorkoutExercise[] = []
-  #workOutId = uuidv4();
-  private exerciseSubscription = new Subscription()
-  private workoutExerciseSubscription = new Subscription()
-
-  constructor(private modalCtrl: ModalController,
-              private stateManagerService: WorkoutExerciseStateManagerService) {
-  }
-
   ngOnInit() {
-    this.exerciseSubscription  = this.stateManagerService.observableExercises
-      .subscribe(value => this._exercises = value)
+    this.exerciseSubscription = this.stateManagerService.observableExercises
+      .subscribe(value => this.ex = value);
 
-    this.workoutExerciseSubscription  = this.stateManagerService.observableWorkoutExercises
-      .subscribe(value => this.workoutExercises = value)
+    this.workoutExerciseSubscription = this.stateManagerService.observableWorkoutExercises
+      .subscribe(value => this.workoutExercises = value);
 
   }
+
   async openModal() {
     const modal = await this.modalCtrl.create({
       component: FetchExerciseModalComponent,
@@ -49,8 +51,9 @@ export class CreateWorkoutExercisesPage implements OnInit {
 
     if (role === 'confirm') {
 
-      if (data === null)
+      if (data === null) {
         return;
+      }
 
       //this.exercises = [...data];
 
@@ -64,13 +67,18 @@ export class CreateWorkoutExercisesPage implements OnInit {
   }
 
   removeWorkOutExerciseHandler(ex: ExerciseType) {
-    this.stateManagerService.deleteExercise(ex)
-    this.workoutExercises = this.workoutExercises.filter(x => x.workoutExercise !== ex)
+    this.stateManagerService.deleteExercise(ex);
+    this.workoutExercises = this.workoutExercises.filter(x => x.workoutExercise !== ex);
 
   }
 
   ngOnDestroy() {
-    this.exerciseSubscription.unsubscribe()
+    this.exerciseSubscription.unsubscribe();
+    this.workoutExerciseSubscription.unsubscribe();
   }
 
+  goToNextPage() {
+    ////////++++VALIDATIE NOG TE IMPLEMENTEREN++++////////
+    this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises', 'create-workout']);
+  }
 }

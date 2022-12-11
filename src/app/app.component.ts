@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {FireAuthService} from './Services/Authentication/fire-auth.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  readonly placeholder = '/assets/images/Portrait_Placeholder.png';
+  constructor(public authService: FireAuthService) {}
 }

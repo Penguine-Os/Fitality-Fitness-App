@@ -1,13 +1,17 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import {CapacitorConfig} from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'be.fitality.ionic',
   appName: 'Fitality',
   webDir: 'www',
   bundledWebRuntime: false,
   plugins: {
-    CapacitorHttp: {
+    capacitorHttp: {
       enabled: true,
+    },
+    firebaseAuthentication: {
+      skipNativeAuth: false,
+      providers: ['google.com','github.com'],
     },
   }
 };

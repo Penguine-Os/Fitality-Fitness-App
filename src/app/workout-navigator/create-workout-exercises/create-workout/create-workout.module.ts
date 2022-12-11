@@ -8,6 +8,7 @@ import { CreateWorkoutPageRoutingModule } from './create-workout-routing.module'
 
 import { CreateWorkoutPage } from './create-workout.page';
 import {SharedModule} from '../../../shared/shared.module';
+import {MatSliderModule} from '@angular/material/slider';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import {SharedModule} from '../../../shared/shared.module';
         FormsModule,
         IonicModule,
         CreateWorkoutPageRoutingModule,
-        SharedModule
+        SharedModule,
+        MatSliderModule
     ],
   declarations: [CreateWorkoutPage]
 })

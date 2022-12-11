@@ -1,3 +1,33 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+    <!--  the side menu  -->
+    <ion-menu contentId="main">
+      <ion-content *ngIf="(authService.currentUser | async); let user">
+        <ion-item>
+          <ion-avatar slot="start">
+            <img [src]="user?.photoURL ?? placeholder" #avatar (error)="avatar.src = placeholder">
+          </ion-avatar>
+          <ion-label>
+            <ion-list-header>
+              {{user.displayName}}
+            </ion-list-header>
+            <ion-note class="ion-margin-start">
+              {{user.email || ''}}
+            </ion-note>
+          </ion-label>
+        </ion-item>
+
+        <ion-list lines="none">
+          <ion-item (click)="authService.signOut()" button="-">Logout</ion-item>
+
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+
+    <!-- the main content -->
+
+  <div class="ion-page" id="main-content">
+    <ion-content class="ion-padding">
+      <ion-router-outlet id="main"></ion-router-outlet>
+    </ion-content>
+  </div>
 </ion-app>

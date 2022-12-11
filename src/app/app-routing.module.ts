@@ -16,6 +16,10 @@ const routes: Routes = [
   },  {
     path: 'workout-navigator',
     loadChildren: () => import('./workout-navigator/workout-navigator.module').then( m => m.WorkoutNavigatorPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   }
 
 ];

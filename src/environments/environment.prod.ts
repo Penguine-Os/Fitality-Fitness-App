@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  exerciseApi_Key: '27Lm/MmbUkjNpCluaqFKig==uk4T0aVzconjlUd3'
+  exerciseApiKey: '27Lm/MmbUkjNpCluaqFKig==uk4T0aVzconjlUd3'
 };
