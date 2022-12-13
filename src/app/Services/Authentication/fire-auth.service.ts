@@ -2,7 +2,7 @@ import {Injectable, OnDestroy} from '@angular/core';
 import {FirebaseAuthentication} from '@capacitor-firebase/authentication';
 import {Router} from '@angular/router';
 import {Auth, signInWithCredential, signOut, Unsubscribe} from '@angular/fire/auth';
-import {updateProfile, GoogleAuthProvider, GithubAuthProvider, User} from 'firebase/auth';
+import {updateProfile, GoogleAuthProvider, GithubAuthProvider, User,getAuth, signInWithPopup,} from 'firebase/auth';
 import {Capacitor} from '@capacitor/core';
 import {BehaviorSubject} from 'rxjs';
 
@@ -94,7 +94,7 @@ export class FireAuthService implements OnDestroy {
   private async setCurrentUser(user: User): Promise<void> {
     this.currentUser.next(user);
     if (this.currentUser.value) {
-      await this.router.navigate(['/']);
+      await this.router.navigate(['/tabs']);
     } else {
       await this.router.navigate(['/login']);
     }

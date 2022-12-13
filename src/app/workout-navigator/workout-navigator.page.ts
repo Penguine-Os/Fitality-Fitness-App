@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ExerciseProviderService} from '../Services/Api/exercise-provider.service';
 import {Router} from '@angular/router';
 import {WorkoutExerciseStateManagerService} from '../Services/workout-exercise-state-manager.service';
+import {FireAuthService} from '../Services/Authentication/fire-auth.service';
 
 
 @Component({
@@ -11,7 +12,7 @@ import {WorkoutExerciseStateManagerService} from '../Services/workout-exercise-s
 })
 export class WorkoutNavigatorPage implements OnInit {
 
-  constructor(private stateManagerService: WorkoutExerciseStateManagerService, private router: Router) {
+  constructor(private stateManagerService: WorkoutExerciseStateManagerService, private router: Router,public authService: FireAuthService) {
 
   }
 

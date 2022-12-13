@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {WorkoutFrequency} from '../../../Models/WorkoutFrequency';
 import {MatSliderModule} from '@angular/material/slider';
+import {FireAuthService} from '../../../Services/Authentication/fire-auth.service';
 
 @Component({
   selector: 'app-create-workout',
@@ -23,7 +24,7 @@ export class CreateWorkoutPage implements OnInit {
   progressiveOverload: number;
   duration = 1;
 
-  constructor() {
+  constructor(public authService: FireAuthService) {
   }
 
   ngOnInit() {

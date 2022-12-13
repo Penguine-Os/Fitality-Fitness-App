@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FireAuthService} from '../Services/Authentication/fire-auth.service';
 
 @Component({
   selector: 'app-progress',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProgressPage implements OnInit {
 
-  constructor() { }
+  constructor(public authService: FireAuthService) { }
 
   ngOnInit() {
   }
