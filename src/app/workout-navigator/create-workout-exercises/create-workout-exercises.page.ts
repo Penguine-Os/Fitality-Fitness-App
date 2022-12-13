@@ -21,6 +21,7 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   private exerciseSubscription = new Subscription();
   private workoutExerciseSubscription = new Subscription();
 
+
   constructor(private modalCtrl: ModalController,
               private stateManagerService: WorkoutExerciseStateManagerService,
               private router: Router,
@@ -34,6 +35,7 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   set exercises(value: ExerciseType[]) {
     this.ex = value;
   }
+
   ngOnInit() {
     this.exerciseSubscription = this.stateManagerService.observableExercises
       .subscribe(value => this.ex = value);
@@ -81,6 +83,14 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
 
   goToNextPage() {
     ////////++++VALIDATIE NOG TE IMPLEMENTEREN++++////////
+    console.log(this.workoutExercises);
     this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises', 'create-workout']);
   }
+
+
+  rangeHandler(event: any, workoutEx: WorkoutExercise) {
+    workoutEx.progressiveOverload = event.detail.value / 100;
+  }
+
+
 }

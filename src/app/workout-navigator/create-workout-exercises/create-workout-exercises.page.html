@@ -37,16 +37,36 @@
           </ion-item>
           <ion-grid slot="content">
             <app-workout-exercise-input [propertyName]="('Sets:')"
-                                        [propertyValue]="workoutEx.sets"></app-workout-exercise-input>
+                                        [(propertyValue)]="workoutEx.sets"></app-workout-exercise-input>
 
             <app-workout-exercise-input [propertyName]="('Reps:')"
-                                        [propertyValue]="workoutEx.reps"></app-workout-exercise-input>
+              [(propertyValue)]="workoutEx.reps"></app-workout-exercise-input>
 
-            <app-workout-exercise-input [propertyName]="('Weight Kg:')"
-                                        [propertyValue]="workoutEx.weight"></app-workout-exercise-input>
+            <app-workout-exercise-input [propertyName]="('Weight:')"
+              [(propertyValue)]="workoutEx.weight"></app-workout-exercise-input>
 
-            <app-workout-exercise-input [propertyName]="('Rest between sets:')"
-                                        [propertyValue]="workoutEx.restDuration"></app-workout-exercise-input>
+            <app-workout-exercise-input [propertyName]="('Rest between reps:')"
+              [(propertyValue)]="workoutEx.restDuration"></app-workout-exercise-input>
+
+
+              <ion-list>
+                <ion-range (ionChange)="rangeHandler($event, workoutEx)"
+                           [ticks]="true" [snaps]="true" step="50" [min]="0" [max]="250">
+
+                  <ion-label slot="start">0</ion-label>
+
+                  <ion-label slot="end">2.5</ion-label>
+                </ion-range>
+                <ion-row>
+                  <ion-col  class="ion-text-center">
+                    <ion-label>{{workoutEx.progressiveOverload}}</ion-label>
+
+                  </ion-col>
+                </ion-row>
+                </ion-list>
+
+
+
           </ion-grid>
         </ion-accordion>
       </ion-accordion-group>

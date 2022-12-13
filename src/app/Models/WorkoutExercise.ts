@@ -10,10 +10,10 @@ export interface WorkoutExercise{
   reps: number;
   weight: number;
   restDuration: number;
-  getRestsBetweenSets: Function;
+  getRestsBetweenSets: () => number [];
   startExercise: Date | undefined;
   endExercise: Date | undefined;
   isCompleted: boolean;
-  splitLabel : Array<SplitStrategy> | undefined
+  progressiveOverload: number;
 
 }
