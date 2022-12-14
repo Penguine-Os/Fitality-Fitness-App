@@ -10,13 +10,16 @@ import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
   providedIn: 'root'
 })
 export class WorkoutExerciseStateManagerService {
+  #routineSpan = 0;
   #exercises: ExerciseType[] = [];
   #workoutExercises: WorkoutExercise[] = [];
-  #workouts: Workout[] = [];
   observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
-
   observableWeeklyWorkouts = new Observable<WeeklyWorkouts[]>();
+  private tempWorkoutExercisesA: WorkoutExercise[] = [];
+  private tempWorkoutExercisesB: WorkoutExercise[] = [];
+  private weekRoutine = new Array<boolean>(7).fill(false);
+  private weeklyWorkouts = new Array<WeeklyWorkouts>();
 
   constructor() {
   }
@@ -52,9 +55,9 @@ export class WorkoutExerciseStateManagerService {
       workOutId: '',
       name: '',
       workoutExercise: exVal,
-      sets: 0,
-      reps: 0,
-      weight: 0,
+      sets: 1,
+      reps: 1,
+      weight: 20,
       restDuration: 0,
       getRestsBetweenSets() {
         return this.restDuration === 0 ? new Array(this.sets).fill(0) : new Array(this.sets).fill(this.restDuration);
@@ -69,16 +72,131 @@ export class WorkoutExerciseStateManagerService {
 
   }
 
-  //
-  // mapWorkoutExercisesToWorkouts(wExercisesList: WorkoutExercise[]) {
-  //   const workout: Workout = {
-  //     id: '',
-  //     exercises: wExercisesList,
-  //     startWorkout: undefined,
-  //     endWorkout: undefined,
-  //     isCompleted: false,
-  //     note: 'string'
-  //   };
-//}
+  public populatePushPullList(workoutEx: WorkoutExercise) {
+    switch (workoutEx.workoutExercise.muscle) {
+      //pull
+      case 'biceps':
+      case 'forearms':
+      case 'traps':
+      case 'lats':
+      case 'lower_back':
+      case 'middle_back':
+      case 'abductors':
+        this.tempWorkoutExercisesA.push(workoutEx);
+        break;
+      //push
+      case 'chest':
+      case 'triceps':
+      case 'hamstrings':
+      case 'quadriceps':
+      case 'calves':
+        this.tempWorkoutExercisesB.push(workoutEx);
+        break;
+      default:
+        this.tempWorkoutExercisesA.push(workoutEx);
+        this.tempWorkoutExercisesB.push(workoutEx);
+    }
+  }
+
+  public populateUpperBodyLowerBody(workoutEx: WorkoutExercise) {
+    switch (workoutEx.workoutExercise.muscle) {
+      //upper
+      case 'biceps':
+      case 'forearms':
+      case 'triceps':
+      case 'traps':
+      case 'lats':
+      case 'chest':
+        this.tempWorkoutExercisesA.push(workoutEx);
+        break;
+      //lower
+      case 'lower_back':
+      case 'middle_back':
+      case 'abductors':
+      case 'hamstrings':
+      case 'quadriceps':
+      case 'calves':
+        this.tempWorkoutExercisesB.push(workoutEx);
+        break;
+      default:
+        this.tempWorkoutExercisesA.push(workoutEx);
+        this.tempWorkoutExercisesB.push(workoutEx);
+    }
+  }
+
+  public copyWeekRoutine(routine: boolean[]): void {
+    this.weekRoutine = [...routine];
+  }
+
+  public copyRoutineSpan(month: number): void {
+    this.#routineSpan = month * 4;
+  }
+
+  populateTempWorkoutExercisesAWithPushPull() {
+    this.#workoutExercises.forEach(wEx => this.populatePushPullList(wEx));
+  }
+
+  populateTempWorkoutExercisesBWithPushPull() {
+    this.#workoutExercises.forEach(wEx => this.populatePushPullList(wEx));
+  }
+
+  public creatWeeklyRoutineWorkouts() {
+    let switchExercises = true;
+    const workouts: Workout[] = [];
+    this.weekRoutine.forEach(val => {
+      if (!val) {
+        return;
+      }
+      const workout: Workout = {
+        workoutExercises: [],
+        startWorkout: undefined,
+        endWorkout: undefined,
+        isCompleted: false,
+        note: 'string'
+      };
+
+      if (switchExercises) {
+        workout.workoutExercises = [...this.tempWorkoutExercisesA];
+      } else {
+        workout.workoutExercises = [...this.tempWorkoutExercisesB];
+      }
+
+      switchExercises = !switchExercises;
+      workouts.push(workout);
+    });
+
+    this.createWeeklyRoutines(workouts);
+
+  }
+
+
+  public createFullBodyWorkouts() {
+    const workouts: Workout[] = [];
+    this.weekRoutine.forEach(val => {
+      if (!val) {
+        return;
+      }
+      const workout: Workout = {
+        workoutExercises: [],
+        startWorkout: undefined,
+        endWorkout: undefined,
+        isCompleted: false,
+        note: 'string'
+      };
+      workout.workoutExercises = [...this.#workoutExercises];
+      workouts.push(workout);
+    });
+    this.createWeeklyRoutines(workouts);
+  }
+
+  public createWeeklyRoutines(workOuts: Workout[]) {
+    for (let i = 0; i < this.#routineSpan; i++) {
+      const weekWorkout: WeeklyWorkouts = {
+        id: `Week ${i}`,
+        weekWorkout: [...workOuts]
+      };
+      this.weeklyWorkouts.push(weekWorkout);
+    }
+  }
 }
 

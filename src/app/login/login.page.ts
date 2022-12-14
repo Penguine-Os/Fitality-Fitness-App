@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FireAuthService} from '../Services/Authentication/fire-auth.service';
+import {FireAuthService} from '../Services/FireBase/fire-auth.service';
 
 @Component({
   selector: 'app-login',

@@ -19,12 +19,12 @@ specifiers:
   '@angular/fire': ^7.5.0
   '@angular/forms': ^15.0.0
   '@angular/language-service': ^15.0.0
-  '@angular/material': ^15.0.2
+  '@angular/material': 15.0.1
   '@angular/platform-browser': ^15.0.0
   '@angular/platform-browser-dynamic': ^15.0.0
   '@angular/router': ^15.0.0
   '@capacitor-firebase/authentication': ^1.2.0
-  '@capacitor/android': ^4.6.1
+  '@capacitor/android': 4.5.0
   '@capacitor/app': 4.1.1
   '@capacitor/cli': 4.5.0
   '@capacitor/core': 4.5.0
@@ -71,12 +71,12 @@ dependencies:
   '@angular/core': 15.0.3_rxjs@7.5.7+zone.js@0.11.8
   '@angular/fire': 7.5.0_djh6j25xwlzcq2ombdqrofynhm
   '@angular/forms': 15.0.1_zfehwzd5vcrwyccevr4evemuf4
-  '@angular/material': 15.0.2_lv2xpk6btdzhvxq65amvhc5aiy
+  '@angular/material': 15.0.1_lv2xpk6btdzhvxq65amvhc5aiy
   '@angular/platform-browser': 15.0.1_4lxssvz5gt2cvefoz4ppogghfi
   '@angular/platform-browser-dynamic': 15.0.1_fiwo45z3odayzzkokrqayjhduu
   '@angular/router': 15.0.1_zfehwzd5vcrwyccevr4evemuf4
   '@capacitor-firebase/authentication': 1.2.0_dr64vliwmzdadaghvtfcvzxlsq
-  '@capacitor/android': 4.6.1_@capacitor+core@4.5.0
+  '@capacitor/android': 4.5.0_@capacitor+core@4.5.0
   '@capacitor/app': 4.1.1_@capacitor+core@4.5.0
   '@capacitor/core': 4.5.0
   '@capacitor/haptics': 4.1.0_@capacitor+core@4.5.0
@@ -602,11 +602,11 @@ packages:
     engines: {node: ^14.20.0 || ^16.13.0 || >=18.10.0}
     dev: true
 
-  /@angular/material/15.0.2_lv2xpk6btdzhvxq65amvhc5aiy:
-    resolution: {integrity: sha512-jXjgKFK09DcqShXSvKJLQ98MSqV2LuBO6ZuJj/gz96ZWoAhTTuWn0hL3xsoKp+kaF5DPdDFd24gLr8YFRibaIQ==}
+  /@angular/material/15.0.1_lv2xpk6btdzhvxq65amvhc5aiy:
+    resolution: {integrity: sha512-JXMcRf27HgXwjoNOKD04YubJ14M9Y66g5Ol4R5EDShnwvvzU1OKLjaYN3SYpH5iMauZztjljsVBsLlO8n/TVFA==}
     peerDependencies:
       '@angular/animations': ^15.0.0 || ^16.0.0
-      '@angular/cdk': 15.0.2
+      '@angular/cdk': 15.0.1
       '@angular/common': ^15.0.0 || ^16.0.0
       '@angular/core': ^15.0.0 || ^16.0.0
       '@angular/forms': ^15.0.0 || ^16.0.0
@@ -1938,10 +1938,10 @@ packages:
       firebase: 9.15.0
     dev: false
 
-  /@capacitor/android/4.6.1_@capacitor+core@4.5.0:
-    resolution: {integrity: sha512-Hnh1tmUr1SP67U6D6ry5I5BEBSN/1nkBAIjQIqf5tF82WNxKbpbC6GfkHE4hMJZinRTrCf36LkrdP8srh7SxoA==}
+  /@capacitor/android/4.5.0_@capacitor+core@4.5.0:
+    resolution: {integrity: sha512-GRoQ0Q1XOupU4pK3aipWfwCGXRuAq32IHpOoNSZm3Enu1/FhoOlIvHMlnnIQTpq6sBye/cqBIuYsOpPBMi3VNg==}
     peerDependencies:
-      '@capacitor/core': ^4.6.0
+      '@capacitor/core': ^4.4.0
     dependencies:
       '@capacitor/core': 4.5.0
     dev: false

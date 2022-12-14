@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-workout-exercise-input',
@@ -10,48 +10,31 @@ export class WorkoutExerciseInputComponent implements OnInit {
   @Input('propertyValue') propertyValue = 0;
   @Output() propertyValueChange = new EventEmitter<number>();
 
+  @Input() min = Number.MIN_VALUE;
+  // @Input() max = Number.POSITIVE_INFINITY;
+  @Input() stepSize = 1;
+  @Input() smallerStep = 1;
   constructor() {
 
   }
-
-
-
-  resize1(delta: number) {
-    this.propertyValue = Math.max(0,this.propertyValue +delta );
-    this.propertyValueChange.emit(this.propertyValue);
-  }
-  resize2(delta: number) {
-    this.propertyValue =  Math.max(1,this.propertyValue +delta );
-    this.propertyValueChange.emit(this.propertyValue);
-  }
-  // resize3(delta: number) {
-  //   this.propertyValue =  Math.max(0,this.propertyValue +delta );
-  //   this.propertyValueChange.emit(this.propertyValue);
-  // }
   ngOnInit() {
   }
 
-  increaseClickHandler() {
-    // this.propertyValue++;
-
-    if (this.propertyName === 'Weight:') {
-      this.resize2(+5);
-      return;
-    }
-    this.resize1(+1);
+  increase() {
+    this.resize(this.stepSize);
   }
 
-  decreaseClickHandler() {
-   if (this.propertyName === 'Month') {
-     this.resize2(-1);
-     return;
-   }
+  decrease() {
+    this.resize(-Math.min(this.smallerStep, this.stepSize));
+  }
 
-    this.resize1(-1);
-    //   this.propertyValue = this.propertyValue <= 1 ? 1 : --this.propertyValue;
-    //   return;
-    // }
-    //
-    // this.propertyValue = this.propertyValue <= 0 ? 0 : --this.propertyValue;
+  resize(stepSize: number) {
+    this.propertyValue = Math.max(this.min, this.propertyValue + stepSize);
+    this.propertyValueChange.emit(this.propertyValue);
+  }
+
+  handleChange($event: any) {
+    this.propertyValue = Number($event.target.value);
+    this.propertyValueChange.emit(this.propertyValue);
   }
 }

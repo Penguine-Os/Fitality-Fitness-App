@@ -7,7 +7,7 @@ import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercis
 import {Subscription} from 'rxjs';
 import {FetchExerciseModalComponent} from '../../shared/fetch-exercise-modal/fetch-exercise-modal.component';
 import {Router} from '@angular/router';
-import {FireAuthService} from '../../Services/Authentication/fire-auth.service';
+import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 
 @Component({
   selector: 'app-create-workout-exercises',

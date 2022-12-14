@@ -6,6 +6,7 @@ import {IonicModule} from '@ionic/angular';
 import {RouterModule} from '@angular/router';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ValidationModalComponent} from './validation-modal/validation-modal.component';
+import {FormsModule} from '@angular/forms';
 
 
 
@@ -19,7 +20,7 @@ import {ValidationModalComponent} from './validation-modal/validation-modal.comp
     CommonModule,
     IonicModule,
     RouterModule,
-    DragDropModule
+    DragDropModule, FormsModule
   ],
   exports:  [
     FetchExerciseModalComponent,

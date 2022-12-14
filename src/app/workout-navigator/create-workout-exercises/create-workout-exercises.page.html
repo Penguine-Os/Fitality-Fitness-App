@@ -36,20 +36,30 @@
             <ion-label>{{workoutEx.workoutExercise.name}}</ion-label>
           </ion-item>
           <ion-grid slot="content">
-            <app-workout-exercise-input [propertyName]="('Sets:')"
-                                        [(propertyValue)]="workoutEx.sets"></app-workout-exercise-input>
-
-            <app-workout-exercise-input [propertyName]="('Reps:')"
-              [(propertyValue)]="workoutEx.reps"></app-workout-exercise-input>
-
-            <app-workout-exercise-input [propertyName]="('Weight:')"
-              [(propertyValue)]="workoutEx.weight"></app-workout-exercise-input>
-
-            <app-workout-exercise-input [propertyName]="('Rest between reps:')"
-              [(propertyValue)]="workoutEx.restDuration"></app-workout-exercise-input>
 
 
               <ion-list>
+                <app-workout-exercise-input [propertyName]="('Sets:')"
+                                            [stepSize]="1"
+                                            [min]="1"
+                                            [(propertyValue)]="workoutEx.sets"></app-workout-exercise-input>
+
+                <app-workout-exercise-input [propertyName]="('Reps:')"
+                                            [stepSize]='1'
+                                            [min]='1'
+                                            [(propertyValue)]="workoutEx.reps"></app-workout-exercise-input>
+
+                <app-workout-exercise-input [propertyName]="('Weight:')"
+                                            [stepSize]='10'
+                                            [min]='1'
+                                            [smallerStep]="1.5"
+                                            [(propertyValue)]="workoutEx.weight"></app-workout-exercise-input>
+
+                <app-workout-exercise-input [propertyName]="('Rest between reps:')"
+                                            [stepSize]='1'
+                                            [min]='0'
+                                            [(propertyValue)]="workoutEx.restDuration"></app-workout-exercise-input>
+
                 <ion-range (ionChange)="rangeHandler($event, workoutEx)"
                            [ticks]="true" [snaps]="true" step="50" [min]="0" [max]="250">
 

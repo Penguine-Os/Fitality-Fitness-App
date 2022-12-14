@@ -1,16 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-
     signingConfigs {
-      debug {
-        storeFile file('C:\\Users\\yene\\source\\repos\\Ionic\\Project\\Fitality\\key.jks')
-        storePassword 'cocoButter'
-        keyPassword 'cocoButter'
-        keyAlias 'fitkey'
-      }
+        debug {
+            storeFile file('C:\\Users\\yene\\source\\repos\\Ionic\\Project\\Fitality\\key.jks')
+            storePassword 'cocoButter'
+            keyPassword 'cocoButter'
+            keyAlias 'fitkey'
+        }
     }
-  namespace 'be.fitality.ionic'
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "be.fitality.ionic"

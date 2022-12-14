@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ExerciseProviderService} from '../Services/Api/exercise-provider.service';
 import {Router} from '@angular/router';
 import {WorkoutExerciseStateManagerService} from '../Services/workout-exercise-state-manager.service';
-import {FireAuthService} from '../Services/Authentication/fire-auth.service';
+import {FireAuthService} from '../Services/FireBase/fire-auth.service';
 
 
 @Component({
