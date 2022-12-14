@@ -73,14 +73,14 @@ export class FireAuthService implements OnDestroy {
 
   async signInWithGithub(): Promise<void> {
 
-    const {credential: {idToken}} = await FirebaseAuthentication.signInWithGithub();
+    const {credential: {accessToken}} = await FirebaseAuthentication.signInWithGithub();
 
     if (Capacitor.isNativePlatform()) {
       // A credential can be generated for each supported provider,
       // however, the signature of these methods is varied.
       // Make sure to check the Firebase JavaScript SDK docs to find the required parameters.
       // https://firebase.google.com/docs/auth/web/google-signin
-      const credential = GithubAuthProvider.credential(idToken);
+      const credential = GithubAuthProvider.credential(accessToken );
       await signInWithCredential(this.auth, credential);
     }
   }

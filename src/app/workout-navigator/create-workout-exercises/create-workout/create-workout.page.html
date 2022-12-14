@@ -27,37 +27,23 @@
         </ion-row>
       </ion-grid>
       <ion-label>Specify the span of this routine!</ion-label>
-      <app-workout-exercise-input propertyName="Month" [propertyValue]="duration"></app-workout-exercise-input>
+      <app-workout-exercise-input [propertyName]="('Month')" [(propertyValue)]="duration"></app-workout-exercise-input>
 
     </ion-card-content>
 
 
   </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Progressive Overload</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <ion-range (ionChange)="rangeHandler($event)" [value]="1"
-                 [ticks]="true" [snaps]="true" step="50" [min]="50" [max]="250">
-
-        <ion-label slot="start">0.5</ion-label>
-        <ion-label slot="end">2.5</ion-label>
-      </ion-range>
-    </ion-card-content>
-  </ion-card>
   <ion-card>
     <ion-card-header>
       <ion-card-title>Split Strategy</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-list>
-        <ion-select interface="action-sheet" placeholder="Select split strategy for your weekly routine">
-          <ion-select-option value="pushPull">Push-Pull</ion-select-option>
-          <ion-select-option value="fullBody">Full-Body</ion-select-option>
-          <ion-select-option value="upperBodyLowerBody">Upper-Body / Lower-Body</ion-select-option>
+        <ion-select interface="action-sheet"
+                    placeholder="Select split strategy for your weekly routine"
+                    (ionChange)="selectOptionHandler($event)">
+          <ion-select-option [value]="item.key" *ngFor="let item of splitStrategies | keyvalue">{{item.value}}</ion-select-option>
         </ion-select>
       </ion-list>
     </ion-card-content>

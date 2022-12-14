@@ -24,19 +24,26 @@ export class WorkoutExerciseInputComponent implements OnInit {
     this.propertyValue =  Math.max(1,this.propertyValue +delta );
     this.propertyValueChange.emit(this.propertyValue);
   }
-
+  // resize3(delta: number) {
+  //   this.propertyValue =  Math.max(0,this.propertyValue +delta );
+  //   this.propertyValueChange.emit(this.propertyValue);
+  // }
   ngOnInit() {
   }
 
   increaseClickHandler() {
     // this.propertyValue++;
-    this.resize1(+1);
 
+    if (this.propertyName === 'Weight:') {
+      this.resize2(+5);
+      return;
+    }
+    this.resize1(+1);
   }
 
   decreaseClickHandler() {
    if (this.propertyName === 'Month') {
-     this.resize2(+1);
+     this.resize2(-1);
      return;
    }
 

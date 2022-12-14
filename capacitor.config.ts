@@ -9,7 +9,8 @@ const config: CapacitorConfig = {
     capacitorHttp: {
       enabled: true,
     },
-    firebaseAuthentication: {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    FirebaseAuthentication: {
       skipNativeAuth: false,
       providers: ['google.com','github.com'],
     },

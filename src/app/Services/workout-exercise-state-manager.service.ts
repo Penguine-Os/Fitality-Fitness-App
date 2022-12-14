@@ -4,6 +4,7 @@ import {ExerciseType} from '../Models/ExerciseType';
 import {Workout} from '../Models/Workout';
 import {WorkoutExercise} from '../Models/WorkoutExercise';
 import {v4 as uuidv4} from 'uuid';
+import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +12,19 @@ import {v4 as uuidv4} from 'uuid';
 export class WorkoutExerciseStateManagerService {
   #exercises: ExerciseType[] = [];
   #workoutExercises: WorkoutExercise[] = [];
+  #workouts: Workout[] = [];
   observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
 
-  workout = new Observable<Workout>();
+  observableWeeklyWorkouts = new Observable<WeeklyWorkouts[]>();
 
   constructor() {
   }
 
-  getWorkoutExercises(){
+  getWorkoutExercises() {
     return this.#workoutExercises;
   }
+
   deleteExercise(deletedExercise: ExerciseType) {
     this.#exercises = this.#exercises.filter(x => x !== deletedExercise);
     this.#workoutExercises = this.#workoutExercises.filter(x => x.workoutExercise !== deletedExercise);
@@ -31,8 +34,8 @@ export class WorkoutExerciseStateManagerService {
 
   addExercises(data: ExerciseType[]) {
 
-    data.forEach(x =>{
-      if (!this.#exercises.find(y => x.name ===  y.name)) {
+    data.forEach(x => {
+      if (!this.#exercises.find(y => x.name === y.name)) {
         this.#exercises.push(x);
         this.mapExerciseTypesToWorkoutExercises(x);
       }
@@ -41,29 +44,41 @@ export class WorkoutExerciseStateManagerService {
     this.observableExercises.next(this.#exercises);
     this.observableWorkoutExercises.next(this.#workoutExercises);
   }
+
   mapExerciseTypesToWorkoutExercises(exVal: ExerciseType) {
 
-      const workoutEx: WorkoutExercise = {
-        id: uuidv4(),
-        workOutId: '',
-        name: '',
-        workoutExercise: exVal,
-        sets: 0,
-        reps: 0,
-        weight: 0,
-        restDuration: 0,
-        getRestsBetweenSets() {
-          return this.restDuration === 0 ? new Array(this.sets).fill(0) : new Array(this.sets).fill(this.restDuration);
-        },
-        startExercise: undefined,
-        endExercise: undefined,
-        isCompleted: false,
-        progressiveOverload: 0
-      };
+    const workoutEx: WorkoutExercise = {
+      id: uuidv4(),
+      workOutId: '',
+      name: '',
+      workoutExercise: exVal,
+      sets: 0,
+      reps: 0,
+      weight: 0,
+      restDuration: 0,
+      getRestsBetweenSets() {
+        return this.restDuration === 0 ? new Array(this.sets).fill(0) : new Array(this.sets).fill(this.restDuration);
+      },
+      startExercise: undefined,
+      endExercise: undefined,
+      isCompleted: false,
+      progressiveOverload: 0
+    };
 
-      this.#workoutExercises.push(workoutEx);
+    this.#workoutExercises.push(workoutEx);
 
   }
 
+  //
+  // mapWorkoutExercisesToWorkouts(wExercisesList: WorkoutExercise[]) {
+  //   const workout: Workout = {
+  //     id: '',
+  //     exercises: wExercisesList,
+  //     startWorkout: undefined,
+  //     endWorkout: undefined,
+  //     isCompleted: false,
+  //     note: 'string'
+  //   };
+//}
 }
 
