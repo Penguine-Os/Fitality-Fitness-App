@@ -72,7 +72,7 @@ export class WorkoutExerciseStateManagerService {
 
   }
 
-  public populatePushPullList(workoutEx: WorkoutExercise) {
+  public splitExercisesIntoPushPullList(workoutEx: WorkoutExercise) {
     switch (workoutEx.workoutExercise.muscle) {
       //pull
       case 'biceps':
@@ -98,7 +98,7 @@ export class WorkoutExerciseStateManagerService {
     }
   }
 
-  public populateUpperBodyLowerBody(workoutEx: WorkoutExercise) {
+  public splitExercisesIntoUpperBodyLowerBody(workoutEx: WorkoutExercise) {
     switch (workoutEx.workoutExercise.muscle) {
       //upper
       case 'biceps':
@@ -130,14 +130,17 @@ export class WorkoutExerciseStateManagerService {
 
   public copyRoutineSpan(month: number): void {
     this.#routineSpan = month * 4;
+    console.log(this.#routineSpan);
   }
 
-  populateTempWorkoutExercisesAWithPushPull() {
-    this.#workoutExercises.forEach(wEx => this.populatePushPullList(wEx));
+  populateTempWorkoutExercisesWithPushPull() {
+    this.#workoutExercises.forEach(wEx => this.splitExercisesIntoPushPullList(wEx));
+
   }
 
-  populateTempWorkoutExercisesBWithPushPull() {
-    this.#workoutExercises.forEach(wEx => this.populatePushPullList(wEx));
+  populateTempWorkoutExercisesWithUpperAndLowerBody() {
+    this.#workoutExercises.forEach(wEx => this.splitExercisesIntoUpperBodyLowerBody(wEx));
+
   }
 
   public creatWeeklyRoutineWorkouts() {
@@ -164,9 +167,9 @@ export class WorkoutExerciseStateManagerService {
       switchExercises = !switchExercises;
       workouts.push(workout);
     });
-
+    console.log('Workout[]: ',workouts);
     this.createWeeklyRoutines(workouts);
-
+   // console.log(this.weeklyWorkouts);
   }
 
 

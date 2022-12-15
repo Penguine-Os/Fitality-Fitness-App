@@ -60,13 +60,14 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
   checkHandler() {
     this.exService.copyWeekRoutine(this.weekRoutine);
   }
-  splitWeekWorkouts() {
+  splitWeekWorkoutsAndCreateRoutine() {
+    this.exService.copyRoutineSpan(this.duration);
     switch (this.selectedSplitStrategy) {
       case 'pushPull':
-        this.exService.populateTempWorkoutExercisesAWithPushPull();
+        this.exService.populateTempWorkoutExercisesWithPushPull();
         break;
       case 'upperBodyLowerBody':
-        this.exService.populateTempWorkoutExercisesBWithPushPull();
+        this.exService.populateTempWorkoutExercisesWithUpperAndLowerBody();
         break;
       case 'fullBody':
         this.exService.createFullBodyWorkouts();
