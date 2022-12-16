@@ -1,11 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {WorkoutFrequency} from '../../../Models/WorkoutFrequency';
 import {FireAuthService} from '../../../Services/FireBase/fire-auth.service';
 import {WorkoutRoutine} from '../../../Models/WorkoutRoutine';
 import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exercise-state-manager.service';
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {Subscription} from 'rxjs';
-import {Workout} from '../../../Models/Workout';
+import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
 
 @Component({
   selector: 'app-create-workout',
@@ -15,19 +14,9 @@ import {Workout} from '../../../Models/Workout';
 export class CreateWorkoutPage implements OnInit, OnDestroy {
 
   weekdays: string[] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-  trainingDays: WorkoutFrequency = {
-    monday: false,
-    tuesday: false,
-    wednesday: false,
-    thursday: false,
-    friday: false,
-    saturday: false,
-    sunday: false
-  };
   weekRoutine = new Array<boolean>(7).fill(false);
   progressiveOverload: number;
   duration = 1;
-  newWorkoutRoutine: WorkoutRoutine;
   workOutExercises: WorkoutExercise[];
   workOutExercisesSubscription = new Subscription();
   splitStrategies: { [key: string]: string } = {
@@ -37,9 +26,10 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
   };
 
   selectedSplitStrategy = '';
-  tempWorkoutsC: WorkoutExercise[] = [];
+  btnNextIsDisabled = true;
 
   constructor(public authService: FireAuthService,
+              private storage: FireStoreService,
               private exService: WorkoutExerciseStateManagerService) {
   }
 
@@ -60,27 +50,43 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
   checkHandler() {
     this.exService.copyWeekRoutine(this.weekRoutine);
   }
-  splitWeekWorkoutsAndCreateRoutine() {
-    this.exService.copyRoutineSpan(this.duration);
+
+  splitExercisesAndCreateWeeklyWorkout() {
+    let categorizedExercises: WorkoutExercise[][] = [];
     switch (this.selectedSplitStrategy) {
       case 'pushPull':
-        this.exService.populateTempWorkoutExercisesWithPushPull();
+        categorizedExercises = this.exService.categorizePushPullExercises();
         break;
       case 'upperBodyLowerBody':
-        this.exService.populateTempWorkoutExercisesWithUpperAndLowerBody();
+        categorizedExercises = this.exService.categorizeUpperAndLowerBodyExercises();
         break;
       case 'fullBody':
-        this.exService.createFullBodyWorkouts();
+        categorizedExercises = [[], [], this.exService.allExercises()];
         break;
       default:
         console.log('Select Split Strategy');
         break;
 
     }
-    this.exService.creatWeeklyRoutineWorkouts();
+    this.exService.creatWeeklyRoutineWorkouts(categorizedExercises);
+    this.createWorkoutRoutine();
+  }
+
+   createWorkoutRoutine() {
+    const wRoutine: WorkoutRoutine = {
+      userId: this.authService.getUserUID(),
+      span: this.duration,
+      routineStartDate: 'undefined',
+      weeklyWorkout: this.exService.getWeeklyWorkout(),
+      workoutDays: this.weekRoutine
+    };
+
+    this.storage.storeWorkoutRoutine('Workout-Routines-Template', wRoutine).then(res => console.log(res)).catch(x => console.log(x));
   }
 
   selectOptionHandler(event: any) {
     this.selectedSplitStrategy = event.detail.value;
+    this.btnNextIsDisabled = !this.btnNextIsDisabled;
+    console.log(this.selectedSplitStrategy, this.btnNextIsDisabled);
   }
 }

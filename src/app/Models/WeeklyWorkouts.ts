@@ -2,5 +2,7 @@ import {Workout} from './Workout';
 
 export interface WeeklyWorkouts {
   id: string;
-  weekWorkout: Workout[];
+  workoutA: Workout;
+  workoutB: Workout;
+  workoutFullBody: Workout;
 }

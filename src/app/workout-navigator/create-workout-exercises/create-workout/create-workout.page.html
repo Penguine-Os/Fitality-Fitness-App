@@ -7,7 +7,7 @@
     <ion-title class="ion-text-center">Create Workout</ion-title>
     <ion-buttons slot="end">
 
-      <ion-button (click)="splitWeekWorkoutsAndCreateRoutine()" >
+      <ion-button [disabled]="btnNextIsDisabled" (click)="splitExercisesAndCreateWeeklyWorkout()" >
         <ion-icon name="arrow-forward-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
