@@ -7,6 +7,7 @@ import {RouterModule} from '@angular/router';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ValidationModalComponent} from './validation-modal/validation-modal.component';
 import {FormsModule} from '@angular/forms';
+import {WorkoutCardComponent} from './workout-card/workout-card.component';
 
 
 
@@ -14,7 +15,8 @@ import {FormsModule} from '@angular/forms';
   declarations: [
     FetchExerciseModalComponent,
     WorkoutExerciseInputComponent,
-  ValidationModalComponent
+    ValidationModalComponent,
+    WorkoutCardComponent
   ],
   imports: [
     CommonModule,
@@ -25,6 +27,7 @@ import {FormsModule} from '@angular/forms';
   exports:  [
     FetchExerciseModalComponent,
     WorkoutExerciseInputComponent,
-    ValidationModalComponent]
+    ValidationModalComponent,
+    WorkoutCardComponent]
 })
 export class SharedModule { }

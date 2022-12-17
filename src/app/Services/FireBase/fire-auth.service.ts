@@ -41,8 +41,8 @@ export class FireAuthService implements OnDestroy {
     return this.isLoggedIn() ? this.currentUser.value.email : undefined;
   }
 
-  getUserUID(): string | undefined {
-    return this.isLoggedIn() ? this.currentUser.value.uid : undefined;
+  getUserUID(): string  {
+    return this.isLoggedIn() ? this.currentUser.value.uid : '';
   }
 
   async signOut(): Promise<void> {
@@ -54,17 +54,9 @@ export class FireAuthService implements OnDestroy {
   }
 
   async signInWithGoogle(): Promise<void> {
-    // Sign in on the native layer.
     const {credential: {idToken}} = await FirebaseAuthentication.signInWithGoogle();
 
-    // Sign in on the web layer.
-    // The plug-in only handles the native layer, for PWA this isn't a problem.
-    // However, for native apps this is a problem, as the app is web-based.
     if (Capacitor.isNativePlatform()) {
-      // A credential can be generated for each supported provider,
-      // however, the signature of these methods is varied.
-      // Make sure to check the Firebase JavaScript SDK docs to find the required parameters.
-      // https://firebase.google.com/docs/auth/web/google-signin
       const credential = GoogleAuthProvider.credential(idToken);
       await signInWithCredential(this.auth, credential);
     }
@@ -76,10 +68,6 @@ export class FireAuthService implements OnDestroy {
     const {credential: {accessToken}} = await FirebaseAuthentication.signInWithGithub();
 
     if (Capacitor.isNativePlatform()) {
-      // A credential can be generated for each supported provider,
-      // however, the signature of these methods is varied.
-      // Make sure to check the Firebase JavaScript SDK docs to find the required parameters.
-      // https://firebase.google.com/docs/auth/web/google-signin
       const credential = GithubAuthProvider.credential(accessToken );
       await signInWithCredential(this.auth, credential);
     }
@@ -99,4 +87,5 @@ export class FireAuthService implements OnDestroy {
       await this.router.navigate(['/login']);
     }
   }
+
 }

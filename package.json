@@ -42,6 +42,7 @@
     "@ionic/angular": "^6.1.9",
     "add": "^2.0.6",
     "firebase": "^9.15.0",
+    "fixed-size-array": "^0.1.1",
     "ionicons": "^6.0.3",
     "pnpm": "^7.18.0",
     "protractor": "^7.0.0",

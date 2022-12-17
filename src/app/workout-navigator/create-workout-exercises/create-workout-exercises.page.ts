@@ -16,7 +16,6 @@ import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 })
 export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   workoutExercises: WorkoutExercise[] = [];
-  #workOutId = uuidv4();
   private ex: ExerciseType[] = [];
   private exerciseSubscription = new Subscription();
   private workoutExerciseSubscription = new Subscription();

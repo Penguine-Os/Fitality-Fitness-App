@@ -1,6 +1,8 @@
 import {Workout} from './Workout';
 
 export interface WeeklyWorkouts {
-  id: string;
-  weekWorkout: Workout[];
+  splitName: string;
+  workoutA: Workout;
+  workoutB: Workout;
+  workoutFullBody: Workout;
 }
