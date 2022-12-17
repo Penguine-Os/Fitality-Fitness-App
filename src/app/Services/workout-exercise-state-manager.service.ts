@@ -101,7 +101,7 @@ export class WorkoutExerciseStateManagerService {
     const allPull = this.#workoutExercises.map(x => this.splitPull(x)).filter(x => x !== undefined);
     const allPush = this.#workoutExercises.map(x => this.splitPush(x)).filter(x => x !== undefined);
 
-    return [allPull, allPush,[]];
+    return [ allPush,allPull,[]];
   }
 
   categorizeUpperAndLowerBodyExercises() {
@@ -110,19 +110,22 @@ export class WorkoutExerciseStateManagerService {
     return [allUpper, allLower,[]];
   }
 
-  public creatWeeklyRoutineWorkouts(allEx: WorkoutExercise[][]) {
+  public creatWeeklyRoutineWorkouts(allEx: WorkoutExercise[][], splitStrategy: string) {
     const [workoutExA, workoutExB, workoutExFull] = allEx;
 
     // const workouts: Workout[] = [];
-
+    const workoutNameA = splitStrategy === 'pushPull'? 'Push' : 'Upper-Body';
+    const workoutNameB = splitStrategy === 'pushPull'? 'Pull' : 'Lower-Body';
     const workoutA: Workout = {
+      workoutName: `Workout A:${workoutNameA}`,
       workoutExercises: workoutExA,
-      startWorkout: 'undefined',
+      startWorkout: new Date(),
       endWorkout: 'undefined',
       isCompleted: false,
       note: 'string'
     };
     const workoutB: Workout = {
+      workoutName: `Workout B:${workoutNameB}`,
       workoutExercises: workoutExB,
       startWorkout: 'undefined',
       endWorkout: 'undefined',
@@ -131,6 +134,7 @@ export class WorkoutExerciseStateManagerService {
     };
 
     const workoutFullBody: Workout = {
+      workoutName: 'Full-Body',
       workoutExercises: workoutExFull,
       startWorkout: 'undefined',
       endWorkout: 'undefined',
@@ -140,7 +144,7 @@ export class WorkoutExerciseStateManagerService {
 
 
     this.weeklyWorkout = {
-      id: '',
+      splitName: splitStrategy,
       workoutA,
       workoutB,
       workoutFullBody
@@ -160,7 +164,7 @@ export class WorkoutExerciseStateManagerService {
   // public createWeeklyRoutines(workOuts: Workout[]) {
   //   for (let i = 0; i < this.#routineSpan; i++) {
   //     const weekWorkout: WeeklyWorkouts = {
-  //       id: `Week ${i}`,
+  //       splitName: `Week ${i}`,
   //       weekWorkout: [...workOuts]
   //     };
   //     this.weeklyWorkouts.push(weekWorkout);

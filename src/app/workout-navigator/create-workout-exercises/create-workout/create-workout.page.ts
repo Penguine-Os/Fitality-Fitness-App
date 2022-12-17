@@ -68,20 +68,25 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
         break;
 
     }
-    this.exService.creatWeeklyRoutineWorkouts(categorizedExercises);
+    this.exService.creatWeeklyRoutineWorkouts(categorizedExercises, this.selectedSplitStrategy);
     this.createWorkoutRoutine();
   }
 
-   createWorkoutRoutine() {
+  async createWorkoutRoutine() {
+    const creationDate = new Date();
+    const expirationDate = new Date();
+    expirationDate.setMonth(creationDate.getMonth() + this.duration);
     const wRoutine: WorkoutRoutine = {
       userId: this.authService.getUserUID(),
       span: this.duration,
-      routineStartDate: 'undefined',
+      routineStartDate: creationDate,
+      routineEndDate: expirationDate,
       weeklyWorkout: this.exService.getWeeklyWorkout(),
+      // workoutDays: this.weekRoutine
       workoutDays: this.weekRoutine
     };
 
-    this.storage.storeWorkoutRoutine('Workout-Routines-Template', wRoutine).then(res => console.log(res)).catch(x => console.log(x));
+    await this.storage.storeWorkoutRoutine('Workout-Routines-Template', wRoutine);
   }
 
   selectOptionHandler(event: any) {
