@@ -14,10 +14,14 @@ export class WorkoutExerciseStateManagerService {
   #workoutExercises: WorkoutExercise[] = [];
   observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
+ observableWorkout: BehaviorSubject<Workout>;
   private weekRoutine = new Array<boolean>(7).fill(false);
   private weeklyWorkout: WeeklyWorkouts;
 
   constructor() {
+  }
+  getWorkout(wOut: Workout){
+    this.observableWorkout =  new BehaviorSubject<Workout>(wOut);
   }
 
   getWorkoutExercises() {
@@ -48,8 +52,7 @@ export class WorkoutExerciseStateManagerService {
 
     const workoutEx: WorkoutExercise = {
       workoutExercise: exVal,
-      sets: 1,
-      reps: 1,
+      setsAndReps: [5,5,5,5],
       weight: 20,
       restDuration: 0,
       startExercise: 'undefined',

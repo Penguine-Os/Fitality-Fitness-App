@@ -8,6 +8,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {ValidationModalComponent} from './validation-modal/validation-modal.component';
 import {FormsModule} from '@angular/forms';
 import {WorkoutCardComponent} from './workout-card/workout-card.component';
+import {SetsAndRepsComponent} from './sets-and-reps/sets-and-reps.component';
 
 
 
@@ -16,7 +17,8 @@ import {WorkoutCardComponent} from './workout-card/workout-card.component';
     FetchExerciseModalComponent,
     WorkoutExerciseInputComponent,
     ValidationModalComponent,
-    WorkoutCardComponent
+    WorkoutCardComponent,
+    SetsAndRepsComponent,
   ],
   imports: [
     CommonModule,
@@ -28,6 +30,7 @@ import {WorkoutCardComponent} from './workout-card/workout-card.component';
     FetchExerciseModalComponent,
     WorkoutExerciseInputComponent,
     ValidationModalComponent,
-    WorkoutCardComponent]
+    WorkoutCardComponent,
+    SetsAndRepsComponent,]
 })
 export class SharedModule { }

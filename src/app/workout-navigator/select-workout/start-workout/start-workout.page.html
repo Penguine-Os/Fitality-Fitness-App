@@ -12,6 +12,38 @@
 </ion-header>
 
 <ion-content>
-  <ion-button (click)="presentToast(0.15)" expand="block">Pair <ion-icon slot="end" name="bluetooth"></ion-icon></ion-button>
+  <ion-list>
+
+      <ion-list *ngFor="let exes of workout.workoutExercises; let i = index">
+        <ion-grid>
+          <ion-row class="ion-margin">
+            <ion-col size="8">
+              <div>
+                <ion-label>{{exes.workoutExercise.name}}</ion-label>
+              </div>
+            </ion-col>
+            <ion-col size="4" class="ion-text-end">
+              <div>
+                <ion-label>{{exes.setsAndReps.length + ' x ' + exes.setsAndReps[0] + ' x ' + exes.weight + 'Kg'}}</ion-label>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <div style="display: flex; ">
+
+              <app-sets-and-reps  [(propertyValue)]="exes.setsAndReps[j]"
+                          (click)="setClickHandler(exes, j)"
+                          *ngFor="let sets of iterator; let j = index" style="margin: 1rem"></app-sets-and-reps>
+            </div>
+          </ion-row>
+        </ion-grid>
+      </ion-list>
+
+  </ion-list>
+
+
+  <ion-button (click)="presentToast(0.15)" expand="block">Pair
+    <ion-icon slot="end" name="bluetooth"></ion-icon>
+  </ion-button>
 
 </ion-content>

@@ -19,6 +19,7 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   private ex: ExerciseType[] = [];
   private exerciseSubscription = new Subscription();
   private workoutExerciseSubscription = new Subscription();
+  totalReps: number;
 
 
   constructor(private modalCtrl: ModalController,
@@ -90,6 +91,5 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   rangeHandler(event: any, workoutEx: WorkoutExercise) {
     workoutEx.progressiveOverload = event.detail.value / 100;
   }
-
 
 }

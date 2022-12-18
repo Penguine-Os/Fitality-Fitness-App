@@ -2,8 +2,7 @@ import {ExerciseType} from './ExerciseType';
 
 export interface WorkoutExercise{
   workoutExercise: ExerciseType;
-  sets: number;
-  reps: number;
+ setsAndReps: number[],
   weight: number;
   restDuration: number;
   startExercise: Date | string;

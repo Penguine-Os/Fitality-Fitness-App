@@ -19,7 +19,7 @@
                   {{ex.workoutExercise.name}}
                 </ion-col>
                 <ion-col size="4" class="ion-text-end">
-                  {{ex.sets}} x {{ex.reps}} x {{ex.weight}}Kg
+                  {{ex.setsAndReps.length}} x {{ex.setsAndReps[0]}} x {{ex.weight}}Kg
                 </ion-col>
               </ion-row>
             </div>
@@ -27,7 +27,9 @@
         </ion-accordion-group>
       </ion-grid>
       <ion-item >
-        <ion-button [routerLink]="['start-workout']" slot="end" fill="outline">Start</ion-button>
+        <ion-button [routerLink]="['start-workout']"
+                    (click)="clickHandler()"
+                    slot="end" fill="outline">Start</ion-button>
       </ion-item>
     </ion-list>
   </ion-card-content>
