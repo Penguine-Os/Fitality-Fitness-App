@@ -19,12 +19,12 @@ export class WorkoutNavigatorPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    if (this.stateManagerService.getWorkoutExercises().length <= 0) {
-      this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
-    } else {
-      this.router.navigate(['tabs', 'WorkoutNavTab', 'start-workout']);
-    }
-    // this.router.navigate(['tabs', 'WorkoutNavTab', 'start-workout']);
+    // if (this.stateManagerService.getWorkoutExercises().length <= 0) {
+    //   this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
+    // } else {
+    //   this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
+    // }
+    this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
   }
 
   ngOnInit() {

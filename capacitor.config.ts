@@ -6,8 +6,9 @@ const config: CapacitorConfig = {
   webDir: 'www',
   bundledWebRuntime: false,
   plugins: {
-    capacitorHttp: {
-      enabled: true,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    Haptics:{
+      enabled: true
     },
     // eslint-disable-next-line @typescript-eslint/naming-convention
     FirebaseAuthentication: {

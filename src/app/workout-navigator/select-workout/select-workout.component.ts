@@ -2,24 +2,31 @@ import {Component, OnInit} from '@angular/core';
 import {WorkoutRoutine} from '../../Models/WorkoutRoutine';
 import {Workout} from '../../Models/Workout';
 import {AlertController} from '@ionic/angular';
+import {Haptics, VibrateOptions} from '@capacitor/haptics';
+import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 
 @Component({
-  selector: 'app-start-workout',
-  templateUrl: './start-workout.page.html',
-  styleUrls: ['./start-workout.page.scss'],
+  selector: 'app-select-workout',
+  templateUrl: './select-workout.component.html',
+  styleUrls: ['./select-workout.component.scss'],
 })
-export class StartWorkoutPage implements OnInit {
+export class SelectWorkout implements OnInit {
   workoutRoutine: WorkoutRoutine;
   btnIsDisabled = false;
   workouts: Workout[];
-  constructor(private alertController: AlertController) {
-    }
+  vDuration: VibrateOptions = {
+    duration: 1000
+  };
+
+  constructor(private alertController: AlertController,
+              public authService: FireAuthService) {
+  }
 
   ngOnInit() {
     this.workoutRoutine = this.testData();
     console.log(this.testData());
     const splitName = this.workoutRoutine.weeklyWorkout.splitName;
-    if (splitName  === 'pushPull' || splitName === 'upperBodyLowerBody') {
+    if (splitName === 'pushPull' || splitName === 'upperBodyLowerBody') {
       this.workouts = this.organizeWeeklyWorkout(this.workoutRoutine.workoutDays, this.workoutRoutine);
     }
 
@@ -140,7 +147,7 @@ export class StartWorkoutPage implements OnInit {
     };
   }
 
-  organizeWeeklyWorkout(workoutDays: boolean[],workoutR: WorkoutRoutine) {
+  organizeWeeklyWorkout(workoutDays: boolean[], workoutR: WorkoutRoutine) {
     const workouts: Workout[] = [];
     let counter = 0;
     workoutDays.forEach((v, i) => {
@@ -155,7 +162,7 @@ export class StartWorkoutPage implements OnInit {
     return workouts;
   }
 
- async presentAlert() {
+  async presentAlert() {
     const alert = await this.alertController.create({
       header: 'Alert',
       subHeader: 'Important message',

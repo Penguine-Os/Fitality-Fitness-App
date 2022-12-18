@@ -13,8 +13,8 @@ const routes: Routes = [
     loadChildren: () => import('./create-workout-exercises/create-workout-exercises.module').then( m => m.CreateWorkoutExercisesPageModule)
   },
   {
-    path: 'start-workout',
-    loadChildren: () => import('./start-workout/start-workout.module').then( m => m.StartWorkoutPageModule)
+    path: 'select-workout',
+    loadChildren: () => import('./select-workout/start-workout.module').then(m => m.StartWorkoutPageModule)
   }
 ];
 
