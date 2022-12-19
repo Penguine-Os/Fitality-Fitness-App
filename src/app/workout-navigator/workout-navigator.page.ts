@@ -24,7 +24,7 @@ export class WorkoutNavigatorPage implements OnInit {
     } else {
       this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
     }
-    //this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
+   // this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
   }
 
   ngOnInit() {

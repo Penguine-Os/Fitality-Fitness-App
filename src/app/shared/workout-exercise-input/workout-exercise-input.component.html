@@ -1,6 +1,9 @@
 <ion-item>
   <ion-label class="ion-text-wrap">{{propertyName}}</ion-label>
-  <ion-input slot="end" [ngClass]="{'invalid' : propertyValue<= 0}" [value]="propertyValue"
+  <ion-input slot="end"
+             class="ion-text-center"
+             [ngClass]="{'invalid' : propertyValue<= 0}"
+             [value]="propertyValue"
              (ionChange)="handleChange($event)"></ion-input>
   <ion-button slot="end" (click)="increase()">
     <ion-icon slot="icon-only" name='add-circle-outline'></ion-icon>

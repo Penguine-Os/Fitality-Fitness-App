@@ -22,7 +22,7 @@
   <ion-list *ngIf="workoutExercises.length>0">
 
 
-    <ion-item-sliding *ngFor="let workoutEx of workoutExercises">
+    <ion-item-sliding *ngFor="let workoutEx of workoutExercises; let i = index">
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)='removeWorkOutExerciseHandler(workoutEx.workoutExercise)'>
           <ion-icon slot="icon-only" name="trash"></ion-icon>
@@ -44,7 +44,8 @@
             <app-workout-exercise-input [propertyName]="('Reps:')"
                                         [stepSize]='1'
                                         [min]='1'
-                                        [(propertyValue)]="totalReps"></app-workout-exercise-input>
+                                        (click)="editReps(repsVal[i], i)"
+                                        [(propertyValue)]="repsVal[i]"></app-workout-exercise-input>
 
             <app-workout-exercise-input [propertyName]="('Weight:')"
                                         [stepSize]='10'
@@ -64,8 +65,11 @@
 
               <ion-label slot="end">2.5</ion-label>
             </ion-range>
-            <ion-item class="ion-text-center">
-                <ion-label>{{workoutEx.progressiveOverload }}</ion-label>
+
+            <ion-item>
+              <ion-label >Progressive Overload:</ion-label>
+
+              <ion-label >{{workoutEx.progressiveOverload }}</ion-label>
             </ion-item>
 
 

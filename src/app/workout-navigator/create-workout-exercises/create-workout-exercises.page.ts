@@ -16,11 +16,12 @@ import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 })
 export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   workoutExercises: WorkoutExercise[] = [];
-  totalReps: number;
+  totalReps = 0;
+  repsVal: number[] = [];
   private ex: ExerciseType[] = [];
   private exerciseSubscription = new Subscription();
   private workoutExerciseSubscription = new Subscription();
-
+  private repsValSubscription = new Subscription();
 
 
   constructor(private modalCtrl: ModalController,
@@ -43,6 +44,9 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
 
     this.workoutExerciseSubscription = this.stateManagerService.observableWorkoutExercises
       .subscribe(value => this.workoutExercises = value);
+
+    this.repsValSubscription = this.stateManagerService.observableRepVals
+      .subscribe(value => this.repsVal = value);
 
   }
 
@@ -93,4 +97,8 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
     workoutEx.progressiveOverload = event.detail.value / 100;
   }
 
+  editReps(repVal: number, index: number) {
+    this.workoutExercises[index].setsAndReps = new Array(this.workoutExercises[index].setsAndReps.length).fill(repVal);
+
+  }
 }

@@ -12,9 +12,11 @@ export class WorkoutExerciseStateManagerService {
 
   #exercises: ExerciseType[] = [];
   #workoutExercises: WorkoutExercise[] = [];
+  #repVals: number[] = [];
   observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
-  observableSetsAndReps = new BehaviorSubject<number[][]>([]);
+  observableIterator = new BehaviorSubject<number[][]>([]);
+  observableRepVals = new BehaviorSubject<number[]>([]);
   observableWorkout: BehaviorSubject<Workout>;
   private weekRoutine = new Array<boolean>(7).fill(false);
   private weeklyWorkout: WeeklyWorkouts;
@@ -40,16 +42,17 @@ export class WorkoutExerciseStateManagerService {
   }
 
   addExercises(data: ExerciseType[]) {
-
-    data.forEach(x => {
+    data.forEach((x,i) => {
       if (!this.#exercises.find(y => x.name === y.name)) {
         this.#exercises.push(x);
-        this.mapExerciseTypesToWorkoutExercises(x);
+        this.#repVals.push(1);
+        this.mapExerciseTypesToWorkoutExercises(x,);
       }
     });
-
+    this.observableRepVals.next(this.#repVals);
     this.observableExercises.next(this.#exercises);
     this.observableWorkoutExercises.next(this.#workoutExercises);
+    this.generateIterator(this.#workoutExercises);
   }
 
   mapExerciseTypesToWorkoutExercises(exVal: ExerciseType) {
@@ -57,8 +60,8 @@ export class WorkoutExerciseStateManagerService {
     const workoutEx: WorkoutExercise = {
       workoutExercise: exVal,
       completedSets: [false, false, false, false],
-      setsAndReps: [5, 5, 5, 5],
-      weight: 20,
+      setsAndReps: [1],
+      weight: 5,
       restDuration: 0,
       startExercise: 'undefined',
       endExercise: 'undefined',
@@ -172,7 +175,7 @@ export class WorkoutExerciseStateManagerService {
     const tempArr: number[][] = [];
     exercises.forEach(x => tempArr.push(new Array(x.setsAndReps.length).fill(0)));
 
-    this.observableSetsAndReps.next(tempArr);
+    this.observableIterator.next(tempArr);
   }
 
   // public createWeeklyRoutines(workOuts: Workout[]) {

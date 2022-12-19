@@ -38,7 +38,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.workoutSub = this.exStateManager.observableWorkout.subscribe(x => this.workout = x);
-    this.iteratorSub = this.exStateManager.observableSetsAndReps.subscribe(x => this.iterator = x);
+    this.iteratorSub = this.exStateManager.observableIterator.subscribe(x => this.iterator = x);
     this.workout.workoutExercises.map(x => x.restDuration = 0.15);
     console.log(this.iterator);
 
