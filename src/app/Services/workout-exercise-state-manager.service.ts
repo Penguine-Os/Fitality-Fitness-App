@@ -52,6 +52,7 @@ export class WorkoutExerciseStateManagerService {
 
     const workoutEx: WorkoutExercise = {
       workoutExercise: exVal,
+      completedSets:[false,false,false,false],
       setsAndReps: [5,5,5,5],
       weight: 20,
       restDuration: 0,

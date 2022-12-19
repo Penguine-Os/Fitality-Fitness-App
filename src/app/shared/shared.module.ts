@@ -9,6 +9,7 @@ import {ValidationModalComponent} from './validation-modal/validation-modal.comp
 import {FormsModule} from '@angular/forms';
 import {WorkoutCardComponent} from './workout-card/workout-card.component';
 import {SetsAndRepsComponent} from './sets-and-reps/sets-and-reps.component';
+import {ExerciseInfoModalComponent} from './exercise-info-modal/exercise-info-modal.component';
 
 
 
@@ -19,6 +20,7 @@ import {SetsAndRepsComponent} from './sets-and-reps/sets-and-reps.component';
     ValidationModalComponent,
     WorkoutCardComponent,
     SetsAndRepsComponent,
+    ExerciseInfoModalComponent
   ],
   imports: [
     CommonModule,
@@ -31,6 +33,7 @@ import {SetsAndRepsComponent} from './sets-and-reps/sets-and-reps.component';
     WorkoutExerciseInputComponent,
     ValidationModalComponent,
     WorkoutCardComponent,
-    SetsAndRepsComponent,]
+    SetsAndRepsComponent,
+    ExerciseInfoModalComponent]
 })
 export class SharedModule { }
