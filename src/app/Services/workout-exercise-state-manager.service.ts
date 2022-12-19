@@ -4,6 +4,7 @@ import {ExerciseType} from '../Models/ExerciseType';
 import {Workout} from '../Models/Workout';
 import {WorkoutExercise} from '../Models/WorkoutExercise';
 import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
+import {getBoolean} from '@angular/fire/remote-config';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,18 @@ export class WorkoutExerciseStateManagerService {
   #workoutExercises: WorkoutExercise[] = [];
   observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
- observableWorkout: BehaviorSubject<Workout>;
+  observableIterator = new BehaviorSubject<boolean[][]>([]);
+  observableWorkout: BehaviorSubject<Workout>;
   private weekRoutine = new Array<boolean>(7).fill(false);
   private weeklyWorkout: WeeklyWorkouts;
 
   constructor() {
   }
-  getWorkout(wOut: Workout){
-    this.observableWorkout =  new BehaviorSubject<Workout>(wOut);
+
+  getWorkout(wOut: Workout) {
+    console.log('modified workout', wOut);
+    this.generateIterator(wOut.workoutExercises);
+    this.observableWorkout = new BehaviorSubject<Workout>(wOut);
   }
 
   getWorkoutExercises() {
@@ -52,8 +57,8 @@ export class WorkoutExerciseStateManagerService {
 
     const workoutEx: WorkoutExercise = {
       workoutExercise: exVal,
-      completedSets:[false,false,false,false],
-      setsAndReps: [5,5,5,5],
+      completedSets: [false, false, false, false],
+      setsAndReps: [5, 5, 5, 5],
       weight: 20,
       restDuration: 0,
       startExercise: 'undefined',
@@ -105,21 +110,21 @@ export class WorkoutExerciseStateManagerService {
     const allPull = this.#workoutExercises.map(x => this.splitPull(x)).filter(x => x !== undefined);
     const allPush = this.#workoutExercises.map(x => this.splitPush(x)).filter(x => x !== undefined);
 
-    return [ allPush,allPull,[]];
+    return [allPush, allPull, []];
   }
 
   categorizeUpperAndLowerBodyExercises() {
     const allUpper = this.#workoutExercises.map(x => this.splitUpper(x)).filter(x => x !== undefined);
     const allLower = this.#workoutExercises.map(x => this.splitLower(x)).filter(x => x !== undefined);
-    return [allUpper, allLower,[]];
+    return [allUpper, allLower, []];
   }
 
   public creatWeeklyRoutineWorkouts(allEx: WorkoutExercise[][], splitStrategy: string) {
     const [workoutExA, workoutExB, workoutExFull] = allEx;
 
     // const workouts: Workout[] = [];
-    const workoutNameA = splitStrategy === 'pushPull'? 'Push' : 'Upper-Body';
-    const workoutNameB = splitStrategy === 'pushPull'? 'Pull' : 'Lower-Body';
+    const workoutNameA = splitStrategy === 'pushPull' ? 'Push' : 'Upper-Body';
+    const workoutNameB = splitStrategy === 'pushPull' ? 'Pull' : 'Lower-Body';
     const workoutA: Workout = {
       workoutName: `Workout A:${workoutNameA}`,
       workoutExercises: workoutExA,
@@ -164,6 +169,12 @@ export class WorkoutExerciseStateManagerService {
     return this.weeklyWorkout;
   }
 
+  generateIterator(exercises: WorkoutExercise[]) {
+    const tempArr: boolean[][] = [];
+    exercises.forEach(x => tempArr.push(new Array(x.setsAndReps.length).fill(true)));
+
+    this.observableIterator.next(tempArr);
+  }
 
   // public createWeeklyRoutines(workOuts: Workout[]) {
   //   for (let i = 0; i < this.#routineSpan; i++) {

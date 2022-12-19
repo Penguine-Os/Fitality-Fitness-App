@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Haptics, ImpactStyle} from '@capacitor/haptics';
 import {AlertController, IonRouterOutlet, ModalController, ToastController} from '@ionic/angular';
 import {FireAuthService} from '../../../Services/FireBase/fire-auth.service';
@@ -10,6 +10,7 @@ import {Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {ExerciseInfoModalComponent} from '../../../shared/exercise-info-modal/exercise-info-modal.component';
 import {ExerciseType} from '../../../Models/ExerciseType';
+import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/edit-exercise-inputs.component';
 
 @Component({
   selector: 'app-start-workout',
@@ -23,12 +24,13 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   checkState: string;
   initialRepVal: number;
   workoutSub = new Subscription();
+  iteratorSub = new Subscription();
   interval: NodeJS.Timeout;
   private isFirstClick = true;
   private repsVal: number;
   private clicks = 0;
   private toaster: HTMLIonToastElement;
-
+  private modal: HTMLIonModalElement;
 
   constructor(public toastCtrl: ToastController,
               public authService: FireAuthService,
@@ -40,20 +42,15 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.workoutSub = this.exStateManager.observableWorkout.subscribe(x => this.workout = x);
+    this.iteratorSub = this.exStateManager.observableIterator.subscribe(x => this.iterator = x);
     this.workout.workoutExercises.map(x => x.restDuration = 0.15);
+    console.log(this.iterator);
 
-    //VERSCHRIKKELIJK
-    this.workout.workoutExercises.forEach(x => this.iterator.push(new Array(x.setsAndReps.length).fill(true)));
-    //VERSCHRIKKELIJK
-    console.log(this.workout.workoutExercises[0]);
-  }
-
-  ionViewWillEnter() {
-    //this.workout.workoutExercises.forEach(x => this.iterator.push(new Array(x.setsAndReps.length).fill('')));
   }
 
   ngOnDestroy() {
     this.workoutSub.unsubscribe();
+    this.iteratorSub.unsubscribe();
   }
 
   hapticsVibrate = async () => {
@@ -107,7 +104,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     return await this.toastCtrl.create({
       message: `Good Work! Recovery in: ${minutes}:${seconds >= 10 ? seconds : '0' + seconds}`,
       duration: duration * 1000,
-      icon: 'globe',
+      icon: 'pulse-outline',
       position: 'top'
     });
   }
@@ -125,27 +122,21 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
       this.initialRepVal = exercise.setsAndReps[repsIndex];
       this.isFirstClick = false;
     }
-
-    // if (this.repsVal <= 0 || exercise.restDuration <= 0) {
-    //   this.isUnchecked = true;
-    // }
-
-    // if (this.clicks > 1 && this.initialRepVal === this.repsVal) {
-    //   return;
-    // }
     this.presentToast(exercise.restDuration);
   }
 
-  async presentModal(i: number) {
-    const modal = await this.modalController.create({
-      component: ExerciseInfoModalComponent,
+  async presentModal(i: number, action: string) {
+    const modalComp = action === 'info' ? ExerciseInfoModalComponent : EditExerciseInputsComponent;
+    this.modal = await this.modalController.create({
+      component: modalComp,
       componentProps: {
         index: i,
       },
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl
     });
-    return await modal.present();
+    await this.modal.present();
+
   }
 
   async ionViewWillLeave() {

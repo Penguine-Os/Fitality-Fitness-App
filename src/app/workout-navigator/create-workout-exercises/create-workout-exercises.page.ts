@@ -16,10 +16,11 @@ import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 })
 export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   workoutExercises: WorkoutExercise[] = [];
+  totalReps: number;
   private ex: ExerciseType[] = [];
   private exerciseSubscription = new Subscription();
   private workoutExerciseSubscription = new Subscription();
-  totalReps: number;
+
 
 
   constructor(private modalCtrl: ModalController,

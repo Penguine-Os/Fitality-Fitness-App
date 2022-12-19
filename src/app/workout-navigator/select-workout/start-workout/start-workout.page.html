@@ -17,25 +17,30 @@
       <ion-list *ngFor="let exes of workout.workoutExercises; let i = index">
         <ion-grid>
           <ion-row class="ion-margin">
-            <ion-col size="8">
+            <ion-col size="7" >
               <div>
                 <ion-label >{{exes.workoutExercise.name}}</ion-label>
                 <ion-icon name="information-circle-outline"
                           color="warning"
                           class="ion-info"
-                          (click)="presentModal(i)"></ion-icon>
+                          (click)="presentModal(i, 'info')"></ion-icon>
               </div>
             </ion-col>
-            <ion-col size="4" class="ion-text-end">
+            <ion-col  size="5" class="ion-text-end">
               <div>
                 <ion-label>{{exes.setsAndReps.length + ' x ' + exes.setsAndReps[0] + ' x ' + exes.weight + 'Kg'}}</ion-label>
+                <ion-icon name="cog-outline"
+                          color="warning"
+                          class="ion-info"
+                          (click)="presentModal(i, 'edit')"></ion-icon>
               </div>
             </ion-col>
           </ion-row>
           <ion-row>
-            <div style="display: flex; ">
+            <div  class="scrolling-wrapper">
 
-              <app-sets-and-reps  [(propertyValue)]="exes.setsAndReps[j]"
+              <app-sets-and-reps class="customComponent"
+                                 [(propertyValue)]="exes.setsAndReps[j]"
                           (click)="setClickHandler(exes, j)"
                                   [(checkStyleValue)]="checkState"
                           *ngFor="let rep of iterator[i]; let j = index" style="margin: 1rem"></app-sets-and-reps>
@@ -46,9 +51,5 @@
 
   </ion-list>
 
-
-  <ion-button (click)="presentToast(0.15)" expand="block">Pair
-    <ion-icon slot="end" name="bluetooth"></ion-icon>
-  </ion-button>
 
 </ion-content>

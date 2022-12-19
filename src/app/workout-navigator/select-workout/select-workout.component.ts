@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {WorkoutRoutine} from '../../Models/WorkoutRoutine';
 import {Workout} from '../../Models/Workout';
 import {AlertController} from '@ionic/angular';
-import {Haptics, VibrateOptions} from '@capacitor/haptics';
 import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 
 @Component({
@@ -14,16 +13,13 @@ export class SelectWorkout implements OnInit {
   workoutRoutine: WorkoutRoutine;
   btnIsDisabled = false;
   workouts: Workout[];
-  vDuration: VibrateOptions = {
-    duration: 1000
-  };
 
   constructor(private alertController: AlertController,
               public authService: FireAuthService) {
   }
 
   ngOnInit() {
-    this.workoutRoutine = this.testData();
+    this.workoutRoutine = this.testData();//to be replaced with firestore data
     const splitName = this.workoutRoutine.weeklyWorkout.splitName;
     if (splitName === 'pushPull' || splitName === 'upperBodyLowerBody') {
       this.workouts = this.organizeWeeklyWorkout(this.workoutRoutine.workoutDays, this.workoutRoutine);
