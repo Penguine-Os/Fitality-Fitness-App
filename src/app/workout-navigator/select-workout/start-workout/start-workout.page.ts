@@ -1,15 +1,12 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {Haptics, ImpactStyle} from '@capacitor/haptics';
-import {AlertController, IonRouterOutlet, ModalController, ToastController} from '@ionic/angular';
+import { Component, OnDestroy, OnInit} from '@angular/core';
+import {Haptics} from '@capacitor/haptics';
+import {IonRouterOutlet, ModalController, ToastController} from '@ionic/angular';
 import {FireAuthService} from '../../../Services/FireBase/fire-auth.service';
 import {Workout} from '../../../Models/Workout';
-import {WeeklyWorkouts} from '../../../Models/WeeklyWorkouts';
-import {ActivatedRoute} from '@angular/router';
 import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exercise-state-manager.service';
 import {Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {ExerciseInfoModalComponent} from '../../../shared/exercise-info-modal/exercise-info-modal.component';
-import {ExerciseType} from '../../../Models/ExerciseType';
 import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/edit-exercise-inputs.component';
 
 @Component({
@@ -20,7 +17,7 @@ import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/
 export class StartWorkoutPage implements OnInit, OnDestroy {
   workout: Workout;
   btnFill: string;
-  iterator: boolean[][] = [];
+  iterator: number[][] = [];
   checkState: string;
   initialRepVal: number;
   workoutSub = new Subscription();
@@ -28,13 +25,12 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   interval: NodeJS.Timeout;
   private isFirstClick = true;
   private repsVal: number;
-  private clicks = 0;
   private toaster: HTMLIonToastElement;
   private modal: HTMLIonModalElement;
 
   constructor(public toastCtrl: ToastController,
-              public authService: FireAuthService,
-              private exStateManager: WorkoutExerciseStateManagerService,
+              private authService: FireAuthService,
+              public exStateManager: WorkoutExerciseStateManagerService,
               private modalController: ModalController,
               private routerOutlet: IonRouterOutlet) {
 
@@ -42,7 +38,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.workoutSub = this.exStateManager.observableWorkout.subscribe(x => this.workout = x);
-    this.iteratorSub = this.exStateManager.observableIterator.subscribe(x => this.iterator = x);
+    this.iteratorSub = this.exStateManager.observableSetsAndReps.subscribe(x => this.iterator = x);
     this.workout.workoutExercises.map(x => x.restDuration = 0.15);
     console.log(this.iterator);
 

@@ -3,7 +3,7 @@ import {ExerciseProviderService} from '../Services/Api/exercise-provider.service
 import {Router} from '@angular/router';
 import {WorkoutExerciseStateManagerService} from '../Services/workout-exercise-state-manager.service';
 import {FireAuthService} from '../Services/FireBase/fire-auth.service';
-import {WorkoutRoutine} from '../Models/WorkoutRoutine';
+
 
 
 @Component({
@@ -19,12 +19,12 @@ export class WorkoutNavigatorPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    // if (this.stateManagerService.getWorkoutExercises().length <= 0) {
-    //   this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
-    // } else {
-    //   this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
-    // }
-    this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
+    if (this.stateManagerService.getWorkoutExercises().length <= 0) {
+      this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
+    } else {
+      this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
+    }
+    //this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
   }
 
   ngOnInit() {

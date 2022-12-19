@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {ExerciseType} from '../Models/ExerciseType';
 import {Workout} from '../Models/Workout';
 import {WorkoutExercise} from '../Models/WorkoutExercise';
 import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
-import {getBoolean} from '@angular/fire/remote-config';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,7 @@ export class WorkoutExerciseStateManagerService {
   #workoutExercises: WorkoutExercise[] = [];
   observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
-  observableIterator = new BehaviorSubject<boolean[][]>([]);
+  observableSetsAndReps = new BehaviorSubject<number[][]>([]);
   observableWorkout: BehaviorSubject<Workout>;
   private weekRoutine = new Array<boolean>(7).fill(false);
   private weeklyWorkout: WeeklyWorkouts;
@@ -170,10 +169,10 @@ export class WorkoutExerciseStateManagerService {
   }
 
   generateIterator(exercises: WorkoutExercise[]) {
-    const tempArr: boolean[][] = [];
-    exercises.forEach(x => tempArr.push(new Array(x.setsAndReps.length).fill(true)));
+    const tempArr: number[][] = [];
+    exercises.forEach(x => tempArr.push(new Array(x.setsAndReps.length).fill(0)));
 
-    this.observableIterator.next(tempArr);
+    this.observableSetsAndReps.next(tempArr);
   }
 
   // public createWeeklyRoutines(workOuts: Workout[]) {

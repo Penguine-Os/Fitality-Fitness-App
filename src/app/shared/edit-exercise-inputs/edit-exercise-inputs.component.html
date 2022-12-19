@@ -8,7 +8,7 @@
       <ion-button color="light" (click)="dismissConfirm()">Confirm</ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-grid>
+  <ion-list>
 
     <app-workout-exercise-input [propertyName]="('Sets:')"
                                 [stepSize]="1"
@@ -26,5 +26,5 @@
                                 [smallerStep]="1.5"
                                 [(propertyValue)]="editWeight"></app-workout-exercise-input>
 
-  </ion-grid>
+  </ion-list>
 </ion-content>
