@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ExerciseType} from '../../Models/ExerciseType';
 import {ModalController} from '@ionic/angular';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
-import {v4 as uuidv4} from 'uuid';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 import {Subscription} from 'rxjs';
 import {FetchExerciseModalComponent} from '../../shared/fetch-exercise-modal/fetch-exercise-modal.component';
@@ -70,10 +69,6 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
     }
   }
 
-  accordionHandler(event: any) {
-    // <ion-slide-page class=“swiper-no-swiping”>
-    // console.log(event.detail.value)
-  }
 
   removeWorkOutExerciseHandler(ex: ExerciseType) {
     this.stateManagerService.deleteExercise(ex);
@@ -88,7 +83,6 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
 
   goToNextPage() {
     ////////++++VALIDATIE NOG TE IMPLEMENTEREN++++////////
-    console.log(this.workoutExercises);
     this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises', 'create-workout']);
   }
 

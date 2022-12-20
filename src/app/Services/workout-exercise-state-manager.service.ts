@@ -4,7 +4,6 @@ import {ExerciseType} from '../Models/ExerciseType';
 import {Workout} from '../Models/Workout';
 import {WorkoutExercise} from '../Models/WorkoutExercise';
 import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +24,6 @@ export class WorkoutExerciseStateManagerService {
   }
 
   getWorkout(wOut: Workout) {
-    console.log('modified workout', wOut);
     this.generateIterator(wOut.workoutExercises);
     this.observableWorkout = new BehaviorSubject<Workout>(wOut);
   }
@@ -42,11 +40,11 @@ export class WorkoutExerciseStateManagerService {
   }
 
   addExercises(data: ExerciseType[]) {
-    data.forEach((x,i) => {
+    data.forEach((x, i) => {
       if (!this.#exercises.find(y => x.name === y.name)) {
         this.#exercises.push(x);
         this.#repVals.push(1);
-        this.mapExerciseTypesToWorkoutExercises(x,);
+        this.mapExerciseTypesToWorkoutExercises(x);
       }
     });
     this.observableRepVals.next(this.#repVals);
@@ -178,14 +176,16 @@ export class WorkoutExerciseStateManagerService {
     this.observableIterator.next(tempArr);
   }
 
-  // public createWeeklyRoutines(workOuts: Workout[]) {
-  //   for (let i = 0; i < this.#routineSpan; i++) {
-  //     const weekWorkout: WeeklyWorkouts = {
-  //       splitName: `Week ${i}`,
-  //       weekWorkout: [...workOuts]
-  //     };
-  //     this.weeklyWorkouts.push(weekWorkout);
-  //   }
-  // }
+   workoutCompleted(workoutExs: WorkoutExercise[]): boolean {
+    let workoutCompleted=true;
+    workoutExs.forEach(ex => {
+      if (!ex.completedSets.every(value => value === true)) {
+        workoutCompleted = false;
+      }
+
+    });
+    console.log('Completed', workoutCompleted);
+    return workoutCompleted;
+  }
 }
 

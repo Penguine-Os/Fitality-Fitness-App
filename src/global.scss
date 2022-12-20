@@ -24,3 +24,54 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.classModal {
+  --height: 50%;
+  --width: 90%;
+  --border-radius: 16px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+
+.classModal {
+  ion-modal::part(backdrop) {
+    --background: rgba(209, 213, 219);
+    opacity: 1;
+  }
+
+  ion-modal {
+    --background: rgb(192, 106, 49);
+    --color: white;
+  }
+
+  ion-toolbar {
+    --background: rgb(192, 106, 49);
+    --color: white;
+  }
+
+
+}
+ion-toast.custom-toast {
+  --background: rgb(192, 106, 49);
+  --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+  --color: #0f3346;
+  --height: 5rem
+}
+
+
+ion-toast.custom-toast::part(button) {
+  color: #971111;
+
+
+}
+
+
+ion-toast.custom-toast::part(icon) {
+  color: #ffffff;
+  font-size: 30px;
+}
+//
+//ion-modal ion-toolbar {
+//  --background: rgb(192, 106, 49);
+//  --color: white;
+//}

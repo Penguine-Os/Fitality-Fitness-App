@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Haptics} from '@capacitor/haptics';
-import {IonRouterOutlet, ModalController, ToastController} from '@ionic/angular';
+import {AlertController, IonRouterOutlet, ModalController, ToastController} from '@ionic/angular';
 import {FireAuthService} from '../../../Services/FireBase/fire-auth.service';
 import {Workout} from '../../../Models/Workout';
 import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exercise-state-manager.service';
@@ -8,6 +8,7 @@ import {Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {ExerciseInfoModalComponent} from '../../../shared/exercise-info-modal/exercise-info-modal.component';
 import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/edit-exercise-inputs.component';
+
 
 @Component({
   selector: 'app-start-workout',
@@ -18,12 +19,9 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   workout: Workout;
   btnFill: string;
   iterator: number[][] = [];
-  checkState: string;
-  initialRepVal: number;
   workoutSub = new Subscription();
   iteratorSub = new Subscription();
   interval: NodeJS.Timeout;
-  private isFirstClick = true;
   private repsVal: number;
   private toaster: HTMLIonToastElement;
   private modal: HTMLIonModalElement;
@@ -32,15 +30,16 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
               private authService: FireAuthService,
               public exStateManager: WorkoutExerciseStateManagerService,
               private modalController: ModalController,
-              private routerOutlet: IonRouterOutlet) {
+              private routerOutlet: IonRouterOutlet,
+              private alertController: AlertController) {
 
   }
 
   async ngOnInit() {
     this.workoutSub = this.exStateManager.observableWorkout.subscribe(x => this.workout = x);
     this.iteratorSub = this.exStateManager.observableIterator.subscribe(x => this.iterator = x);
-    this.workout.workoutExercises.map(x => x.restDuration = 0.15);
-    console.log(this.iterator);
+    console.log('!!!Change duration to initial value!!!!');
+    this.workout.workoutExercises.map(x => x.restDuration = 5);
 
   }
 
@@ -53,6 +52,32 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     await Haptics.vibrate({duration: 500});
   };
 
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Workout Not Yet Completed!',
+      message: 'Are You Sure You Want To Quit?',
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel'
+      },
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: ()=> this.finishWorkout()
+        }],
+    });
+    if (this.exStateManager.workoutCompleted(this.workout.workoutExercises)){
+      this.finishWorkout();
+      return;
+    }
+
+    await alert.present();
+
+  }
+
+  finishWorkout(){
+    console.log('toch ok');
+}
 
   async presentToast(duration: number) {
 
@@ -100,7 +125,18 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     return await this.toastCtrl.create({
       message: `Good Work! Recovery in: ${minutes}:${seconds >= 10 ? seconds : '0' + seconds}`,
       duration: duration * 1000,
+      cssClass: 'custom-toast',
       icon: 'pulse-outline',
+      buttons: [
+        {
+          side: 'end',
+          icon: 'close-circle-outline',
+          cssClass: '',
+          role: 'cancel',
+          handler: () => {
+          }
+        }
+      ],
       position: 'top'
     });
   }
@@ -108,15 +144,9 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   setClickHandler(exercise: WorkoutExercise, repsIndex: number) {
 
     this.repsVal = exercise.setsAndReps[repsIndex];
-   // exercise.completedSets[repsIndex] = true;
-console.log( exercise.completedSets);
-    if (this.checkState === 'outline') {
-      exercise.completedSets[repsIndex] = false;
+
+    if (!exercise.completedSets[repsIndex]) {
       return;
-    }
-    if (this.isFirstClick) {
-      this.initialRepVal = exercise.setsAndReps[repsIndex];
-      this.isFirstClick = false;
     }
     this.presentToast(exercise.restDuration);
   }
@@ -128,6 +158,7 @@ console.log( exercise.completedSets);
       componentProps: {
         index: i,
       },
+      cssClass: 'classModal',
       swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl
     });
