@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {ExerciseType} from '../Models/ExerciseType';
 import {Workout} from '../Models/Workout';
 import {WorkoutExercise} from '../Models/WorkoutExercise';
 import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -12,16 +11,21 @@ export class WorkoutExerciseStateManagerService {
 
   #exercises: ExerciseType[] = [];
   #workoutExercises: WorkoutExercise[] = [];
+  #repVals: number[] = [];
   observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
- observableWorkout: BehaviorSubject<Workout>;
+  observableIterator = new BehaviorSubject<number[][]>([]);
+  observableRepVals = new BehaviorSubject<number[]>([]);
+  observableWorkout: BehaviorSubject<Workout>;
   private weekRoutine = new Array<boolean>(7).fill(false);
   private weeklyWorkout: WeeklyWorkouts;
 
   constructor() {
   }
-  getWorkout(wOut: Workout){
-    this.observableWorkout =  new BehaviorSubject<Workout>(wOut);
+
+  getWorkout(wOut: Workout) {
+    this.generateIterator(wOut.workoutExercises);
+    this.observableWorkout = new BehaviorSubject<Workout>(wOut);
   }
 
   getWorkoutExercises() {
@@ -36,24 +40,26 @@ export class WorkoutExerciseStateManagerService {
   }
 
   addExercises(data: ExerciseType[]) {
-
-    data.forEach(x => {
+    data.forEach((x, i) => {
       if (!this.#exercises.find(y => x.name === y.name)) {
         this.#exercises.push(x);
+        this.#repVals.push(1);
         this.mapExerciseTypesToWorkoutExercises(x);
       }
     });
-
+    this.observableRepVals.next(this.#repVals);
     this.observableExercises.next(this.#exercises);
     this.observableWorkoutExercises.next(this.#workoutExercises);
+    this.generateIterator(this.#workoutExercises);
   }
 
   mapExerciseTypesToWorkoutExercises(exVal: ExerciseType) {
 
     const workoutEx: WorkoutExercise = {
       workoutExercise: exVal,
-      setsAndReps: [5,5,5,5],
-      weight: 20,
+      completedSets: [false],
+      setsAndReps: [1],
+      weight: 5,
       restDuration: 0,
       startExercise: 'undefined',
       endExercise: 'undefined',
@@ -104,21 +110,21 @@ export class WorkoutExerciseStateManagerService {
     const allPull = this.#workoutExercises.map(x => this.splitPull(x)).filter(x => x !== undefined);
     const allPush = this.#workoutExercises.map(x => this.splitPush(x)).filter(x => x !== undefined);
 
-    return [ allPush,allPull,[]];
+    return [allPush, allPull, []];
   }
 
   categorizeUpperAndLowerBodyExercises() {
     const allUpper = this.#workoutExercises.map(x => this.splitUpper(x)).filter(x => x !== undefined);
     const allLower = this.#workoutExercises.map(x => this.splitLower(x)).filter(x => x !== undefined);
-    return [allUpper, allLower,[]];
+    return [allUpper, allLower, []];
   }
 
   public creatWeeklyRoutineWorkouts(allEx: WorkoutExercise[][], splitStrategy: string) {
     const [workoutExA, workoutExB, workoutExFull] = allEx;
 
     // const workouts: Workout[] = [];
-    const workoutNameA = splitStrategy === 'pushPull'? 'Push' : 'Upper-Body';
-    const workoutNameB = splitStrategy === 'pushPull'? 'Pull' : 'Lower-Body';
+    const workoutNameA = splitStrategy === 'pushPull' ? 'Push' : 'Upper-Body';
+    const workoutNameB = splitStrategy === 'pushPull' ? 'Pull' : 'Lower-Body';
     const workoutA: Workout = {
       workoutName: `Workout A:${workoutNameA}`,
       workoutExercises: workoutExA,
@@ -163,15 +169,23 @@ export class WorkoutExerciseStateManagerService {
     return this.weeklyWorkout;
   }
 
+  generateIterator(exercises: WorkoutExercise[]) {
+    const tempArr: number[][] = [];
+    exercises.forEach(x => tempArr.push(new Array(x.setsAndReps.length).fill(0)));
 
-  // public createWeeklyRoutines(workOuts: Workout[]) {
-  //   for (let i = 0; i < this.#routineSpan; i++) {
-  //     const weekWorkout: WeeklyWorkouts = {
-  //       splitName: `Week ${i}`,
-  //       weekWorkout: [...workOuts]
-  //     };
-  //     this.weeklyWorkouts.push(weekWorkout);
-  //   }
-  // }
+    this.observableIterator.next(tempArr);
+  }
+
+   workoutCompleted(workoutExs: WorkoutExercise[]): boolean {
+    let workoutCompleted=true;
+    workoutExs.forEach(ex => {
+      if (!ex.completedSets.every(value => value === true)) {
+        workoutCompleted = false;
+      }
+
+    });
+    console.log('Completed', workoutCompleted);
+    return workoutCompleted;
+  }
 }
 

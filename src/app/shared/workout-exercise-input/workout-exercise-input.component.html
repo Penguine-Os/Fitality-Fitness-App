@@ -1,15 +1,14 @@
-<ion-row >
-  <ion-col>
-    <ion-item>
-      <ion-label class="ion-text-wrap">{{propertyName}}</ion-label>
-      <ion-input slot="end" [ngClass]="{'invalid' : propertyValue<= 0}" [value]="propertyValue" (ionChange)="handleChange($event)"></ion-input>
-      <ion-button slot="end" (click)="increase()">
-        <ion-icon slot="icon-only" name='add-circle-outline'></ion-icon>
-      </ion-button>
-      <ion-button slot="end"  (click)="decrease()">
-        <ion-icon slot="icon-only" name='remove-circle-outline'></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-col>
-
-</ion-row>
+<ion-item>
+  <ion-label class="ion-text-wrap">{{propertyName}}</ion-label>
+  <ion-input slot="end"
+             class="ion-text-center"
+             [ngClass]="{'invalid' : propertyValue<= 0}"
+             [value]="propertyValue"
+             (ionChange)="handleChange($event)"></ion-input>
+  <ion-button slot="end" (click)="increase()">
+    <ion-icon slot="icon-only" name='add-circle-outline'></ion-icon>
+  </ion-button>
+  <ion-button slot="end" (click)="decrease()">
+    <ion-icon slot="icon-only" name='remove-circle-outline'></ion-icon>
+  </ion-button>
+</ion-item>

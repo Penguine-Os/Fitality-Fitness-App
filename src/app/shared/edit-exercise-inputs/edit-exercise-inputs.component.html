@@ -1,0 +1,30 @@
+<ion-content>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="light" (click)="dismiss()">Close</ion-button>
+    </ion-buttons>
+    <ion-title>{{wEx.workoutExercise.name}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="dismissConfirm()">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-list>
+
+    <app-workout-exercise-input [propertyName]="('Sets:')"
+                                [stepSize]="1"
+                                [min]="1"
+                                [(propertyValue)]="editSets"></app-workout-exercise-input>
+
+    <app-workout-exercise-input [propertyName]="('Reps:')"
+                                [stepSize]='1'
+                                [min]='1'
+                                [(propertyValue)]="editReps"></app-workout-exercise-input>
+
+    <app-workout-exercise-input [propertyName]="('Weight:')"
+                                [stepSize]='10'
+                                [min]='1'
+                                [smallerStep]="1.5"
+                                [(propertyValue)]="editWeight"></app-workout-exercise-input>
+
+  </ion-list>
+</ion-content>

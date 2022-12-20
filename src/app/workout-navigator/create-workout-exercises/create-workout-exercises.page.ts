@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ExerciseType} from '../../Models/ExerciseType';
 import {ModalController} from '@ionic/angular';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
-import {v4 as uuidv4} from 'uuid';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 import {Subscription} from 'rxjs';
 import {FetchExerciseModalComponent} from '../../shared/fetch-exercise-modal/fetch-exercise-modal.component';
@@ -16,10 +15,12 @@ import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 })
 export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   workoutExercises: WorkoutExercise[] = [];
+  totalReps = 0;
+  repsVal: number[] = [];
   private ex: ExerciseType[] = [];
   private exerciseSubscription = new Subscription();
   private workoutExerciseSubscription = new Subscription();
-  totalReps: number;
+  private repsValSubscription = new Subscription();
 
 
   constructor(private modalCtrl: ModalController,
@@ -43,6 +44,9 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
     this.workoutExerciseSubscription = this.stateManagerService.observableWorkoutExercises
       .subscribe(value => this.workoutExercises = value);
 
+    this.repsValSubscription = this.stateManagerService.observableRepVals
+      .subscribe(value => this.repsVal = value);
+
   }
 
   async openModal() {
@@ -65,10 +69,6 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
     }
   }
 
-  accordionHandler(event: any) {
-    // <ion-slide-page class=“swiper-no-swiping”>
-    // console.log(event.detail.value)
-  }
 
   removeWorkOutExerciseHandler(ex: ExerciseType) {
     this.stateManagerService.deleteExercise(ex);
@@ -83,7 +83,6 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
 
   goToNextPage() {
     ////////++++VALIDATIE NOG TE IMPLEMENTEREN++++////////
-    console.log(this.workoutExercises);
     this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises', 'create-workout']);
   }
 
@@ -92,4 +91,8 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
     workoutEx.progressiveOverload = event.detail.value / 100;
   }
 
+  editReps(repVal: number, index: number) {
+    this.workoutExercises[index].setsAndReps = new Array(this.workoutExercises[index].setsAndReps.length).fill(repVal);
+    this.workoutExercises[index].completedSets =  new Array(this.workoutExercises[index].setsAndReps.length).fill(false);
+  }
 }
