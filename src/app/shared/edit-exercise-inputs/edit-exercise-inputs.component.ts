@@ -61,6 +61,16 @@ export class EditExerciseInputsComponent implements OnInit {
     const newSetsAndReps = new Array(this.editSets).fill(this.editReps);
     this.wEx.weight = this.editWeight;
     this.wEx.setsAndReps = [...newSetsAndReps];
+    this.updateCompletedSets(this.wEx.setsAndReps );
     this.exService.generateIterator(this.wExercises);
+    console.log(this.wEx.completedSets);
+  }
+  private updateCompletedSets(setsAndRepsArr: number[]){
+    while (setsAndRepsArr.length>this.wEx.completedSets.length){
+      this.wEx.completedSets.push(false);
+    }
+    while (setsAndRepsArr.length<this.wEx.completedSets.length){
+      this.wEx.completedSets.pop();
+    }
   }
 }

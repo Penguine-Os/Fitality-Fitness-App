@@ -108,8 +108,8 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   setClickHandler(exercise: WorkoutExercise, repsIndex: number) {
 
     this.repsVal = exercise.setsAndReps[repsIndex];
-    exercise.completedSets[repsIndex] = true;
-
+   // exercise.completedSets[repsIndex] = true;
+console.log( exercise.completedSets);
     if (this.checkState === 'outline') {
       exercise.completedSets[repsIndex] = false;
       return;

@@ -42,6 +42,7 @@
               <app-sets-and-reps class="customComponent"
                                  [(propertyValue)]="exes.setsAndReps[j]"
                           (click)="setClickHandler(exes, j)"
+                                 [(clickedValue)]="exes.completedSets[j]"
                                   [(checkStyleValue)]="checkState"
                           *ngFor="let rep of iterator[i]; let j = index" style="margin: 1rem"></app-sets-and-reps>
             </div>

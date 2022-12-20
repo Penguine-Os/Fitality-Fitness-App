@@ -99,6 +99,6 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
 
   editReps(repVal: number, index: number) {
     this.workoutExercises[index].setsAndReps = new Array(this.workoutExercises[index].setsAndReps.length).fill(repVal);
-
+    this.workoutExercises[index].completedSets =  new Array(this.workoutExercises[index].setsAndReps.length).fill(false);
   }
 }
