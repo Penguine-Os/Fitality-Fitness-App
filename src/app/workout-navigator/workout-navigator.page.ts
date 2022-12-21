@@ -14,7 +14,7 @@ import {User} from 'firebase/auth';
   styleUrls: ['./workout-navigator.page.scss'],
 })
 export class WorkoutNavigatorPage implements OnInit {
-  workoutR: WorkoutRoutine[];
+  workoutR: WorkoutRoutine;
   wRoutineSub = new Subscription();
   user: User;
   userSub = new Subscription();
@@ -41,7 +41,7 @@ export class WorkoutNavigatorPage implements OnInit {
      this.userSub= this.authService.currentUser.subscribe(x =>{
        this.user = x;
        this.wRoutineSub = this.storage.getRoutine('Workout-Routines-Template',userId)
-         .subscribe(y => this.workoutR = y);
+         .subscribe(y => this.workoutR = y[0]);
     console.log(this.workoutR);
      });
  //   console.log(this.storage.getRoutine('Workout-Routines-Template', userId));
