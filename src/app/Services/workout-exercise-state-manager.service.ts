@@ -61,8 +61,8 @@ export class WorkoutExerciseStateManagerService {
       setsAndReps: [1],
       weight: 5,
       restDuration: 0,
-      startExercise: 'undefined',
-      endExercise: 'undefined',
+      startExerciseTimeStamp: 0,
+      endExerciseTimeStamp: 0,
       isCompleted: false,
       progressiveOverload: 0
     };
@@ -128,16 +128,16 @@ export class WorkoutExerciseStateManagerService {
     const workoutA: Workout = {
       workoutName: `Workout A:${workoutNameA}`,
       workoutExercises: workoutExA,
-      startWorkout: new Date(),
-      endWorkout: 'undefined',
+      startWorkoutTimeStamp: 0,
+      endWorkoutTimeStamp: 0,
       isCompleted: false,
       note: 'string'
     };
     const workoutB: Workout = {
       workoutName: `Workout B:${workoutNameB}`,
       workoutExercises: workoutExB,
-      startWorkout: 'undefined',
-      endWorkout: 'undefined',
+      startWorkoutTimeStamp:  0,
+      endWorkoutTimeStamp: 0,
       isCompleted: false,
       note: 'string'
     };
@@ -145,8 +145,8 @@ export class WorkoutExerciseStateManagerService {
     const workoutFullBody: Workout = {
       workoutName: 'Full-Body',
       workoutExercises: workoutExFull,
-      startWorkout: 'undefined',
-      endWorkout: 'undefined',
+      startWorkoutTimeStamp:  0,
+      endWorkoutTimeStamp: 0,
       isCompleted: false,
       note: 'string'
     };

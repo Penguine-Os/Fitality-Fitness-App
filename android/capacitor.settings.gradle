@@ -19,3 +19,6 @@ project(':capacitor-splash-screen').projectDir = new File('../node_modules/.pnpm
 
 include ':capacitor-status-bar'
 project(':capacitor-status-bar').projectDir = new File('../node_modules/.pnpm/@capacitor+status-bar@4.1.0_@capacitor+core@4.5.0/node_modules/@capacitor/status-bar/android')
+
+include ':capgo-native-audio'
+project(':capgo-native-audio').projectDir = new File('../node_modules/.pnpm/@capgo+native-audio@5.0.5_@capacitor+core@4.5.0/node_modules/@capgo/native-audio/android')

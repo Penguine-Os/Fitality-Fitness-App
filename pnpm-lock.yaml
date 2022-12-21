@@ -32,6 +32,7 @@ specifiers:
   '@capacitor/keyboard': 4.1.0
   '@capacitor/splash-screen': ^4.1.2
   '@capacitor/status-bar': 4.1.0
+  '@capgo/native-audio': ^5.0.5
   '@ionic/angular': ^6.1.9
   '@ionic/angular-toolkit': ^6.0.0
   '@types/jasmine': ~4.0.0
@@ -84,6 +85,7 @@ dependencies:
   '@capacitor/keyboard': 4.1.0_@capacitor+core@4.5.0
   '@capacitor/splash-screen': 4.1.2_@capacitor+core@4.5.0
   '@capacitor/status-bar': 4.1.0_@capacitor+core@4.5.0
+  '@capgo/native-audio': 5.0.5_@capacitor+core@4.5.0
   '@ionic/angular': 6.3.8_huuvnw4xjecm5gzubtbglmnboa
   add: 2.0.6
   firebase: 9.15.0
@@ -2014,6 +2016,14 @@ packages:
 
   /@capacitor/status-bar/4.1.0_@capacitor+core@4.5.0:
     resolution: {integrity: sha512-3yHVmSTKtSxiM4rUT/WmALDOes+htEGHPlzMSe2hN9uOOEKr/pMnNA2VBFJS+EfxRMWDGOcR14q9kXxmn9Rz+w==}
+    peerDependencies:
+      '@capacitor/core': ^4.0.0
+    dependencies:
+      '@capacitor/core': 4.5.0
+    dev: false
+
+  /@capgo/native-audio/5.0.5_@capacitor+core@4.5.0:
+    resolution: {integrity: sha512-URA0J30j5+dmCA+r8QYVFxYKfZEEymrtJ6FTIssc79eK3rQ3reMSTvA+SsQ6UyM3GxaXWUdexcFhXY3q76qo8w==}
     peerDependencies:
       '@capacitor/core': ^4.0.0
     dependencies:

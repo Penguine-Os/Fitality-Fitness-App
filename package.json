@@ -39,6 +39,7 @@
     "@capacitor/keyboard": "4.1.0",
     "@capacitor/splash-screen": "^4.1.2",
     "@capacitor/status-bar": "4.1.0",
+    "@capgo/native-audio": "^5.0.5",
     "@ionic/angular": "^6.1.9",
     "add": "^2.0.6",
     "firebase": "^9.15.0",

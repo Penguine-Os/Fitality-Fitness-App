@@ -8,7 +8,7 @@ import {Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {ExerciseInfoModalComponent} from '../../../shared/exercise-info-modal/exercise-info-modal.component';
 import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/edit-exercise-inputs.component';
-
+import {NativeAudio} from '@capgo/native-audio';
 
 @Component({
   selector: 'app-start-workout',
@@ -38,8 +38,14 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   async ngOnInit() {
     this.workoutSub = this.exStateManager.observableWorkout.subscribe(x => this.workout = x);
     this.iteratorSub = this.exStateManager.observableIterator.subscribe(x => this.iterator = x);
-    console.log('!!!Change duration to initial value!!!!');
-    this.workout.workoutExercises.map(x => x.restDuration = 5);
+    this.workout.workoutExercises.forEach(x => x.restDuration = 0.1); ////for dev only
+
+    await NativeAudio.preload({
+      assetId: 'ring',
+      assetPath: 'ring.mp3',
+      audioChannelNum: 1,
+      isUrl: false
+    });
 
   }
 
@@ -48,8 +54,8 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     this.iteratorSub.unsubscribe();
   }
 
-  hapticsVibrate = async () => {
-    await Haptics.vibrate({duration: 500});
+  hapticsVibrate = async (duration: number) => {
+    await Haptics.vibrate({duration});
   };
 
   async presentAlert() {
@@ -63,10 +69,10 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
         {
           text: 'OK',
           role: 'confirm',
-          handler: ()=> this.finishWorkout()
+          handler: () => this.finishWorkout()
         }],
     });
-    if (this.exStateManager.workoutCompleted(this.workout.workoutExercises)){
+    if (this.exStateManager.workoutCompleted(this.workout.workoutExercises)) {
       this.finishWorkout();
       return;
     }
@@ -75,9 +81,9 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   }
 
-  finishWorkout(){
+  finishWorkout() {
     console.log('toch ok');
-}
+  }
 
   async presentToast(duration: number) {
 
@@ -92,28 +98,34 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
     this.toaster = await this.createNewToast(minutes, seconds, duration);
 
-    await this.toaster.present();
+    await Promise.all([
+      this.toaster.present().then(() => this.interval = this.countDown(remainingTime, minutes, seconds)),
+      this.playSound()
+    ]).then(() => {
+      this.toaster.onDidDismiss().then(() => {
+        clearInterval(this.interval);
+      });
+    });
 
-    this.interval = this.countDown(remainingTime, minutes, seconds);
-
-    await this.toaster.onDidDismiss().then(() => clearInterval(this.interval));
-
+    await this.toaster.onDidDismiss().then(() => {
+      console.log('in toaster.onDidDismiss()');
+      clearInterval(this.interval);
+    });
 
   }
 
   countDown(remainingTime, minutes, seconds) {
     return setInterval(() => {
-
       remainingTime--;
       minutes = Math.floor(remainingTime / 60);
       seconds = remainingTime % 60;
       this.toaster.message = `Good Work! Recovery in: ${minutes}:${seconds >= 10 ? seconds : '0' + seconds}`;
 
       if (seconds < 4) {
-        this.hapticsVibrate();
+        this.hapticsVibrate(500);
       }
       // console.log(this.isUnchecked);
-      if (this.repsVal <= 0) {
+      if (remainingTime <= 0) {
         //toast.dismiss();
         this.toaster.dismiss().then(() => clearInterval(this.interval));
       }
@@ -141,14 +153,15 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     });
   }
 
-  setClickHandler(exercise: WorkoutExercise, repsIndex: number) {
+  async setClickHandler(exercise: WorkoutExercise, repsIndex: number) {
 
     this.repsVal = exercise.setsAndReps[repsIndex];
 
     if (!exercise.completedSets[repsIndex]) {
       return;
     }
-    this.presentToast(exercise.restDuration);
+    await this.presentToast(exercise.restDuration);
+
   }
 
   async presentModal(i: number, action: string) {
@@ -168,5 +181,10 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   async ionViewWillLeave() {
     await this.toaster.dismiss();
+  }
+
+  async playSound() {
+    await Promise.all([NativeAudio.play({assetId: 'ring', time: 0}), this.hapticsVibrate(150)]);
+
   }
 }

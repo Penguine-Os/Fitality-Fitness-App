@@ -3,8 +3,8 @@ import {WorkoutExercise} from './WorkoutExercise';
 export interface Workout {
   workoutName: string;
   workoutExercises: WorkoutExercise[];
-  startWorkout: Date | string;
-  endWorkout: Date | string;
+  startWorkoutTimeStamp: number;
+  endWorkoutTimeStamp: number;
   isCompleted: boolean;
   note: string;
 }

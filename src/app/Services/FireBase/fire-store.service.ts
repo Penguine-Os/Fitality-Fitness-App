@@ -29,10 +29,19 @@ export class FireStoreService {
     console.log(workoutRoutine);
     await addDoc<WorkoutRoutine>(this.getCollectionRef<WorkoutRoutine>(collectionName), workoutRoutine);
   }
+  retrieveWorkoutRoutine(collectionName: string): Observable<WorkoutRoutine[]> {
+    const routines = collectionData<WorkoutRoutine>(
+      query<WorkoutRoutine>(this.getCollectionRef(collectionName)));
+
+    return routines;
+  }
+
+
 
   private getCollectionRef<T>(collectionName: string): CollectionReference<T> {
     return collection(this.firestore, collectionName) as CollectionReference<T>;
   }
+
 
   private getCurrenUser(id: string) {
     return firstValueFrom(

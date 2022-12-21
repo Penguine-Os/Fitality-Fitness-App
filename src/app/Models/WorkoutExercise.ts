@@ -6,8 +6,8 @@ export interface WorkoutExercise{
   completedSets: boolean[];
   weight: number;
   restDuration: number;
-  startExercise: Date | string;
-  endExercise: Date | string;
+  startExerciseTimeStamp: number;
+  endExerciseTimeStamp: number;
   isCompleted: boolean;
   progressiveOverload: number;
 

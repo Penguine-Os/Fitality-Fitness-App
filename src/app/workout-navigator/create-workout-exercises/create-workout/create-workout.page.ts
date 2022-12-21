@@ -78,9 +78,9 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
     expirationDate.setMonth(creationDate.getMonth() + this.duration);
     const wRoutine: WorkoutRoutine = {
       userId: this.authService.getUserUID(),
-      span: this.duration,
-      routineStartDate: creationDate,
-      routineEndDate: expirationDate,
+      routineSpan: this.duration,
+      routineStartDate: creationDate.valueOf(),
+      routineEndDate: expirationDate.valueOf(),
       weeklyWorkout: this.exService.getWeeklyWorkout(),
       // workoutDays: this.weekRoutine
       workoutDays: this.weekRoutine
