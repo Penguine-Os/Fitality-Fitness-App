@@ -4,6 +4,7 @@ import {
   collection,
   collectionData,
   CollectionReference,
+  getDoc,
   doc,
   DocumentReference,
   Firestore,
@@ -29,17 +30,19 @@ export class FireStoreService {
     console.log(workoutRoutine);
     await addDoc<WorkoutRoutine>(this.getCollectionRef<WorkoutRoutine>(collectionName), workoutRoutine);
   }
-  retrieveWorkoutRoutine(collectionName: string): Observable<WorkoutRoutine[]> {
-    const routines = collectionData<WorkoutRoutine>(
-      query<WorkoutRoutine>(this.getCollectionRef(collectionName)));
 
-    return routines;
+  getRoutine(collectionName: string, userId): Observable<WorkoutRoutine[]> {
+    return collectionData<WorkoutRoutine>(
+      query<WorkoutRoutine>(this.getCollectionRef(collectionName),where('userId','==', userId)
+      ),
+    );
   }
-
-
-
   private getCollectionRef<T>(collectionName: string): CollectionReference<T> {
     return collection(this.firestore, collectionName) as CollectionReference<T>;
+  }
+
+  private getDocumentRef<T>(collectionName: string, id: string): DocumentReference<T> {
+    return doc(this.firestore, collectionName) as DocumentReference<T>;
   }
 
 

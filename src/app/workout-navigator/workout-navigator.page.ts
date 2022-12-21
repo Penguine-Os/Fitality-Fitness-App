@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ExerciseProviderService} from '../Services/Api/exercise-provider.service';
 import {Router} from '@angular/router';
 import {WorkoutExerciseStateManagerService} from '../Services/workout-exercise-state-manager.service';
 import {FireAuthService} from '../Services/FireBase/fire-auth.service';
-
+import {FireStoreService} from '../Services/FireBase/fire-store.service';
+import {WorkoutRoutine} from '../Models/WorkoutRoutine';
+import {Subscription} from 'rxjs';
+import {User} from 'firebase/auth';
 
 
 @Component({
@@ -12,9 +14,15 @@ import {FireAuthService} from '../Services/FireBase/fire-auth.service';
   styleUrls: ['./workout-navigator.page.scss'],
 })
 export class WorkoutNavigatorPage implements OnInit {
+  workoutR: WorkoutRoutine[];
+  wRoutineSub = new Subscription();
+  user: User;
+  userSub = new Subscription();
 
   constructor(private stateManagerService: WorkoutExerciseStateManagerService,
-              private router: Router, public authService: FireAuthService) {
+              public authService: FireAuthService,
+              private storage: FireStoreService,
+              private router: Router) {
 
   }
 
@@ -24,10 +32,21 @@ export class WorkoutNavigatorPage implements OnInit {
     // } else {
     //   this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
     // }
-   this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
+    //this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
   }
 
-  ngOnInit() {
+
+  async ngOnInit() {
+    const userId = 'CdUNk3tHzOPUlsDOIysAO3oDkwn2';
+     this.userSub= this.authService.currentUser.subscribe(x =>{
+       this.user = x;
+       this.wRoutineSub = this.storage.getRoutine('Workout-Routines-Template',userId)
+         .subscribe(y => this.workoutR = y);
+    console.log(this.workoutR);
+     });
+ //   console.log(this.storage.getRoutine('Workout-Routines-Template', userId));
+
+
   }
 
 

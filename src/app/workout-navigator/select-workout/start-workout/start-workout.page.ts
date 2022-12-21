@@ -146,6 +146,9 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
           cssClass: '',
           role: 'cancel',
           handler: () => {
+             this.toaster.onDidDismiss().then(() => {
+              clearInterval(this.interval);
+            });
           }
         }
       ],

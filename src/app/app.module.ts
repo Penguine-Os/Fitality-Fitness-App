@@ -9,8 +9,6 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {provideFirebaseApp, initializeApp} from '@angular/fire/app';
 import {environment} from '../environments/environment';
 import {getAuth, provideAuth} from '@angular/fire/auth';
-import { NativeAudio } from '@capgo/native-audio';
-
 import {
   enableMultiTabIndexedDbPersistence,
   getFirestore, provideFirestore
@@ -38,7 +36,7 @@ import {FormsModule} from '@angular/forms';
     }),
     provideAuth(() => getAuth()),
     BrowserAnimationsModule,],
-  providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy},],
+  providers: [{provide: RouteReuseStrategy, useClass: IonicRouteStrategy}],
   bootstrap: [AppComponent],
 })
 export class AppModule {
