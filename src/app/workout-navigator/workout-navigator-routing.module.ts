@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { WorkoutNavigatorPage } from './workout-navigator.page';
+import {WorkoutGuard} from './workout.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: WorkoutNavigatorPage
+    component: WorkoutNavigatorPage,
+    canActivate: [WorkoutGuard]
   },
   {
     path: 'create-workout-exercises',
