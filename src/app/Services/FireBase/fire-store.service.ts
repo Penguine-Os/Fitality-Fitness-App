@@ -32,18 +32,9 @@ export class FireStoreService {
   }
 
   getRoutine(collectionName: string, userId) {
-    // return collectionData<WorkoutRoutine>(
-    //   query<WorkoutRoutine>(this.getCollectionRef(collectionName),where('userId','==', userId)
-    //   ),
-    // );
-    let promiseResolved: WorkoutRoutine[];
-    firstValueFrom(collectionData<WorkoutRoutine>(
-      query<WorkoutRoutine>(this.getCollectionRef(collectionName),where('userId','==', userId)
-      ),
-    )).then(x=> {
-      promiseResolved = x;
-    });
-    return promiseResolved;
+    return collectionData<WorkoutRoutine>(
+      query<WorkoutRoutine>(this.getCollectionRef(collectionName),where('userId','==', userId))
+    );
   }
   private getCollectionRef<T>(collectionName: string): CollectionReference<T> {
     return collection(this.firestore, collectionName) as CollectionReference<T>;
