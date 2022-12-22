@@ -40,8 +40,8 @@ export class WorkoutNavigatorPage implements OnInit {
     const userId = 'CdUNk3tHzOPUlsDOIysAO3oDkwn2';
      this.userSub= this.authService.currentUser.subscribe(x =>{
        this.user = x;
-       this.wRoutineSub = this.storage.getRoutine('Workout-Routines-Template',userId)
-         .subscribe(y => this.workoutR = y[0]);
+       // this.wRoutineSub = this.storage.getRoutine('Workout-Routines-Template',userId)
+       //   .subscribe(y => this.workoutR = y[0]);
     console.log(this.workoutR);
      });
  //   console.log(this.storage.getRoutine('Workout-Routines-Template', userId));

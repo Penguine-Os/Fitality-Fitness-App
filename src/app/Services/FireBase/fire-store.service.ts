@@ -31,11 +31,19 @@ export class FireStoreService {
     await addDoc<WorkoutRoutine>(this.getCollectionRef<WorkoutRoutine>(collectionName), workoutRoutine);
   }
 
-  getRoutine(collectionName: string, userId): Observable<WorkoutRoutine[]> {
-    return collectionData<WorkoutRoutine>(
+  getRoutine(collectionName: string, userId) {
+    // return collectionData<WorkoutRoutine>(
+    //   query<WorkoutRoutine>(this.getCollectionRef(collectionName),where('userId','==', userId)
+    //   ),
+    // );
+    let promiseResolved: WorkoutRoutine[];
+    firstValueFrom(collectionData<WorkoutRoutine>(
       query<WorkoutRoutine>(this.getCollectionRef(collectionName),where('userId','==', userId)
       ),
-    );
+    )).then(x=> {
+      promiseResolved = x;
+    });
+    return promiseResolved;
   }
   private getCollectionRef<T>(collectionName: string): CollectionReference<T> {
     return collection(this.firestore, collectionName) as CollectionReference<T>;
