@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'select-workout',
-    loadChildren: () => import('./select-workout/start-workout.module').then(m => m.StartWorkoutPageModule)
+    loadChildren: () => import('./select-workout/select-workout.module').then(m => m.SelectWorkoutPageModule)
   }
 ];
 

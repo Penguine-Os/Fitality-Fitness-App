@@ -6,8 +6,8 @@ import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 
 @Component({
   selector: 'app-select-workout',
-  templateUrl: './select-workout.component.html',
-  styleUrls: ['./select-workout.component.scss'],
+  templateUrl: './select-workout.page.html',
+  styleUrls: ['./select-workout.page.scss'],
 })
 export class SelectWorkout implements OnInit {
   workoutRoutine: WorkoutRoutine;

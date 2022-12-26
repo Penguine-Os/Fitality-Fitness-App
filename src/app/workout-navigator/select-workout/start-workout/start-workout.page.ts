@@ -4,7 +4,7 @@ import {AlertController, IonRouterOutlet, ModalController, ToastController} from
 import {FireAuthService} from '../../../Services/FireBase/fire-auth.service';
 import {Workout} from '../../../Models/Workout';
 import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exercise-state-manager.service';
-import {Subscription} from 'rxjs';
+import { Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {ExerciseInfoModalComponent} from '../../../shared/exercise-info-modal/exercise-info-modal.component';
 import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/edit-exercise-inputs.component';
@@ -183,6 +183,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   }
 
   async ionViewWillLeave() {
+    if (this.toaster === undefined){return;}
     await this.toaster.dismiss();
   }
 

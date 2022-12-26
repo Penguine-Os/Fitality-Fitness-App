@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { StartWorkoutPageRoutingModule } from './start-workout-routing.module';
+import { SelectWorkoutPageRoutingModule } from './select-workout-routing.module';
 
-import { SelectWorkout } from './select-workout.component';
+import { SelectWorkout } from './select-workout.page';
 import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import {SharedModule} from '../../shared/shared.module';
         CommonModule,
         FormsModule,
         IonicModule,
-        StartWorkoutPageRoutingModule,
+        SelectWorkoutPageRoutingModule,
         SharedModule
     ],
   declarations: [SelectWorkout]
 })
-export class StartWorkoutPageModule {}
+export class SelectWorkoutPageModule {}
