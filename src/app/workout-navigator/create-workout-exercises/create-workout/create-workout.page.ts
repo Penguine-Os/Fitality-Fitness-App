@@ -5,6 +5,8 @@ import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exer
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {Subscription} from 'rxjs';
 import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
+import {AllWorkouts} from '../../../Models/AllWorkouts';
+import {Timestamp }  from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-create-workout',
@@ -13,7 +15,7 @@ import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
 })
 export class CreateWorkoutPage implements OnInit, OnDestroy {
 
-  weekdays: string[] = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
+  weekdays: string[] = ['Su','Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ];
   weekRoutine = new Array<boolean>(7).fill(false);
   progressiveOverload: number;
   duration = 1;
@@ -72,21 +74,28 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
     this.createWorkoutRoutine();
   }
 
+
   async createWorkoutRoutine() {
+    const collectionName = `Workout-Routine-${this.authService.getUserUID()}`;
     const creationDate = new Date();
     const expirationDate = new Date();
     expirationDate.setMonth(creationDate.getMonth() + this.duration);
     const wRoutine: WorkoutRoutine = {
       userId: this.authService.getUserUID(),
       routineSpan: this.duration,
-      routineStartDate: creationDate.valueOf(),
-      routineEndDate: expirationDate.valueOf(),
+      routineStartDate: Timestamp.fromDate(creationDate),
+      routineEndDate: Timestamp.fromDate(expirationDate),
       weeklyWorkout: this.exService.getWeeklyWorkout(),
       // workoutDays: this.weekRoutine
       workoutDays: this.weekRoutine
     };
-
-    await this.storage.storeWorkoutRoutine('Workout-Routines-Template', wRoutine);
+    const allWorkouts: AllWorkouts = {
+      workouts: this.exService.workoutScheduler(creationDate,
+        expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays)
+    };
+    //await this.storage.storeWorkouts(collectionName, allWorkouts);
+    await this.storage.batchedWrites(this.exService.workoutScheduler(creationDate,
+      expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays),collectionName);
   }
 
   selectOptionHandler(event: any) {

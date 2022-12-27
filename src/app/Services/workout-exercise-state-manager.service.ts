@@ -4,6 +4,9 @@ import {ExerciseType} from '../Models/ExerciseType';
 import {Workout} from '../Models/Workout';
 import {WorkoutExercise} from '../Models/WorkoutExercise';
 import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
+import {WorkoutRoutine} from '../Models/WorkoutRoutine';
+import {Timestamp} from '@angular/fire/firestore';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,16 +19,43 @@ export class WorkoutExerciseStateManagerService {
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
   observableIterator = new BehaviorSubject<number[][]>([]);
   observableRepVals = new BehaviorSubject<number[]>([]);
-  observableWorkout: BehaviorSubject<Workout>;
+  observableWorkout = new BehaviorSubject<Workout>(undefined);
+  observableWorkouts = new BehaviorSubject<Workout[]>(undefined);
+  observableRoutine = new BehaviorSubject<WorkoutRoutine>(undefined);
   private weekRoutine = new Array<boolean>(7).fill(false);
   private weeklyWorkout: WeeklyWorkouts;
 
   constructor() {
   }
 
+  getWorkoutRoutine(wOutRoutine: WorkoutRoutine) {
+    this.observableRoutine.next(wOutRoutine);
+    this.organizeWeeklyWorkout(wOutRoutine.workoutDays, wOutRoutine);
+  }
+  getWorkouts(workouts: Workout[]) {
+    this.observableWorkouts.next(workouts);
+   // this.organizeWeeklyWorkout(wOutRoutine.workoutDays, wOutRoutine);
+  }
   getWorkout(wOut: Workout) {
     this.generateIterator(wOut.workoutExercises);
-    this.observableWorkout = new BehaviorSubject<Workout>(wOut);
+    //  this.observableWorkout = new BehaviorSubject<Workout>(wOut);
+    this.observableWorkout.next(wOut);
+    this.observableWorkoutExercises.next(wOut.workoutExercises);
+  }
+
+  organizeWeeklyWorkout(workoutDays: boolean[], workoutR: WorkoutRoutine) {
+    const workouts: Workout[] = [];
+    let counter = 0;
+    workoutDays.forEach((v, i) => {
+      if (v) {
+        counter++;
+        const w = counter % 2 !== 0 ? workoutR.weeklyWorkout.workoutA : workoutR.weeklyWorkout.workoutB;
+        if (!w.isCompleted) {
+          workouts.push(w);
+        }
+      }
+    });
+    this.observableWorkouts.next(workouts);
   }
 
   getWorkoutExercises() {
@@ -128,16 +158,16 @@ export class WorkoutExerciseStateManagerService {
     const workoutA: Workout = {
       workoutName: `Workout A:${workoutNameA}`,
       workoutExercises: workoutExA,
-      startWorkoutTimeStamp: 0,
-      endWorkoutTimeStamp: 0,
+      startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
+      endWorkoutTimeStamp: Timestamp.fromDate(new Date()),
       isCompleted: false,
       note: 'string'
     };
     const workoutB: Workout = {
       workoutName: `Workout B:${workoutNameB}`,
       workoutExercises: workoutExB,
-      startWorkoutTimeStamp:  0,
-      endWorkoutTimeStamp: 0,
+      startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
+      endWorkoutTimeStamp: Timestamp.fromDate(new Date()),
       isCompleted: false,
       note: 'string'
     };
@@ -145,8 +175,8 @@ export class WorkoutExerciseStateManagerService {
     const workoutFullBody: Workout = {
       workoutName: 'Full-Body',
       workoutExercises: workoutExFull,
-      startWorkoutTimeStamp:  0,
-      endWorkoutTimeStamp: 0,
+      startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
+      endWorkoutTimeStamp: Timestamp.fromDate(new Date()),
       isCompleted: false,
       note: 'string'
     };
@@ -172,12 +202,12 @@ export class WorkoutExerciseStateManagerService {
   generateIterator(exercises: WorkoutExercise[]) {
     const tempArr: number[][] = [];
     exercises.forEach(x => tempArr.push(new Array(x.setsAndReps.length).fill(0)));
-
+    console.log(tempArr);
     this.observableIterator.next(tempArr);
   }
 
-   workoutCompleted(workoutExs: WorkoutExercise[]): boolean {
-    let workoutCompleted=true;
+  workoutCompleted(workoutExs: WorkoutExercise[]): boolean {
+    let workoutCompleted = true;
     workoutExs.forEach(ex => {
       if (!ex.completedSets.every(value => value === true)) {
         workoutCompleted = false;
@@ -187,5 +217,37 @@ export class WorkoutExerciseStateManagerService {
     console.log('Completed', workoutCompleted);
     return workoutCompleted;
   }
+
+
+
+  workoutScheduler(startTimestamp: Date, endTimestamp: Date, weeklyW: WeeklyWorkouts, workoutDays: boolean[]) {
+    const currentDate = new Date(startTimestamp);
+    const workouts: Workout[] = [];
+    let counter = 0;
+    while (currentDate < endTimestamp) {
+
+      for (const item of workoutDays) {
+        if (workoutDays[currentDate.getDay()]) {
+          counter++;
+          const w = counter % 2 !== 0 ? weeklyW.workoutA : weeklyW.workoutB;
+          const copy: Workout = {
+            workoutName: w.workoutName,
+            workoutExercises: w.workoutExercises,
+            startWorkoutTimeStamp: Timestamp.fromDate(currentDate),
+            endWorkoutTimeStamp: Timestamp.fromDate(currentDate),
+            isCompleted: w.isCompleted,
+            note: w.workoutName,
+          };
+          workouts.push(copy);
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    }
+
+    return workouts;
+  }
+
+
+
 }
 

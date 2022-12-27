@@ -79,6 +79,7 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.exerciseSubscription.unsubscribe();
     this.workoutExerciseSubscription.unsubscribe();
+    this.repsValSubscription.unsubscribe();
   }
 
   goToNextPage() {

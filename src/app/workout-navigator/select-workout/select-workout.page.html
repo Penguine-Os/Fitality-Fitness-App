@@ -29,8 +29,11 @@
     </ion-fab-list>
   </ion-fab>
 
-  <div *ngFor="let workout of workouts ">
-      <app-workout-card [workout]="workout"></app-workout-card>
+  <div *ngFor="let workout of stateManagerService.observableWorkouts |async ">
+      <app-workout-card [workout]="workout"
+                        [startDate]="workout.startWorkoutTimeStamp.toMillis()">
+
+      </app-workout-card>
   </div>
 
 </ion-content>

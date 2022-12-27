@@ -4,11 +4,12 @@ import {AlertController, IonRouterOutlet, ModalController, ToastController} from
 import {FireAuthService} from '../../../Services/FireBase/fire-auth.service';
 import {Workout} from '../../../Models/Workout';
 import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exercise-state-manager.service';
-import { Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {ExerciseInfoModalComponent} from '../../../shared/exercise-info-modal/exercise-info-modal.component';
 import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/edit-exercise-inputs.component';
 import {NativeAudio} from '@capgo/native-audio';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-start-workout',
@@ -31,15 +32,19 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
               public exStateManager: WorkoutExerciseStateManagerService,
               private modalController: ModalController,
               private routerOutlet: IonRouterOutlet,
+              private router: Router,
               private alertController: AlertController) {
 
   }
 
   async ngOnInit() {
-    this.workoutSub = this.exStateManager.observableWorkout.subscribe(x => this.workout = x);
-    this.iteratorSub = this.exStateManager.observableIterator.subscribe(x => this.iterator = x);
-    this.workout.workoutExercises.forEach(x => x.restDuration = 0.1); ////for dev only
 
+    if (this.exStateManager.observableWorkout.getValue() === undefined) {
+      console.log('observable workout is undefined');
+      console.log(this.exStateManager.observableWorkout.getValue());
+      this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
+      return;
+    }
     await NativeAudio.preload({
       assetId: 'ring',
       assetPath: 'ring.mp3',
@@ -50,6 +55,8 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('in Destroy');
+
     this.workoutSub.unsubscribe();
     this.iteratorSub.unsubscribe();
   }
@@ -146,7 +153,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
           cssClass: '',
           role: 'cancel',
           handler: () => {
-             this.toaster.onDidDismiss().then(() => {
+            this.toaster.onDidDismiss().then(() => {
               clearInterval(this.interval);
             });
           }
@@ -183,7 +190,9 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   }
 
   async ionViewWillLeave() {
-    if (this.toaster === undefined){return;}
+    if (this.toaster === undefined) {
+      return;
+    }
     await this.toaster.dismiss();
   }
 

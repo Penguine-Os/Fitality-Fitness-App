@@ -26,7 +26,7 @@ export class SetsAndRepsComponent implements OnInit {
 
   resize(stepSize: number) {
     this.propertyValue = Math.max(-1, this.propertyValue + stepSize);
-    this.btnFill = this.propertyValue > 0 ? 'solid' : 'outline';
+  //  this.btnFill = this.propertyValue > 0 ? 'solid' : 'outline';
     this.clickedValue = this.propertyValue > 0 ;
     this.propertyValue = this.propertyValue >= 0 ? this.propertyValue : this.initialRepVal;
     this.isUnchecked = this.propertyValue === this.initialRepVal;
@@ -36,7 +36,7 @@ export class SetsAndRepsComponent implements OnInit {
   }
 
   setClickHandler() {
-    this.btnFill = 'solid';
+   // this.btnFill = 'solid';
     this.clickedValueChange.emit(true);
 
     if (this.isUnchecked){

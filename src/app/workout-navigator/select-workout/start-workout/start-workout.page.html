@@ -15,7 +15,7 @@
 <ion-content>
   <ion-list>
 
-      <ion-list *ngFor="let exes of workout.workoutExercises; let i = index">
+      <ion-list *ngFor="let exes of exStateManager.observableWorkoutExercises|async; let i = index">
         <ion-grid>
           <ion-row class="ion-margin">
             <ion-col size="7" >
@@ -44,7 +44,7 @@
                                  [(propertyValue)]="exes.setsAndReps[j]"
                           (click)="setClickHandler(exes, j)"
                                  [(clickedValue)]="exes.completedSets[j]"
-                          *ngFor="let rep of iterator[i]; let j = index" style="margin: 1rem"></app-sets-and-reps>
+                          *ngFor="let sets of exStateManager.observableIterator.getValue()[i]; let j = index" style="margin: 1rem"></app-sets-and-reps>
             </div>
           </ion-row>
         </ion-grid>
