@@ -5,8 +5,8 @@ import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exer
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {Subscription} from 'rxjs';
 import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
-import {AllWorkouts} from '../../../Models/AllWorkouts';
 import {Timestamp }  from '@angular/fire/firestore';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-workout',
@@ -32,7 +32,8 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
 
   constructor(public authService: FireAuthService,
               private storage: FireStoreService,
-              private exService: WorkoutExerciseStateManagerService) {
+              private exService: WorkoutExerciseStateManagerService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -89,18 +90,14 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
       // workoutDays: this.weekRoutine
       workoutDays: this.weekRoutine
     };
-    const allWorkouts: AllWorkouts = {
-      workouts: this.exService.workoutScheduler(creationDate,
-        expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays)
-    };
-    //await this.storage.storeWorkouts(collectionName, allWorkouts);
+
     await this.storage.batchedWrites(this.exService.workoutScheduler(creationDate,
-      expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays),collectionName);
+      expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays),collectionName)
+      .then(()=>this.router.navigate(['tabs', 'WorkoutNavTab']));
   }
 
   selectOptionHandler(event: any) {
     this.selectedSplitStrategy = event.detail.value;
     this.btnNextIsDisabled = !this.btnNextIsDisabled;
-    console.log(this.selectedSplitStrategy, this.btnNextIsDisabled);
   }
 }

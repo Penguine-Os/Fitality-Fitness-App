@@ -6,7 +6,7 @@ import {WorkoutExercise} from '../Models/WorkoutExercise';
 import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
 import {WorkoutRoutine} from '../Models/WorkoutRoutine';
 import {Timestamp} from '@angular/fire/firestore';
-
+import { v4 as uuidv4 } from 'uuid';
 @Injectable({
   providedIn: 'root'
 })
@@ -156,6 +156,7 @@ export class WorkoutExerciseStateManagerService {
     const workoutNameA = splitStrategy === 'pushPull' ? 'Push' : 'Upper-Body';
     const workoutNameB = splitStrategy === 'pushPull' ? 'Pull' : 'Lower-Body';
     const workoutA: Workout = {
+      id: uuidv4(),
       workoutName: `Workout A:${workoutNameA}`,
       workoutExercises: workoutExA,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -164,6 +165,7 @@ export class WorkoutExerciseStateManagerService {
       note: 'string'
     };
     const workoutB: Workout = {
+      id: uuidv4(),
       workoutName: `Workout B:${workoutNameB}`,
       workoutExercises: workoutExB,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -173,6 +175,7 @@ export class WorkoutExerciseStateManagerService {
     };
 
     const workoutFullBody: Workout = {
+      id: uuidv4(),
       workoutName: 'Full-Body',
       workoutExercises: workoutExFull,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -231,6 +234,7 @@ export class WorkoutExerciseStateManagerService {
           counter++;
           const w = counter % 2 !== 0 ? weeklyW.workoutA : weeklyW.workoutB;
           const copy: Workout = {
+            id: w.id,
             workoutName: w.workoutName,
             workoutExercises: w.workoutExercises,
             startWorkoutTimeStamp: Timestamp.fromDate(currentDate),

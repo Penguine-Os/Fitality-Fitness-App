@@ -2,6 +2,7 @@ import {WorkoutExercise} from './WorkoutExercise';
 import {Timestamp} from '@angular/fire/firestore';
 
 export interface Workout {
+  id: string;
   workoutName: string;
   workoutExercises: WorkoutExercise[];
   startWorkoutTimeStamp: Timestamp;
