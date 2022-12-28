@@ -2,9 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Haptics} from '@capacitor/haptics';
 import {AlertController, IonRouterOutlet, ModalController, ToastController} from '@ionic/angular';
 import {FireAuthService} from '../../../Services/FireBase/fire-auth.service';
-import {Workout} from '../../../Models/Workout';
 import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exercise-state-manager.service';
-import {Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {ExerciseInfoModalComponent} from '../../../shared/exercise-info-modal/exercise-info-modal.component';
 import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/edit-exercise-inputs.component';
@@ -17,11 +15,6 @@ import {Router} from '@angular/router';
   styleUrls: ['./start-workout.page.scss'],
 })
 export class StartWorkoutPage implements OnInit, OnDestroy {
-  workout: Workout;
-  btnFill: string;
-  iterator: number[][] = [];
-  workoutSub = new Subscription();
-  iteratorSub = new Subscription();
   interval: NodeJS.Timeout;
   private repsVal: number;
   private toaster: HTMLIonToastElement;
@@ -40,8 +33,6 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   async ngOnInit() {
 
     if (this.exStateManager.observableWorkout.getValue() === undefined) {
-      console.log('observable workout is undefined');
-      console.log(this.exStateManager.observableWorkout.getValue());
       this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
       return;
     }
@@ -55,10 +46,6 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('in Destroy');
-
-    this.workoutSub.unsubscribe();
-    this.iteratorSub.unsubscribe();
   }
 
   hapticsVibrate = async (duration: number) => {
@@ -79,7 +66,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
           handler: () => this.finishWorkout()
         }],
     });
-    if (this.exStateManager.workoutCompleted(this.workout.workoutExercises)) {
+    if (this.exStateManager.workoutCompleted(this.exStateManager.observableWorkout.getValue().workoutExercises)) {
       this.finishWorkout();
       return;
     }
@@ -182,7 +169,6 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
         index: i,
       },
       cssClass: 'classModal',
-      swipeToClose: true,
       presentingElement: this.routerOutlet.nativeEl
     });
     await this.modal.present();

@@ -3,6 +3,8 @@ import {ModalController} from '@ionic/angular';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 import {Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
+import {FireStoreService} from '../../Services/FireBase/fire-store.service';
+import {Workout} from '../../Models/Workout';
 
 @Component({
   selector: 'app-edit-exercise-inputs',
@@ -10,6 +12,7 @@ import {WorkoutExercise} from '../../Models/WorkoutExercise';
   styleUrls: ['./edit-exercise-inputs.component.scss'],
 })
 export class EditExerciseInputsComponent implements OnInit {
+  workout: Workout;
   wEx: WorkoutExercise;
   wExercises: WorkoutExercise[];
   exSub: Subscription;
@@ -19,14 +22,16 @@ export class EditExerciseInputsComponent implements OnInit {
   @Input() index: number;
 
   constructor(private modalController: ModalController,
+              private fireStoreService: FireStoreService,
               private exService: WorkoutExerciseStateManagerService) {
 
   }
 
   ngOnInit() {
-    this.exSub = this.exService.observableWorkout.subscribe(exVal => {
-      this.wExercises = exVal.workoutExercises;
-      this.wEx = exVal.workoutExercises[this.index];
+    this.exSub = this.exService.observableWorkout.subscribe(wVal => {
+      this.workout = wVal
+      this.wExercises = wVal.workoutExercises;
+      this.wEx = wVal.workoutExercises[this.index];
     });
     this.editSets = this.wEx.setsAndReps.length;
     this.editReps = this.wEx.setsAndReps[0];
@@ -46,7 +51,7 @@ export class EditExerciseInputsComponent implements OnInit {
 
   }
 
-  dismissConfirm() {
+ async dismissConfirm() {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
@@ -57,12 +62,13 @@ export class EditExerciseInputsComponent implements OnInit {
 
   }
 
-  private updateExercise() {
+  private async updateExercise() {
     const newSetsAndReps = new Array(this.editSets).fill(this.editReps);
     this.wEx.weight = this.editWeight;
     this.wEx.setsAndReps = newSetsAndReps;
     this.updateCompletedSets(this.wEx.setsAndReps );
     this.exService.generateIterator(this.wExercises);
+   await this.fireStoreService.updateWorkout(this.exService.getCollectionName(),this.workout.id, this.workout)
   }
   private updateCompletedSets(setsAndRepsArr: number[]){
     while (setsAndRepsArr.length>this.wEx.completedSets.length){

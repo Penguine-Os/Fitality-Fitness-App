@@ -18,7 +18,6 @@ export class WorkoutCardComponent implements OnInit {
   }
 
   clickHandler() {
-    console.log(this.workout);
     this.exService.getWorkout(this.workout);
   }
 }

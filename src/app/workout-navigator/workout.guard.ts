@@ -4,10 +4,6 @@ import {firstValueFrom, Observable, Subscription} from 'rxjs';
 import {WorkoutExerciseStateManagerService} from '../Services/workout-exercise-state-manager.service';
 import {FireStoreService} from '../Services/FireBase/fire-store.service';
 import {FireAuthService} from '../Services/FireBase/fire-auth.service';
-import {User} from 'firebase/auth';
-import {WorkoutRoutine} from '../Models/WorkoutRoutine';
-import {Workout} from '../Models/Workout';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -22,15 +18,17 @@ export class WorkoutGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const dateA = new Date();
-    const dateB = new Date();
-    dateB.setDate(dateA.getDate() + 7);
+
     const userId = this.authService.currentUser?.value?.uid;
+    const collectionName=`Workout-Routine-${userId}`
+    this.stateManagerService.setUserId(userId);
+    this.stateManagerService.setCollectionName(collectionName);
+
     if (!userId) {
       return false;
     }
 
-    return firstValueFrom(this.storage.getRoutine(`Workout-Routine-${userId}`, dateA, dateB))
+    return firstValueFrom(this.storage.getRoutine(collectionName))
       .then(workouts => {
         if (workouts.length <= 0) {
           return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);

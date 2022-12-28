@@ -4,20 +4,14 @@ import {
   collection,
   collectionData,
   CollectionReference,
-  getDoc,
   doc,
   writeBatch,
   DocumentReference,
   Firestore,
-  orderBy,
   query,
-  deleteDoc,
   updateDoc, where
 } from '@angular/fire/firestore';
-import {firstValueFrom, Observable} from 'rxjs';
 import {WorkoutRoutine} from '../../Models/WorkoutRoutine';
-import {User} from 'firebase/auth';
-import {FireAuthService} from './fire-auth.service';
 import {Workout} from '../../Models/Workout';
 import {AllWorkouts} from '../../Models/AllWorkouts';
 
@@ -26,7 +20,7 @@ import {AllWorkouts} from '../../Models/AllWorkouts';
 })
 export class FireStoreService {
 
-  constructor(private firestore: Firestore, private fireAuth: FireAuthService) {
+  constructor(private firestore: Firestore) {
   }
 
   async storeWorkoutRoutine(collectionName: string, workoutRoutine: WorkoutRoutine): Promise<void> {
@@ -38,7 +32,7 @@ export class FireStoreService {
     await addDoc<AllWorkouts>(this.getCollectionRef<AllWorkouts>(collectionName), allWorkouts);
   }
 
-  getRoutine(collectionName: string, dateA: Date, dateB: Date) {
+  getRoutine(collectionName: string) {
     const today = new Date();
     const oneWeekFromNow = new Date();
     oneWeekFromNow.setDate(today.getDate() + 7);
@@ -55,7 +49,7 @@ export class FireStoreService {
     let counter = 0;
     for (const item of workouts) {
       counter++;
-      const docRef = doc(this.firestore, collectionName, `workout-${counter}`);
+      const docRef = doc(this.firestore, collectionName, `${item.id}`);
       batch.set(docRef, item, {merge: true});
       // await batch.commit();
     }
@@ -65,22 +59,13 @@ export class FireStoreService {
   private getCollectionRef<T>(collectionName: string): CollectionReference<T> {
     return collection(this.firestore, collectionName) as CollectionReference<T>;
   }
-
-  private getDocumentRef<T>(collectionName: string): DocumentReference<T> {
-    return doc(this.firestore, collectionName) as DocumentReference<T>;
+  private getDocumentRef<T>(collectionName: string, id: string): DocumentReference<T> {
+    return doc(this.firestore, `${collectionName}`, `${id}`) as DocumentReference<T>;
   }
 
-
-  private getCurrenUser(id: string) {
-    return firstValueFrom(
-      collectionData<User>(
-        query<User>(
-          this.getCollectionRef<User>('users'),
-          where('id', '==', id)
-        )
-      )
-    );
+  async updateWorkout(collectionName: string, id: string, workout: Workout): Promise<void> {
+    delete workout.id;
+    await updateDoc(this.getDocumentRef(collectionName, id), workout);
   }
-
 }
 

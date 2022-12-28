@@ -11,10 +11,11 @@ import { v4 as uuidv4 } from 'uuid';
   providedIn: 'root'
 })
 export class WorkoutExerciseStateManagerService {
-
   #exercises: ExerciseType[] = [];
   #workoutExercises: WorkoutExercise[] = [];
   #repVals: number[] = [];
+  #collectionName: string;
+  #userId: string;
   observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
   observableIterator = new BehaviorSubject<number[][]>([]);
@@ -27,11 +28,21 @@ export class WorkoutExerciseStateManagerService {
 
   constructor() {
   }
-
-  getWorkoutRoutine(wOutRoutine: WorkoutRoutine) {
-    this.observableRoutine.next(wOutRoutine);
-    this.organizeWeeklyWorkout(wOutRoutine.workoutDays, wOutRoutine);
+  getCollectionName(): string {
+    return this.#collectionName;
   }
+
+  setCollectionName(value: string) {
+    this.#collectionName = value;
+  }
+  getUserId(): string {
+    return this.#userId;
+  }
+
+  setUserId(value: string) {
+    this.#userId = value;
+  }
+
   getWorkouts(workouts: Workout[]) {
     this.observableWorkouts.next(workouts);
    // this.organizeWeeklyWorkout(wOutRoutine.workoutDays, wOutRoutine);
@@ -156,7 +167,7 @@ export class WorkoutExerciseStateManagerService {
     const workoutNameA = splitStrategy === 'pushPull' ? 'Push' : 'Upper-Body';
     const workoutNameB = splitStrategy === 'pushPull' ? 'Pull' : 'Lower-Body';
     const workoutA: Workout = {
-      id: uuidv4(),
+      id: '',
       workoutName: `Workout A:${workoutNameA}`,
       workoutExercises: workoutExA,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -165,7 +176,7 @@ export class WorkoutExerciseStateManagerService {
       note: 'string'
     };
     const workoutB: Workout = {
-      id: uuidv4(),
+      id: '',
       workoutName: `Workout B:${workoutNameB}`,
       workoutExercises: workoutExB,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -175,7 +186,7 @@ export class WorkoutExerciseStateManagerService {
     };
 
     const workoutFullBody: Workout = {
-      id: uuidv4(),
+      id:'',
       workoutName: 'Full-Body',
       workoutExercises: workoutExFull,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -205,7 +216,6 @@ export class WorkoutExerciseStateManagerService {
   generateIterator(exercises: WorkoutExercise[]) {
     const tempArr: number[][] = [];
     exercises.forEach(x => tempArr.push(new Array(x.setsAndReps.length).fill(0)));
-    console.log(tempArr);
     this.observableIterator.next(tempArr);
   }
 
@@ -234,7 +244,7 @@ export class WorkoutExerciseStateManagerService {
           counter++;
           const w = counter % 2 !== 0 ? weeklyW.workoutA : weeklyW.workoutB;
           const copy: Workout = {
-            id: w.id,
+            id: uuidv4(),
             workoutName: w.workoutName,
             workoutExercises: w.workoutExercises,
             startWorkoutTimeStamp: Timestamp.fromDate(currentDate),
