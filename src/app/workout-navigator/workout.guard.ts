@@ -28,7 +28,7 @@ export class WorkoutGuard implements CanActivate {
       return false;
     }
 
-    return firstValueFrom(this.storage.getRoutine(collectionName))
+    return firstValueFrom(this.storage.getWeekRoutine(collectionName))
       .then(workouts => {
         if (workouts.length <= 0) {
           return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);

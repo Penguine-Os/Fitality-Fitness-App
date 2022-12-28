@@ -32,15 +32,26 @@ export class FireStoreService {
     await addDoc<AllWorkouts>(this.getCollectionRef<AllWorkouts>(collectionName), allWorkouts);
   }
 
-  getRoutine(collectionName: string) {
+  getWeekRoutine(collectionName: string) {
     const today = new Date();
     const oneWeekFromNow = new Date();
     oneWeekFromNow.setDate(today.getDate() + 7);
 
     return collectionData<Workout>(
       query<Workout>(this.getCollectionRef(collectionName),
-        where('startWorkoutTimeStamp', '>=', today),where('startWorkoutTimeStamp', '<=', oneWeekFromNow) )
+        where('startWorkoutTimeStamp', '>=', today),
+        where('startWorkoutTimeStamp', '<=', oneWeekFromNow),)
+        // where('isCompleted', '==', false), )
     );
+  }
+
+  getAllRoutineWorkouts(collectionName: string) {
+    const today = new Date();
+    const oneWeekFromNow = new Date();
+    oneWeekFromNow.setDate(today.getDate() + 7);
+
+    return collectionData<Workout>(
+      query<Workout>(this.getCollectionRef(collectionName)));
   }
 
   async batchedWrites(workouts: Workout[], collectionName: string) {
@@ -49,7 +60,7 @@ export class FireStoreService {
     let counter = 0;
     for (const item of workouts) {
       counter++;
-      const docRef = doc(this.firestore, collectionName, `${item.id}`);
+      const docRef = doc(this.firestore, collectionName, `${item.workoutRoleNr}`);
       batch.set(docRef, item, {merge: true});
       // await batch.commit();
     }

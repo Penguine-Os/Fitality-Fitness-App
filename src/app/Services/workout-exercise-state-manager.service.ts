@@ -167,7 +167,8 @@ export class WorkoutExerciseStateManagerService {
     const workoutNameA = splitStrategy === 'pushPull' ? 'Push' : 'Upper-Body';
     const workoutNameB = splitStrategy === 'pushPull' ? 'Pull' : 'Lower-Body';
     const workoutA: Workout = {
-      id: '',
+      id: uuidv4(),
+      workoutRoleNr: '',
       workoutName: `Workout A:${workoutNameA}`,
       workoutExercises: workoutExA,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -176,7 +177,8 @@ export class WorkoutExerciseStateManagerService {
       note: 'string'
     };
     const workoutB: Workout = {
-      id: '',
+      id: uuidv4(),
+      workoutRoleNr: '',
       workoutName: `Workout B:${workoutNameB}`,
       workoutExercises: workoutExB,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -186,7 +188,8 @@ export class WorkoutExerciseStateManagerService {
     };
 
     const workoutFullBody: Workout = {
-      id:'',
+      id: uuidv4(),
+      workoutRoleNr: '',
       workoutName: 'Full-Body',
       workoutExercises: workoutExFull,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -244,7 +247,8 @@ export class WorkoutExerciseStateManagerService {
           counter++;
           const w = counter % 2 !== 0 ? weeklyW.workoutA : weeklyW.workoutB;
           const copy: Workout = {
-            id: uuidv4(),
+            id: w.id,
+            workoutRoleNr: `workout-${counter}`,
             workoutName: w.workoutName,
             workoutExercises: w.workoutExercises,
             startWorkoutTimeStamp: Timestamp.fromDate(currentDate),

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ModalController} from '@ionic/angular';
+import {AlertController, ModalController} from '@ionic/angular';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 import {Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
@@ -23,7 +23,8 @@ export class EditExerciseInputsComponent implements OnInit {
 
   constructor(private modalController: ModalController,
               private fireStoreService: FireStoreService,
-              private exService: WorkoutExerciseStateManagerService) {
+              private exService: WorkoutExerciseStateManagerService,
+              private alertController: AlertController) {
 
   }
 
@@ -51,14 +52,13 @@ export class EditExerciseInputsComponent implements OnInit {
 
   }
 
- async dismissConfirm() {
+  async dismissConfirm() {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
       dismissed: true
-    }, 'confirmed').then(() => {
-      this.updateExercise();
-    });
+    }, 'confirmed').then(() => this.updateExercise());
+
 
   }
 
@@ -66,16 +66,19 @@ export class EditExerciseInputsComponent implements OnInit {
     const newSetsAndReps = new Array(this.editSets).fill(this.editReps);
     this.wEx.weight = this.editWeight;
     this.wEx.setsAndReps = newSetsAndReps;
-    this.updateCompletedSets(this.wEx.setsAndReps );
+    this.updateCompletedSets(this.wEx.completedSets,this.wEx.setsAndReps);
     this.exService.generateIterator(this.wExercises);
-   await this.fireStoreService.updateWorkout(this.exService.getCollectionName(),this.workout.id, this.workout)
+    await this.fireStoreService.updateWorkout(this.exService.getCollectionName(), this.workout.workoutRoleNr, this.workout)
   }
-  private updateCompletedSets(setsAndRepsArr: number[]){
-    while (setsAndRepsArr.length>this.wEx.completedSets.length){
-      this.wEx.completedSets.push(false);
+
+  private updateCompletedSets(completedSets: boolean[],setsAndRepsArr: number[]) {
+    while (setsAndRepsArr.length > this.wEx.completedSets.length) {
+      completedSets.push(false);
     }
-    while (setsAndRepsArr.length<this.wEx.completedSets.length){
-      this.wEx.completedSets.pop();
+    while (setsAndRepsArr.length < this.wEx.completedSets.length) {
+      completedSets.pop();
     }
   }
+
+
 }
