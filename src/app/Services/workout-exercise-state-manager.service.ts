@@ -230,7 +230,7 @@ export class WorkoutExerciseStateManagerService {
       }
 
     });
-    console.log('Completed', workoutCompleted);
+
     return workoutCompleted;
   }
 
@@ -243,9 +243,29 @@ export class WorkoutExerciseStateManagerService {
     while (currentDate < endTimestamp) {
 
       for (const item of workoutDays) {
+
         if (workoutDays[currentDate.getDay()]) {
           counter++;
-          const w = counter % 2 !== 0 ? weeklyW.workoutA : weeklyW.workoutB;
+          let w = counter % 2 !== 0 ? weeklyW.workoutA : weeklyW.workoutB;
+          if (counter % 2 !== 0 ){
+            if (weeklyW.workoutA.workoutExercises.length !== 0){
+              w = weeklyW.workoutA;
+
+            }else {
+              w = weeklyW.workoutB;
+            }
+
+
+          }
+          else{
+            if (weeklyW.workoutB.workoutExercises.length !== 0){
+              w = weeklyW.workoutB;
+            }else {
+              w = weeklyW.workoutA;
+            }
+
+
+          }
           const copy: Workout = {
             id: w.id,
             workoutRoleNr: `workout-${counter}`,
@@ -258,10 +278,11 @@ export class WorkoutExerciseStateManagerService {
           };
           workouts.push(copy);
         }
+
         currentDate.setDate(currentDate.getDate() + 1);
       }
     }
-
+console.log(workouts)
     return workouts;
   }
 

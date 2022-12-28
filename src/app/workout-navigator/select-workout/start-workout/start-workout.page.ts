@@ -8,6 +8,10 @@ import {ExerciseInfoModalComponent} from '../../../shared/exercise-info-modal/ex
 import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/edit-exercise-inputs.component';
 import {NativeAudio} from '@capgo/native-audio';
 import {Router} from '@angular/router';
+import {Capacitor} from '@capacitor/core';
+import {Workout} from '../../../Models/Workout';
+import {Subscription} from 'rxjs';
+import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
 
 @Component({
   selector: 'app-start-workout',
@@ -15,6 +19,8 @@ import {Router} from '@angular/router';
   styleUrls: ['./start-workout.page.scss'],
 })
 export class StartWorkoutPage implements OnInit, OnDestroy {
+  workoutUpdate: Workout;
+  workoutUpdateSub: Subscription = new Subscription();
   interval: NodeJS.Timeout;
   private repsVal: number;
   private toaster: HTMLIonToastElement;
@@ -22,6 +28,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   constructor(public toastCtrl: ToastController,
               private authService: FireAuthService,
+              private fireStoreService: FireStoreService,
               public exStateManager: WorkoutExerciseStateManagerService,
               private modalController: ModalController,
               private routerOutlet: IonRouterOutlet,
@@ -32,13 +39,16 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
 
-    if (this.exStateManager.observableWorkout.getValue() === undefined) {
-      this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
-      return;
-    }
+    // if (this.exStateManager.observableWorkout.getValue() === undefined) {
+    //   this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
+    //   return;
+    // }
+    this.workoutUpdateSub = this.exStateManager.observableWorkout
+      .subscribe(wVal => this.workoutUpdate = wVal);
+    const path = Capacitor.isNativePlatform() ? 'ring.mp3' : '/assets/ring.mp3'
     await NativeAudio.preload({
       assetId: 'ring',
-      assetPath: 'ring.mp3',
+      assetPath:  path,
       audioChannelNum: 1,
       isUrl: false
     });
@@ -46,6 +56,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.workoutUpdateSub.unsubscribe();
   }
 
   hapticsVibrate = async (duration: number) => {
@@ -54,29 +65,31 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   async presentAlert() {
     const alert = await this.alertController.create({
-      header: 'Workout Not Yet Completed!',
-      message: 'Are You Sure You Want To Quit?',
+      message: 'Workout Not Yet Completed!',
       buttons: [{
-        text: 'Cancel',
+        text: 'Continue',
         role: 'cancel'
       },
         {
-          text: 'OK',
+          text: 'Finish',
           role: 'confirm',
           handler: () => this.finishWorkout()
         }],
     });
-    if (this.exStateManager.workoutCompleted(this.exStateManager.observableWorkout.getValue().workoutExercises)) {
+    if (this.exStateManager.workoutCompleted(this.workoutUpdate.workoutExercises)) {
       this.finishWorkout();
       return;
     }
-
     await alert.present();
 
   }
 
-  finishWorkout() {
-    console.log('toch ok');
+   finishWorkout() {
+    this.workoutUpdate.isCompleted = true;
+     this.fireStoreService.updateWorkout(this.exStateManager.getCollectionName(),
+       this.workoutUpdate.workoutRoleNr,this.workoutUpdate)
+       .then(()=>setTimeout(()=>this.router.navigate(['tabs', 'WorkoutNavTab']), 500))
+       //.then(()=>this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']))
   }
 
   async presentToast(duration: number) {
@@ -102,7 +115,6 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     });
 
     await this.toaster.onDidDismiss().then(() => {
-      console.log('in toaster.onDidDismiss()');
       clearInterval(this.interval);
     });
 
@@ -118,7 +130,6 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
       if (seconds < 4) {
         this.hapticsVibrate(500);
       }
-      // console.log(this.isUnchecked);
       if (remainingTime <= 0) {
         //toast.dismiss();
         this.toaster.dismiss().then(() => clearInterval(this.interval));

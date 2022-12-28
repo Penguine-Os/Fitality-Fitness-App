@@ -3,6 +3,9 @@ import {Workout} from '../../Models/Workout';
 import {AlertController} from '@ionic/angular';
 import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
+import {FireStoreService} from '../../Services/FireBase/fire-store.service';
+import {Router} from '@angular/router';
+import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-select-workout',
@@ -16,7 +19,9 @@ export class SelectWorkout implements OnInit, OnDestroy {
 
   constructor(private alertController: AlertController,
               public authService: FireAuthService,
-              public stateManagerService: WorkoutExerciseStateManagerService) {
+              private router: Router,
+              public stateManagerService: WorkoutExerciseStateManagerService,
+              private fireStoreService: FireStoreService,) {
   }
 
   ionViewWillEnter() {
@@ -25,11 +30,9 @@ export class SelectWorkout implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  async presentAlert() {
+  async deleteAlert() {
     const alert = await this.alertController.create({
-      header: 'Alert',
-      subHeader: 'Important message',
-      message: 'This is an alert!',
+      message: 'Delete entire Workout-Routine?!',
       buttons: [
         {
           text: 'Cancel',
@@ -41,7 +44,8 @@ export class SelectWorkout implements OnInit, OnDestroy {
           text: 'OK',
           role: 'confirm',
           handler: () => {
-            this.deleteRoutineFromFireStore();
+            this.deleteRoutineFromFireStore()
+              .then(()=>setTimeout(()=>this.router.navigate(['tabs', 'WorkoutNavTab'])))
           },
         },
       ],
@@ -50,8 +54,12 @@ export class SelectWorkout implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  deleteRoutineFromFireStore() {
-    throw new Error('Method not implemented.');
+ async deleteRoutineFromFireStore() {
+    //batchDelete()
+   firstValueFrom(this.fireStoreService.getAllRoutineWorkouts(this.stateManagerService.getCollectionName()))
+     .then((workouts)=>{
+       this.fireStoreService.batchDelete(workouts)
+     })
   }
 
   ngOnDestroy(): void {

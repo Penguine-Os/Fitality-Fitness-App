@@ -24,7 +24,7 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
 
 
   constructor(private modalCtrl: ModalController,
-              private stateManagerService: WorkoutExerciseStateManagerService,
+              public stateManagerService: WorkoutExerciseStateManagerService,
               private router: Router,
               public authService: FireAuthService) {
   }
