@@ -45,7 +45,10 @@ export class SelectWorkout implements OnInit, OnDestroy {
           role: 'confirm',
           handler: () => {
             this.deleteRoutineFromFireStore()
-              .then(()=>setTimeout(()=>this.router.navigate(['tabs', 'WorkoutNavTab'])))
+              .then(()=>{
+                setTimeout(()=>this.router.navigate(['tabs', 'WorkoutNavTab']), 500);
+                //()=>this.router.navigate(['tabs', 'WorkoutNavTab'])
+              })
           },
         },
       ],
@@ -59,7 +62,7 @@ export class SelectWorkout implements OnInit, OnDestroy {
    firstValueFrom(this.fireStoreService.getAllRoutineWorkouts(this.stateManagerService.getCollectionName()))
      .then((workouts)=>{
        this.fireStoreService.batchDelete(workouts)
-     })
+     }).then(()=> this.stateManagerService.resetFieldVariables())
   }
 
   ngOnDestroy(): void {

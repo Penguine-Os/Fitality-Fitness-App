@@ -4,7 +4,6 @@ import {
   collection,
   collectionData,
   CollectionReference,
-  getDocs,
   doc,
   writeBatch,
   DocumentReference,
@@ -15,14 +14,13 @@ import {
 import {WorkoutRoutine} from '../../Models/WorkoutRoutine';
 import {Workout} from '../../Models/Workout';
 import {AllWorkouts} from '../../Models/AllWorkouts';
-import {filter, map} from 'rxjs';
+import { map} from 'rxjs';
 import {WorkoutExerciseStateManagerService} from '../workout-exercise-state-manager.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FireStoreService {
-  private batch = writeBatch(this.firestore);
   constructor(private firestore: Firestore,
               private stateManagerService: WorkoutExerciseStateManagerService,) {
   }
@@ -57,32 +55,30 @@ export class FireStoreService {
     return collectionData<Workout>(
       query<Workout>(this.getCollectionRef(collectionName)));
   }
-  async deleteDocs (){
-    const citiesRef = collection(this.firestore, this.stateManagerService.getCollectionName());
 
-  }
   async batchedWrites(workouts: Workout[], collectionName: string) {
+    const batch = writeBatch(this.firestore);
     let counter = 0;
     for (const item of workouts) {
       counter++;
       const docRef = doc(this.firestore, collectionName, `${item.workoutRoleNr}`);
-      this.batch.set(docRef, item, {merge: true});
+      batch.set(docRef, item, {merge: true});
       // await batch.commit();
     }
-    await this.batch.commit();
+    await batch.commit();
   }
   async batchDelete(workouts: Workout[]){
+    const batch = writeBatch(this.firestore);
     const collectionName = this.stateManagerService.getCollectionName();
     console.log(collectionName)
     let counter = 0;
     for (const item of workouts) {
       counter++;
       const docRef = doc(this.firestore, this.stateManagerService.getCollectionName(), `${item.workoutRoleNr}`);
-      this.batch.delete(docRef);
+      batch.delete(docRef);
       console.log('in batch Delete')
     }
-
-    await this.batch.commit();
+    await batch.commit();
   }
 
   private getCollectionRef<T>(collectionName: string): CollectionReference<T> {

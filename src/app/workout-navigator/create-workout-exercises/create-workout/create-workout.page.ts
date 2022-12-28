@@ -72,7 +72,8 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
 
     }
     this.exService.creatWeeklyRoutineWorkouts(categorizedExercises, this.selectedSplitStrategy);
-    this.createWorkoutRoutine();
+    this.createWorkoutRoutine()
+      .then(()=> setTimeout(()=>this.router.navigate(['tabs', 'WorkoutNavTab']),500 ));
   }
 
 
@@ -93,7 +94,7 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
 
     await this.storage.batchedWrites(this.exService.workoutScheduler(creationDate,
       expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays),collectionName)
-      .then(()=>this.router.navigate(['tabs', 'WorkoutNavTab']));
+      .then(()=>this.exService.resetFieldVariables());
   }
 
   selectOptionHandler(event: any) {

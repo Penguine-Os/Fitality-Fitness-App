@@ -22,7 +22,7 @@
   <ion-list *ngIf="workoutExercises.length>0">
 
 
-    <ion-item-sliding *ngFor="let workoutEx of workoutExercises; let i = index">
+    <ion-item-sliding *ngFor="let workoutEx of stateManagerService.observableWorkoutExercises | async; let i = index">
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)='removeWorkOutExerciseHandler(workoutEx.workoutExercise)'>
           <ion-icon slot="icon-only" name="trash"></ion-icon>

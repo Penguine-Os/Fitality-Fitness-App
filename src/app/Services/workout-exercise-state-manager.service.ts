@@ -6,7 +6,8 @@ import {WorkoutExercise} from '../Models/WorkoutExercise';
 import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
 import {WorkoutRoutine} from '../Models/WorkoutRoutine';
 import {Timestamp} from '@angular/fire/firestore';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,6 +29,7 @@ export class WorkoutExerciseStateManagerService {
 
   constructor() {
   }
+
   getCollectionName(): string {
     return this.#collectionName;
   }
@@ -35,6 +37,7 @@ export class WorkoutExerciseStateManagerService {
   setCollectionName(value: string) {
     this.#collectionName = value;
   }
+
   getUserId(): string {
     return this.#userId;
   }
@@ -45,8 +48,9 @@ export class WorkoutExerciseStateManagerService {
 
   getWorkouts(workouts: Workout[]) {
     this.observableWorkouts.next(workouts);
-   // this.organizeWeeklyWorkout(wOutRoutine.workoutDays, wOutRoutine);
+    // this.organizeWeeklyWorkout(wOutRoutine.workoutDays, wOutRoutine);
   }
+
   getWorkout(wOut: Workout) {
     this.generateIterator(wOut.workoutExercises);
     //  this.observableWorkout = new BehaviorSubject<Workout>(wOut);
@@ -235,7 +239,6 @@ export class WorkoutExerciseStateManagerService {
   }
 
 
-
   workoutScheduler(startTimestamp: Date, endTimestamp: Date, weeklyW: WeeklyWorkouts, workoutDays: boolean[]) {
     const currentDate = new Date(startTimestamp);
     const workouts: Workout[] = [];
@@ -247,20 +250,19 @@ export class WorkoutExerciseStateManagerService {
         if (workoutDays[currentDate.getDay()]) {
           counter++;
           let w = counter % 2 !== 0 ? weeklyW.workoutA : weeklyW.workoutB;
-          if (counter % 2 !== 0 ){
-            if (weeklyW.workoutA.workoutExercises.length !== 0){
+          if (counter % 2 !== 0) {
+            if (weeklyW.workoutA.workoutExercises.length !== 0) {
               w = weeklyW.workoutA;
 
-            }else {
+            } else {
               w = weeklyW.workoutB;
             }
 
 
-          }
-          else{
-            if (weeklyW.workoutB.workoutExercises.length !== 0){
+          } else {
+            if (weeklyW.workoutB.workoutExercises.length !== 0) {
               w = weeklyW.workoutB;
-            }else {
+            } else {
               w = weeklyW.workoutA;
             }
 
@@ -282,11 +284,25 @@ export class WorkoutExerciseStateManagerService {
         currentDate.setDate(currentDate.getDate() + 1);
       }
     }
-console.log(workouts)
     return workouts;
   }
 
-
+  resetFieldVariables() {
+    this.#exercises= [];
+    this.#workoutExercises= [];
+    this.#repVals = [];
+    this.#collectionName =undefined;
+    this.#userId=undefined;
+    this.observableExercises = new BehaviorSubject<ExerciseType[]>(undefined);
+    this.observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
+    this.observableIterator = new BehaviorSubject<number[][]>(undefined);
+    this.observableRepVals = new BehaviorSubject<number[]>(undefined);
+    this.observableWorkout = new BehaviorSubject<Workout>(undefined);
+    this.observableWorkouts = new BehaviorSubject<Workout[]>(undefined);
+    this.observableRoutine = new BehaviorSubject<WorkoutRoutine>(undefined);
+    this.weekRoutine = new Array<boolean>(7).fill(false);
+    this.weeklyWorkout=undefined;
+  }
 
 }
 
