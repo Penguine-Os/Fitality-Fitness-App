@@ -19,31 +19,34 @@ export class EditExerciseInputsComponent implements OnInit {
   editSets = 0;
   editReps = 0;
   editWeight = 0;
+  editRest = 0;
+  editProgressiveOverload = 0;
   @Input() index: number;
 
   constructor(private modalController: ModalController,
               private fireStoreService: FireStoreService,
-              private exService: WorkoutExerciseStateManagerService,
-              private alertController: AlertController) {
+              private exService: WorkoutExerciseStateManagerService,) {
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.exSub = this.exService.observableWorkout.subscribe(wVal => {
-      this.workout = wVal
+      this.workout = wVal;
       this.wExercises = wVal.workoutExercises;
       this.wEx = wVal.workoutExercises[this.index];
     });
     this.editSets = this.wEx.setsAndReps.length;
     this.editReps = this.wEx.setsAndReps[0];
     this.editWeight = this.wEx.weight;
+    this.editRest = this.wEx.restDuration;
+    this.editProgressiveOverload = this.wEx.progressiveOverload;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.exSub.unsubscribe();
   }
 
-  dismiss() {
+  public dismiss(): void {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
@@ -52,7 +55,11 @@ export class EditExerciseInputsComponent implements OnInit {
 
   }
 
-  async dismissConfirm() {
+  public rangeHandler(event: any): void {
+    this.editProgressiveOverload = event.detail.value / 100;
+  }
+
+  public async dismissConfirm(): Promise<void> {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
@@ -62,16 +69,16 @@ export class EditExerciseInputsComponent implements OnInit {
 
   }
 
-  private async updateExercise() {
+  private async updateExercise(): Promise<void>  {
     const newSetsAndReps = new Array(this.editSets).fill(this.editReps);
     this.wEx.weight = this.editWeight;
     this.wEx.setsAndReps = newSetsAndReps;
-    this.updateCompletedSets(this.wEx.completedSets,this.wEx.setsAndReps);
+    this.updateCompletedSets(this.wEx.completedSets, this.wEx.setsAndReps);
     this.exService.generateIterator(this.wExercises);
-    await this.fireStoreService.updateWorkout(this.exService.getCollectionName(), this.workout.workoutRoleNr, this.workout)
+    await this.fireStoreService.updateWorkout(this.exService.getCollectionName(), this.workout.workoutRoleNr, this.workout);
   }
 
-  private updateCompletedSets(completedSets: boolean[],setsAndRepsArr: number[]) {
+  private updateCompletedSets(completedSets: boolean[], setsAndRepsArr: number[]): void {
     while (setsAndRepsArr.length > this.wEx.completedSets.length) {
       completedSets.push(false);
     }
@@ -79,6 +86,4 @@ export class EditExerciseInputsComponent implements OnInit {
       completedSets.pop();
     }
   }
-
-
 }

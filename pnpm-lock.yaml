@@ -41,7 +41,8 @@ specifiers:
   '@typescript-eslint/eslint-plugin': 5.3.0
   '@typescript-eslint/parser': 5.3.0
   add: ^2.0.6
-  eslint: ^7.6.0
+  eslint: ^7.32.0
+  eslint-plugin-angular: ^4.1.0
   eslint-plugin-import: 2.22.1
   eslint-plugin-jsdoc: 30.7.6
   eslint-plugin-prefer-arrow: 1.2.2
@@ -115,6 +116,7 @@ devDependencies:
   '@typescript-eslint/eslint-plugin': 5.3.0_rqhavgyymtr5v6ckiqvrlonw74
   '@typescript-eslint/parser': 5.3.0_3rubbgt5ekhqrcgx4uwls3neim
   eslint: 7.32.0
+  eslint-plugin-angular: 4.1.0
   eslint-plugin-import: 2.22.1_u27ca6k675humrg6ovkxv22o44
   eslint-plugin-jsdoc: 30.7.6_eslint@7.32.0
   eslint-plugin-prefer-arrow: 1.2.2_eslint@7.32.0
@@ -5775,6 +5777,10 @@ packages:
       eslint-import-resolver-node: 0.3.6
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /eslint-plugin-angular/4.1.0:
+    resolution: {integrity: sha512-dacledMPxVOZA3T0xcYFuvrMCy5dHxg0ZTMWUaHqSBQef3/XLyXJ9s1LNj0NikJ/dYx6OhqlnnNpKmrJhEUB+Q==}
     dev: true
 
   /eslint-plugin-import/2.22.1_u27ca6k675humrg6ovkxv22o44:

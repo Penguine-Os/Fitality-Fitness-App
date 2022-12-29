@@ -47,7 +47,7 @@
 
       <ion-img *ngIf="chosenExercises.length===0" src="assets/images/drag&drop.png"></ion-img>
 
-      <ion-item  class="overlayList" *ngFor="let exercise of chosenExercises " cdkDrag >
+      <ion-item  class="overlayList" *ngFor="let exercise of chosenExercises "  >
         <ion-label [color]="lblColorSuccess">
           {{exercise?.name}}
         </ion-label>
@@ -55,17 +55,19 @@
     </ion-list>
   </div>
 
-  <ion-list cdkDropList
+  <ion-item cdkDropList
             [cdkDropListData]="fetchedExercises"
             [cdkDropListConnectedTo]="[chosenList]"
             #fetchedList="cdkDropList">
+<ion-list style="padding-right: 2rem" lines="none">
+  <ion-item class="overlayList" *ngFor="let exercise of fetchedExercises " cdkDrag >
+    <ion-label >
+      {{exercise?.name}}
+    </ion-label>
+  </ion-item>
+</ion-list>
 
-    <ion-item class="overlayList" *ngFor="let exercise of fetchedExercises " cdkDrag >
-      <ion-label >
-        {{exercise?.name}}
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  </ion-item>
 
 
 

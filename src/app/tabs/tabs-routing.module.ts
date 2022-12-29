@@ -10,15 +10,15 @@ const routes: Routes = [
 
       {
         path: 'WorkoutNavTab',
-        loadChildren: () => import('../workout-navigator/workout-navigator.module').then(m => m.WorkoutNavigatorPageModule)
+        loadChildren: (): any => import('../workout-navigator/workout-navigator.module').then(m => m.WorkoutNavigatorPageModule)
       },
       {
         path: 'ProgressTab',
-        loadChildren: () => import('../progress/progress.module').then(m => m.ProgressPageModule)
+        loadChildren: (): any => import('../progress/progress.module').then(m => m.ProgressPageModule)
       },
       {
         path: 'InsightTab',
-        loadChildren: () => import('../insight/insight.module').then(m => m.InsightPageModule)
+        loadChildren: (): any => import('../calender/calender.module').then(m => m.InsightPageModule)
       },
       {
         path: '',

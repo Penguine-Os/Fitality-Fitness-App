@@ -3,10 +3,12 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">Workout Name</ion-title>
+
     <ion-buttons slot="end">
-      <ion-button color="danger"
-                  (click)="presentAlert()">Finish</ion-button>
+
+      <ion-button color="success"
+                  (click)="presentAlert()">Done
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 
@@ -15,42 +17,47 @@
 <ion-content>
   <ion-list>
 
-      <ion-list *ngFor="let exes of exStateManager.observableWorkoutExercises|async; let i = index">
-        <ion-grid>
-          <ion-row class="ion-margin">
-            <ion-col size="7" >
-              <div>
-                <ion-label >{{exes.workoutExercise.name}}</ion-label>
-                <ion-icon name="information-circle-outline"
-                          color="warning"
-                          class="ion-info"
-                          (click)="presentModal(i, 'info')"></ion-icon>
-              </div>
-            </ion-col>
-            <ion-col  size="5" class="ion-text-end">
-              <div>
-                <ion-label>{{exes.setsAndReps.length + ' x ' + exes.setsAndReps[0] + ' x ' + exes.weight + 'Kg'}}</ion-label>
-                <ion-icon name="cog-outline"
-                          color="warning"
-                          class="ion-info"
-                          (click)="presentModal(i, 'edit')"></ion-icon>
-              </div>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <div  class="scrolling-wrapper">
-
-              <app-sets-and-reps class="customComponent"
-                                 [(propertyValue)]="exes.setsAndReps[j]"
-                          (click)="setClickHandler(exes, j)"
-                                 [(clickedValue)]="exes.completedSets[j]"
-                          *ngFor="let sets of exStateManager.observableIterator.getValue()[i]; let j = index" style="margin: 1rem"></app-sets-and-reps>
+    <ion-list *ngFor="let exes of exStateManager.observableWorkoutExercises|async; let i = index">
+      <ion-grid>
+        <ion-row class="ion-margin">
+          <ion-col size="7">
+            <div>
+              <ion-label>{{exes.workoutExercise.name}}</ion-label>
+              <ion-icon name="information-circle-outline"
+                        color="warning"
+                        class="ion-info"
+                        (click)="presentModal('info',i)"></ion-icon>
             </div>
-          </ion-row>
-        </ion-grid>
-      </ion-list>
+          </ion-col>
+          <ion-col size="5" class="ion-text-end">
+            <div>
+              <ion-label>{{exes.setsAndReps.length + ' x ' + exes.setsAndReps[0] + ' x ' + exes.weight + 'Kg'}}</ion-label>
+              <ion-icon name="cog-outline"
+                        color="warning"
+                        class="ion-info"
+                        (click)="presentModal('edit',i)"></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <div class="scrolling-wrapper">
+
+            <app-sets-and-reps class="customComponent"
+                               [(propertyValue)]="exes.setsAndReps[j]"
+                               (click)="setClickHandler(exes, j)"
+                               [(clickedValue)]="exes.completedSets[j]"
+                               *ngFor="let sets of exStateManager.observableIterator.getValue()[i]; let j = index"
+                               style="margin: 1rem"></app-sets-and-reps>
+          </div>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
 
   </ion-list>
-
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="presentModal('note')">
+      <ion-icon name="clipboard-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

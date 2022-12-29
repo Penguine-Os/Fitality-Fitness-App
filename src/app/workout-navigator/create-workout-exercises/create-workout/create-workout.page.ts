@@ -5,7 +5,7 @@ import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exer
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {Subscription} from 'rxjs';
 import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
-import {Timestamp }  from '@angular/fire/firestore';
+import {Timestamp} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 
 @Component({
@@ -15,7 +15,7 @@ import {Router} from '@angular/router';
 })
 export class CreateWorkoutPage implements OnInit, OnDestroy {
 
-  weekdays: string[] = ['Su','Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa' ];
+  weekdays: string[] = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
   weekRoutine = new Array<boolean>(7).fill(false);
   progressiveOverload: number;
   duration = 1;
@@ -29,6 +29,7 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
 
   selectedSplitStrategy = '';
   btnNextIsDisabled = true;
+  nextBtnColor: string;
 
   constructor(public authService: FireAuthService,
               private storage: FireStoreService,
@@ -36,25 +37,28 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
               private router: Router) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.workOutExercisesSubscription = this.exService.observableWorkoutExercises.subscribe(
       xVal => this.workOutExercises = xVal
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.workOutExercisesSubscription.unsubscribe();
   }
 
-  rangeHandler(event: any) {
-    this.progressiveOverload = event.detail.value / 100;
+  public selectOptionHandler(event: any): void {
+    console.log(event.detail.value);
+    this.selectedSplitStrategy = event.detail.value;
+    this.btnNextIsDisabled = false;
+    this.nextBtnColor = 'success';
   }
 
-  checkHandler() {
+  public checkHandler(): void {
     this.exService.copyWeekRoutine(this.weekRoutine);
   }
 
-  splitExercisesAndCreateWeeklyWorkout() {
+  public splitExercisesAndCreateWeeklyWorkout(): void {
     let categorizedExercises: WorkoutExercise[][] = [];
     switch (this.selectedSplitStrategy) {
       case 'pushPull':
@@ -64,7 +68,7 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
         categorizedExercises = this.exService.categorizeUpperAndLowerBodyExercises();
         break;
       case 'fullBody':
-        categorizedExercises = [[], [], this.exService.allExercises()];
+        categorizedExercises = [this.exService.allExercises(), this.exService.allExercises()];
         break;
       default:
         console.log('Select Split Strategy');
@@ -73,11 +77,11 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
     }
     this.exService.creatWeeklyRoutineWorkouts(categorizedExercises, this.selectedSplitStrategy);
     this.createWorkoutRoutine()
-      .then(()=> setTimeout(()=>this.router.navigate(['tabs', 'WorkoutNavTab']),500 ));
+      .then(() => setTimeout(() => this.router.navigate(['tabs', 'WorkoutNavTab']), 500));
   }
 
 
-  async createWorkoutRoutine() {
+  private async createWorkoutRoutine(): Promise<void> {
     const collectionName = `Workout-Routine-${this.authService.getUserUID()}`;
     const creationDate = new Date();
     const expirationDate = new Date();
@@ -93,12 +97,8 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
     };
 
     await this.storage.batchedWrites(this.exService.workoutScheduler(creationDate,
-      expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays),collectionName)
-      .then(()=>this.exService.resetFieldVariables());
+      expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays), collectionName)
+      .then(() => this.exService.resetFieldVariables());
   }
 
-  selectOptionHandler(event: any) {
-    this.selectedSplitStrategy = event.detail.value;
-    this.btnNextIsDisabled = !this.btnNextIsDisabled;
-  }
 }

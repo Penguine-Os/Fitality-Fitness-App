@@ -4,5 +4,4 @@ export interface WeeklyWorkouts {
   splitName: string;
   workoutA: Workout;
   workoutB: Workout;
-  workoutFullBody: Workout;
 }

@@ -5,12 +5,12 @@ import {WorkoutExerciseInputComponent} from './workout-exercise-input/workout-ex
 import {IonicModule} from '@ionic/angular';
 import {RouterModule} from '@angular/router';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import {ValidationModalComponent} from './validation-modal/validation-modal.component';
 import {FormsModule} from '@angular/forms';
 import {WorkoutCardComponent} from './workout-card/workout-card.component';
 import {SetsAndRepsComponent} from './sets-and-reps/sets-and-reps.component';
 import {ExerciseInfoModalComponent} from './exercise-info-modal/exercise-info-modal.component';
 import {EditExerciseInputsComponent} from './edit-exercise-inputs/edit-exercise-inputs.component';
+import {NotepadComponent} from './notepad/notepad.component';
 
 
 
@@ -18,11 +18,11 @@ import {EditExerciseInputsComponent} from './edit-exercise-inputs/edit-exercise-
   declarations: [
     FetchExerciseModalComponent,
     WorkoutExerciseInputComponent,
-    ValidationModalComponent,
     WorkoutCardComponent,
     SetsAndRepsComponent,
     ExerciseInfoModalComponent,
-    EditExerciseInputsComponent
+    EditExerciseInputsComponent,
+    NotepadComponent
   ],
   imports: [
     CommonModule,
@@ -33,10 +33,10 @@ import {EditExerciseInputsComponent} from './edit-exercise-inputs/edit-exercise-
   exports:  [
     FetchExerciseModalComponent,
     WorkoutExerciseInputComponent,
-    ValidationModalComponent,
     WorkoutCardComponent,
     SetsAndRepsComponent,
     ExerciseInfoModalComponent,
-    EditExerciseInputsComponent]
+    EditExerciseInputsComponent,
+    NotepadComponent]
 })
 export class SharedModule { }

@@ -37,7 +37,14 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
     this.ex = value;
   }
 
-  ngOnInit() {
+  ngOnDestroy(): void {
+    this.exerciseSubscription.unsubscribe();
+    this.workoutExerciseSubscription.unsubscribe();
+    this.repsValSubscription.unsubscribe();
+  }
+
+
+  ngOnInit(): void {
     this.exerciseSubscription = this.stateManagerService.observableExercises
       .subscribe(value => this.ex = value);
 
@@ -49,7 +56,7 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
 
   }
 
-  async openModal() {
+  public async openModal(): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: FetchExerciseModalComponent,
     });
@@ -62,38 +69,28 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
       if (data === null) {
         return;
       }
-
-      //this.exercises = [...data];
-
-
     }
   }
 
 
-  removeWorkOutExerciseHandler(ex: ExerciseType) {
+  public removeWorkOutExerciseHandler(ex: ExerciseType): void {
     this.stateManagerService.deleteExercise(ex);
     this.workoutExercises = this.workoutExercises.filter(x => x.workoutExercise !== ex);
 
   }
 
-  ngOnDestroy() {
-    this.exerciseSubscription.unsubscribe();
-    this.workoutExerciseSubscription.unsubscribe();
-    this.repsValSubscription.unsubscribe();
-  }
 
-  goToNextPage() {
-    ////////++++VALIDATIE NOG TE IMPLEMENTEREN++++////////
-    this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises', 'create-workout']);
+  public async goToNextPage(): Promise<void> {
+    await this.router.navigate(['tabs', 'WorkoutNavTab', 'create-workout-exercises', 'create-workout']);
   }
 
 
-  rangeHandler(event: any, workoutEx: WorkoutExercise) {
+  public rangeHandler(event: any, workoutEx: WorkoutExercise): void {
     workoutEx.progressiveOverload = event.detail.value / 100;
   }
 
-  editReps(repVal: number, index: number) {
+  public editReps(repVal: number, index: number): void {
     this.workoutExercises[index].setsAndReps = new Array(this.workoutExercises[index].setsAndReps.length).fill(repVal);
-    this.workoutExercises[index].completedSets =  new Array(this.workoutExercises[index].setsAndReps.length).fill(false);
+    this.workoutExercises[index].completedSets = new Array(this.workoutExercises[index].setsAndReps.length).fill(false);
   }
 }

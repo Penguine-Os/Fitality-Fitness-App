@@ -12,6 +12,9 @@ import {Capacitor} from '@capacitor/core';
 import {Workout} from '../../../Models/Workout';
 import {Subscription} from 'rxjs';
 import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
+import {Timestamp} from '@angular/fire/firestore';
+import {NotepadComponent} from '../../../shared/notepad/notepad.component';
+import {promise} from 'protractor';
 
 @Component({
   selector: 'app-start-workout',
@@ -19,12 +22,15 @@ import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
   styleUrls: ['./start-workout.page.scss'],
 })
 export class StartWorkoutPage implements OnInit, OnDestroy {
+
+
   workoutUpdate: Workout;
   workoutUpdateSub: Subscription = new Subscription();
   interval: NodeJS.Timeout;
   private repsVal: number;
   private toaster: HTMLIonToastElement;
   private modal: HTMLIonModalElement;
+  private actions = new Set(['info', 'edit', 'note']);
 
   constructor(public toastCtrl: ToastController,
               private authService: FireAuthService,
@@ -37,33 +43,34 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   }
 
-  async ngOnInit() {
 
-    // if (this.exStateManager.observableWorkout.getValue() === undefined) {
-    //   this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
-    //   return;
-    // }
+  async ngOnInit(): Promise<void> {
+
+    if (this.exStateManager.observableWorkout.getValue() === undefined) {
+    await  this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']);
+      return;
+    }
     this.workoutUpdateSub = this.exStateManager.observableWorkout
-      .subscribe(wVal => this.workoutUpdate = wVal);
-    const path = Capacitor.isNativePlatform() ? 'ring.mp3' : '/assets/ring.mp3'
+      .subscribe(wVal => {
+        this.workoutUpdate = wVal;
+        const start = new Date();
+        this.workoutUpdate.startWorkoutTimeStamp = Timestamp.fromDate(start);
+      });
+    const path = Capacitor.isNativePlatform() ? 'ring.mp3' : '/assets/ring.mp3';
     await NativeAudio.preload({
       assetId: 'ring',
-      assetPath:  path,
+      assetPath: path,
       audioChannelNum: 1,
       isUrl: false
     });
 
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.workoutUpdateSub.unsubscribe();
   }
 
-  hapticsVibrate = async (duration: number) => {
-    await Haptics.vibrate({duration});
-  };
-
-  async presentAlert() {
+  public async presentAlert(): Promise<void> {
     const alert = await this.alertController.create({
       message: 'Workout Not Yet Completed!',
       buttons: [{
@@ -73,7 +80,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
         {
           text: 'Finish',
           role: 'confirm',
-          handler: () => this.finishWorkout()
+          handler: (): void => this.finishWorkout()
         }],
     });
     if (this.exStateManager.workoutCompleted(this.workoutUpdate.workoutExercises)) {
@@ -84,15 +91,55 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   }
 
-   finishWorkout() {
-    this.workoutUpdate.isCompleted = true;
-     this.fireStoreService.updateWorkout(this.exStateManager.getCollectionName(),
-       this.workoutUpdate.workoutRoleNr,this.workoutUpdate)
-       .then(()=>setTimeout(()=>this.router.navigate(['tabs', 'WorkoutNavTab']), 500))
-       //.then(()=>this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']))
+
+  public async setClickHandler(exercise: WorkoutExercise, repsIndex: number): Promise<void> {
+
+    this.repsVal = exercise.setsAndReps[repsIndex];
+
+    if (!exercise.completedSets[repsIndex]) {
+      return;
+    }
+    await this.presentToast(exercise.restDuration);
+
   }
 
-  async presentToast(duration: number) {
+  public async presentModal(action: string, i = 0): Promise<void> {
+    let modalComponent;
+    switch (action) {
+      case 'edit':
+        modalComponent = EditExerciseInputsComponent;
+        break;
+      case 'info':
+        modalComponent = ExerciseInfoModalComponent;
+        break;
+      case 'note':
+        modalComponent = NotepadComponent;
+        break;
+    }
+    this.modal = await this.modalController.create({
+      component: modalComponent,
+      componentProps: {
+        index: i,
+      },
+      cssClass: 'classModal',
+      presentingElement: this.routerOutlet.nativeEl
+    });
+    await this.modal.present();
+
+  }
+
+  async ionViewWillLeave(): Promise<void> {
+    if (this.toaster === undefined) {
+      return;
+    }
+    await this.toaster.dismiss();
+  }
+
+  private async hapticsVibrate(duration: number): Promise<void> {
+    await Haptics.vibrate({duration});
+  };
+
+  private async presentToast(duration: number): Promise<void> {
 
     duration *= 60;
     const remainingTime = duration;
@@ -106,7 +153,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     this.toaster = await this.createNewToast(minutes, seconds, duration);
 
     await Promise.all([
-      this.toaster.present().then(() => this.interval = this.countDown(remainingTime, minutes, seconds)),
+      this.toaster.present().then(() => this.interval = this.createCountDown(remainingTime, minutes, seconds)),
       this.playSound()
     ]).then(() => {
       this.toaster.onDidDismiss().then(() => {
@@ -120,7 +167,17 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   }
 
-  countDown(remainingTime, minutes, seconds) {
+  private finishWorkout(): void {
+    const end = new Date();
+    this.workoutUpdate.isCompleted = true;
+    this.workoutUpdate.endWorkoutTimeStamp = Timestamp.fromDate(end);
+    this.fireStoreService.updateWorkout(this.exStateManager.getCollectionName(),
+      this.workoutUpdate.workoutRoleNr, this.workoutUpdate)
+      .then(() => setTimeout(() => this.router.navigate(['tabs', 'WorkoutNavTab']), 500));
+    //.then(()=>this.router.navigate(['tabs', 'WorkoutNavTab', 'select-workout']))
+  }
+
+  private createCountDown(remainingTime, minutes, seconds): NodeJS.Timeout {
     return setInterval(() => {
       remainingTime--;
       minutes = Math.floor(remainingTime / 60);
@@ -138,7 +195,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  async createNewToast(minutes: number, seconds: number, duration: number) {
+  private async createNewToast(minutes: number, seconds: number, duration: number): Promise<HTMLIonToastElement> {
     return await this.toastCtrl.create({
       message: `Good Work! Recovery in: ${minutes}:${seconds >= 10 ? seconds : '0' + seconds}`,
       duration: duration * 1000,
@@ -150,7 +207,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
           icon: 'close-circle-outline',
           cssClass: '',
           role: 'cancel',
-          handler: () => {
+          handler: (): void => {
             this.toaster.onDidDismiss().then(() => {
               clearInterval(this.interval);
             });
@@ -161,39 +218,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     });
   }
 
-  async setClickHandler(exercise: WorkoutExercise, repsIndex: number) {
-
-    this.repsVal = exercise.setsAndReps[repsIndex];
-
-    if (!exercise.completedSets[repsIndex]) {
-      return;
-    }
-    await this.presentToast(exercise.restDuration);
-
-  }
-
-  async presentModal(i: number, action: string) {
-    const modalComp = action === 'info' ? ExerciseInfoModalComponent : EditExerciseInputsComponent;
-    this.modal = await this.modalController.create({
-      component: modalComp,
-      componentProps: {
-        index: i,
-      },
-      cssClass: 'classModal',
-      presentingElement: this.routerOutlet.nativeEl
-    });
-    await this.modal.present();
-
-  }
-
-  async ionViewWillLeave() {
-    if (this.toaster === undefined) {
-      return;
-    }
-    await this.toaster.dismiss();
-  }
-
-  async playSound() {
+  private async playSound(): Promise<void> {
     await Promise.all([NativeAudio.play({assetId: 'ring', time: 0}), this.hapticsVibrate(150)]);
 
   }

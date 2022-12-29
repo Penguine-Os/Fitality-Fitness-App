@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { InsightPage } from './insight.page';
+import { CalenderPage } from './calender.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: InsightPage
+    component: CalenderPage
   }
 ];
 

@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { InsightPageRoutingModule } from './insight-routing.module';
+import { InsightPageRoutingModule } from './calender-routing.module';
 
-import { InsightPage } from './insight.page';
+import { CalenderPage } from './calender.page';
 
 @NgModule({
   imports: [
@@ -15,6 +15,6 @@ import { InsightPage } from './insight.page';
     IonicModule,
     InsightPageRoutingModule
   ],
-  declarations: [InsightPage]
+  declarations: [CalenderPage]
 })
 export class InsightPageModule {}
