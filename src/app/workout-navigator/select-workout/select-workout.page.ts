@@ -25,6 +25,9 @@ export class SelectWorkout implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log(this.stateManagerService.getCollectionName());
+    this.fireStoreService.getWeekRoutine(this.stateManagerService.getCollectionName())
+      .then(w => this.stateManagerService.observableWorkouts.next(w));
   }
 
   ngOnDestroy(): void {

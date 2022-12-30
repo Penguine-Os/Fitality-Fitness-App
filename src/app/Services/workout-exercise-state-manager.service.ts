@@ -13,10 +13,11 @@ import {v4 as uuidv4} from 'uuid';
 })
 export class WorkoutExerciseStateManagerService {
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
+  collectionHasDocs = new BehaviorSubject<boolean>(false);
   observableIterator = new BehaviorSubject<number[][]>([]);
   observableRepVals = new BehaviorSubject<number[]>([]);
   observableWorkout = new BehaviorSubject<Workout>(undefined);
-  observableWorkouts = new BehaviorSubject<Workout[]>(undefined);
+  observableWorkouts = new BehaviorSubject<Workout[]>([]);
   observableRoutine = new BehaviorSubject<WorkoutRoutine>(undefined);
   #exercises: ExerciseType[] = [];
   observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
@@ -47,6 +48,7 @@ export class WorkoutExerciseStateManagerService {
   }
 
  public getWorkouts(workouts: Workout[]): void {
+    console.log(workouts);
     this.observableWorkouts.next(workouts);
     // this.organizeWeeklyWorkout(wOutRoutine.workoutDays, wOutRoutine);
   }
@@ -79,7 +81,7 @@ export class WorkoutExerciseStateManagerService {
 
  public deleteExercise(deletedExercise: ExerciseType): void {
     this.#exercises = this.#exercises.filter(x => x !== deletedExercise);
-    this.#workoutExercises = this.#workoutExercises.filter(x => x.workoutExercise !== deletedExercise);
+    this.#workoutExercises = this.#workoutExercises.filter(x => x.workoutExerciseType !== deletedExercise);
     this.observableExercises.next(this.#exercises);
     this.observableWorkoutExercises.next(this.#workoutExercises);
   }
@@ -101,7 +103,7 @@ export class WorkoutExerciseStateManagerService {
  public mapExerciseTypesToWorkoutExercises(exVal: ExerciseType): void  {
 
     const workoutEx: WorkoutExercise = {
-      workoutExercise: exVal,
+      workoutExerciseType: exVal,
       completedSets: [false],
       setsAndReps: [1],
       weight: 10,
@@ -118,14 +120,14 @@ export class WorkoutExerciseStateManagerService {
 
   public splitPull(workoutEx: WorkoutExercise): WorkoutExercise {
     const pull = new Set(['biceps', 'forearms', 'traps', 'lats', 'lower_back', 'middle_back', 'abductors', 'neck']);
-    if (pull.has(workoutEx.workoutExercise.muscle.trim())) {
+    if (pull.has(workoutEx.workoutExerciseType.muscle.trim())) {
       return workoutEx;
     }
   }
 
   public splitPush(workoutEx: WorkoutExercise): WorkoutExercise {
     const push = new Set(['chest', 'triceps', 'hamstrings', 'quadriceps', 'calves']);
-    if (push.has(workoutEx.workoutExercise.muscle.trim())) {
+    if (push.has(workoutEx.workoutExerciseType.muscle.trim())) {
       return workoutEx;
     }
   }
@@ -133,7 +135,7 @@ export class WorkoutExerciseStateManagerService {
   public splitUpper(workoutEx: WorkoutExercise): WorkoutExercise {
     const upper = new Set(['biceps', 'forearms', 'traps', 'lats', 'chest', 'neck']);
 
-    if (upper.has(workoutEx.workoutExercise.muscle.trim())) {
+    if (upper.has(workoutEx.workoutExerciseType.muscle.trim())) {
       return workoutEx;
     }
   }
@@ -141,7 +143,7 @@ export class WorkoutExerciseStateManagerService {
   public splitLower(workoutEx: WorkoutExercise): WorkoutExercise {
     const lower = new Set(['lower_back', 'middle_back', 'abductors', 'hamstrings', 'quadriceps', 'calves']);
 
-    if (lower.has(workoutEx.workoutExercise.muscle.trim())) {
+    if (lower.has(workoutEx.workoutExerciseType.muscle.trim())) {
       return workoutEx;
     }
   }

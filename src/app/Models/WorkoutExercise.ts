@@ -1,7 +1,7 @@
 import {ExerciseType} from './ExerciseType';
 
 export interface WorkoutExercise{
-  workoutExercise: ExerciseType;
+  workoutExerciseType: ExerciseType;
  setsAndReps: number[];
   completedSets: boolean[];
   weight: number;

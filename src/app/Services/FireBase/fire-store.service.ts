@@ -9,12 +9,12 @@ import {
   DocumentReference,
   Firestore,
   query,
-  updateDoc, where
+  updateDoc, where, limit
 } from '@angular/fire/firestore';
 import {WorkoutRoutine} from '../../Models/WorkoutRoutine';
 import {Workout} from '../../Models/Workout';
 import {AllWorkouts} from '../../Models/AllWorkouts';
-import {map, Observable} from 'rxjs';
+import {firstValueFrom, map, Observable} from 'rxjs';
 import {WorkoutExerciseStateManagerService} from '../workout-exercise-state-manager.service';
 
 @Injectable({
@@ -34,21 +34,21 @@ export class FireStoreService {
     await addDoc<AllWorkouts>(this.getCollectionRef<AllWorkouts>(collectionName), allWorkouts);
   }
 
-public  getWeekRoutine(collectionName: string): Observable<Workout[]>  {
+  public getWeekRoutine(collectionName: string): Promise<Workout[]> {
     const today = new Date();
     const oneWeekFromNow = new Date();
     oneWeekFromNow.setDate(today.getDate() + 7);
 
-    return collectionData<Workout>(
+    return firstValueFrom(collectionData<Workout>(
       query<Workout>(this.getCollectionRef(collectionName),
         where('startWorkoutTimeStamp', '>=', today),
         where('startWorkoutTimeStamp', '<=', oneWeekFromNow))
     ).pipe(
-      map((wr)=> wr.filter(x => !x.isCompleted))
-    );
+      map((wr) => wr.filter(x => !x.isCompleted))
+    ));
   }
 
- public getAllRoutineWorkouts(collectionName: string): Observable<Workout[]> {
+  public getAllRoutineWorkouts(collectionName: string): Observable<Workout[]> {
     return collectionData<Workout>(
       query<Workout>(this.getCollectionRef(collectionName)));
   }
@@ -64,7 +64,8 @@ public  getWeekRoutine(collectionName: string): Observable<Workout[]>  {
     }
     await batch.commit();
   }
-  public async batchDelete(workouts: Workout[]): Promise<void>{
+
+  public async batchDelete(workouts: Workout[]): Promise<void> {
     const batch = writeBatch(this.firestore);
     const collectionName = this.stateManagerService.getCollectionName();
     for (const item of workouts) {
@@ -74,15 +75,28 @@ public  getWeekRoutine(collectionName: string): Observable<Workout[]>  {
     }
     await batch.commit();
   }
+
   public async updateWorkout(collectionName: string, id: string, workout: Workout): Promise<void> {
     delete workout.id;
     await updateDoc(this.getDocumentRef(collectionName, id), workout);
   }
+  public collectionHaveDocs(): Observable<boolean> {
+    return  collectionData<Workout>(
+      query<Workout>(this.getCollectionRef(this.stateManagerService.getCollectionName()),
+        limit(1)))
+      .pipe(
+        map(w => w.length>0)
+      );
+
+  }
   private getCollectionRef<T>(collectionName: string): CollectionReference<T> {
     return collection(this.firestore, collectionName) as CollectionReference<T>;
   }
+
   private getDocumentRef<T>(collectionName: string, id: string): DocumentReference<T> {
     return doc(this.firestore, `${collectionName}`, `${id}`) as DocumentReference<T>;
   }
+
+
 }
 

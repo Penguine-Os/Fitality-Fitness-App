@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {ExerciseType} from '../../Models/ExerciseType';
 import {environment} from '../../../environments/environment';
 import {WorkoutEx} from '../../Models/WorkoutEx';
+import {WorkoutExercise} from '../../Models/WorkoutExercise';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,7 @@ export class ExerciseProviderService {
           difficulty
         },
         headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           'X-Api-Key': `${environment.exerciseApiKey}`
         },
       }
@@ -41,8 +43,8 @@ export class ExerciseProviderService {
   getExercisesV2(name: string = '',
                  type: string = '',
                  muscle: string = '',
-                 difficulty: string = ''): Observable<WorkoutEx<ExerciseType>[]> {
-    return this.httpClient.get<WorkoutEx<ExerciseType>[]>(
+                 difficulty: string = ''): Observable<WorkoutExercise[]> {
+    return this.httpClient.get<ExerciseType[]>(
       this.baseUrl,
       {
         responseType: 'json',
@@ -53,10 +55,30 @@ export class ExerciseProviderService {
           difficulty
         },
         headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           'X-Api-Key': `${environment.exerciseApiKey}`
         },
       }
-    ).pipe();
+    ).pipe(
+      map( exercises =>{
+        const workoutsEx: WorkoutExercise[]=[];
+        exercises.forEach( e => {
+          const wex: WorkoutExercise={
+            completedSets: [],
+            endExerciseTimeStamp: 0,
+            isCompleted: false,
+            progressiveOverload: 0,
+            restDuration: 0,
+            setsAndReps: [],
+            startExerciseTimeStamp: 0,
+            weight: 0,
+            workoutExerciseType: e
+          };
+          workoutsEx.push(wex);
+        });
+        return workoutsEx;
+      })
+    );
 
   }
 }

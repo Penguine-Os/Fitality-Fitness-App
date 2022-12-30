@@ -20,7 +20,7 @@ export class ExerciseInfoModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.exSub = this.exServiec.observableWorkout.subscribe(exVal=> this.ex = exVal.workoutExercises[this.index].workoutExercise);
+    this.exSub = this.exServiec.observableWorkout.subscribe(exVal=> this.ex = exVal.workoutExercises[this.index].workoutExerciseType);
   }
   ngOnDestroy() {
    this.exSub.unsubscribe();

@@ -16,7 +16,7 @@
             <div class="ion-padding" slot="content">
               <ion-row *ngFor="let ex of workout.workoutExercises">
                 <ion-col size="8">
-                  {{ex.workoutExercise.name}}
+                  {{ex.workoutExerciseType.name}}
                 </ion-col>
                 <ion-col size="4" class="ion-text-end">
                   {{ex.setsAndReps.length}} x {{ex.setsAndReps[0]}} x {{ex.weight}}Kg

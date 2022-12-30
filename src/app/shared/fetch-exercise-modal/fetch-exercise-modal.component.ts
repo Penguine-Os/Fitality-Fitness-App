@@ -37,10 +37,10 @@ export class FetchExerciseModalComponent implements OnInit {
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  async fetchHandler() {
+  public async fetchHandler(): Promise<void> {
     this.apiSubscription = this.exerciseProvider.getExercises(
       '',
       this.activityVal,
@@ -54,35 +54,35 @@ export class FetchExerciseModalComponent implements OnInit {
 
   }
 
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel');
+  public async cancel(): Promise<void> {
+    await this.modalCtrl.dismiss(null, 'cancel');
   }
 
-  confirm() {
+  public  async confirm(): Promise<void>  {
     this.stateManagerService.addExercises(this.chosenExercises);
 
-    return this.modalCtrl.dismiss(this.chosenExercises, 'confirm');
+  await  this.modalCtrl.dismiss(this.chosenExercises, 'confirm');
   }
 
-  onDifficultyChanged(ev: any) {
+  public onDifficultyChanged(ev: any): void {
     this.difficultyVal = Object.values(Difficulty)[ev.detail.value.i];
   }
 
-  onActivityChanged(ev: any) {
+  public onActivityChanged(ev: any): void {
     this.activityVal = Object.values(ActivityType)[ev.detail.value.i];
 
   }
 
-  onMuscleChanged(ev: any) {
+  public onMuscleChanged(ev: any): void {
     this.muscleVal = Object.values(Muscle)[ev.detail.value.i];
 
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.apiSubscription.unsubscribe();
   }
 
-  dropHandler(event: any) {
+  public dropHandler(event: any): void {
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

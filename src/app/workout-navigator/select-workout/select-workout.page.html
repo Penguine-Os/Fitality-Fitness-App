@@ -24,12 +24,14 @@
 
     </ion-fab-list>
   </ion-fab>
-
+<div *ngIf="stateManagerService.collectionHasDocs| async">
   <div *ngFor="let workout of stateManagerService.observableWorkouts |async ">
     <app-workout-card [workout]="workout"
                       [startDate]="workout.startWorkoutTimeStamp.toMillis()">
 
     </app-workout-card>
   </div>
+</div>
+
 
 </ion-content>
