@@ -19,12 +19,12 @@ export class EditExerciseInputsComponent implements OnInit {
   editSets = 0;
   editReps = 0;
   editWeight = 0;
+  editRest = 0;
+  editProgressiveOverload= 0;
   @Input() index: number;
-
   constructor(private modalController: ModalController,
               private fireStoreService: FireStoreService,
-              private exService: WorkoutExerciseStateManagerService,
-              private alertController: AlertController) {
+              private exService: WorkoutExerciseStateManagerService) {
 
   }
 
@@ -37,6 +37,8 @@ export class EditExerciseInputsComponent implements OnInit {
     this.editSets = this.wEx.setsAndReps.length;
     this.editReps = this.wEx.setsAndReps[0];
     this.editWeight = this.wEx.weight;
+    this.editRest = this.wEx.restDuration;
+    this.editProgressiveOverload = this.wEx.progressiveOverload;
   }
 
   ngOnDestroy(): void {
@@ -61,6 +63,8 @@ export class EditExerciseInputsComponent implements OnInit {
   private async updateExercise(): Promise<void> {
     const newSetsAndReps = new Array(this.editSets).fill(this.editReps);
     this.wEx.weight = this.editWeight;
+    this.wEx.restDuration = this.editRest;
+    this.wEx.progressiveOverload = this.editProgressiveOverload;
     this.wEx.setsAndReps = newSetsAndReps;
     this.updateCompletedSets(this.wEx.completedSets, this.wEx.setsAndReps);
     this.exService.generateIterator(this.wExercises);
@@ -77,4 +81,7 @@ export class EditExerciseInputsComponent implements OnInit {
   }
 
 
+  rangeHandler(event: any): void {
+    this.editProgressiveOverload = event.detail.value / 100;
+  }
 }

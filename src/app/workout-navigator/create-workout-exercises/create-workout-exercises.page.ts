@@ -78,7 +78,7 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
 
   public removeWorkOutExerciseHandler(ex: ExerciseType): void {
     this.stateManagerService.deleteExercise(ex);
-    this.workoutExercises = this.workoutExercises.filter(x => x.workoutExercise !== ex);
+    //this.workoutExercises = this.workoutExercises.filter(x => x.workoutExercise !== ex);
 
   }
 

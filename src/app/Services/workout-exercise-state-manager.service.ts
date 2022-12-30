@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ExerciseType} from '../Models/ExerciseType';
 import {Workout} from '../Models/Workout';
 import {WorkoutExercise} from '../Models/WorkoutExercise';
@@ -17,7 +17,7 @@ export class WorkoutExerciseStateManagerService {
   #repVals: number[] = [];
   #collectionName: string;
   #userId: string;
-  observableExercises = new BehaviorSubject<ExerciseType[]>(this.#exercises);
+  observableExercises = new BehaviorSubject<ExerciseType[]>([]);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
   observableIterator = new BehaviorSubject<number[][]>([]);
   observableRepVals = new BehaviorSubject<number[]>([]);
@@ -45,7 +45,9 @@ export class WorkoutExerciseStateManagerService {
   setUserId(value: string): void {
     this.#userId = value;
   }
-
+  setObservableWorkoutExercises(owe: BehaviorSubject<WorkoutExercise[]>): void{
+     this.observableWorkoutExercises =owe;
+  }
   getWorkouts(workouts: Workout[]): void {
     this.observableWorkouts.next(workouts);
     // this.organizeWeeklyWorkout(wOutRoutine.workoutDays, wOutRoutine);

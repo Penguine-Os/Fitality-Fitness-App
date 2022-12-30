@@ -8,8 +8,8 @@
       <ion-button (click)="openModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
-      <ion-button [disabled]="workoutExercises.length<=0"
-                  [color]="workoutExercises.length<=0 ? '' : 'success'"
+      <ion-button [disabled]="(stateManagerService.observableWorkoutExercises | async)?.length <=0"
+                  [color]="(stateManagerService.observableWorkoutExercises | async)?.length <=0 ? '' : 'success'"
                   (click)="goToNextPage()">
         <ion-icon name="arrow-forward-outline"></ion-icon>
       </ion-button>
@@ -19,9 +19,7 @@
 
 
 <ion-content>
-  <ion-list *ngIf="workoutExercises.length>0">
-
-
+  <ion-list *ngIf="(stateManagerService.observableWorkoutExercises | async)?.length !== 0; else workoutIllustration ">
     <ion-item-sliding *ngFor="let workoutEx of stateManagerService.observableWorkoutExercises | async; let i = index">
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)='removeWorkOutExerciseHandler(workoutEx.workoutExercise)'>
@@ -79,4 +77,11 @@
     </ion-item-sliding>
 
   </ion-list>
+
+
+  <ng-template #workoutIllustration>
+      <div class="workoutImgContainer">
+        <ion-img  src="assets/images/workouts.png"></ion-img>
+      </div>
+  </ng-template>
 </ion-content>
