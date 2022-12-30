@@ -1,4 +1,13 @@
-ion-card-header.ios {
-  display: flex;
-  flex-flow: column-reverse;
+
+ion-icon{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 20px;
+}ion-icon.charge{
+   color: greenyellow;
+
+ }
+ion-icon.work{
+  color: #f67518;
+
 }

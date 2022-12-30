@@ -9,7 +9,8 @@ import {FireAuthService} from '../Services/FireBase/fire-auth.service';
   providedIn: 'root'
 })
 export class WorkoutGuard implements CanActivate, OnDestroy {
-workoutSub = new Subscription();
+  workoutSub = new Subscription();
+
   constructor(private stateManagerService: WorkoutExerciseStateManagerService,
               private storage: FireStoreService,
               public authService: FireAuthService,
@@ -17,8 +18,8 @@ workoutSub = new Subscription();
   }
 
   ngOnDestroy(): void {
-       this.workoutSub.unsubscribe();
-    }
+    this.workoutSub.unsubscribe();
+  }
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -33,17 +34,39 @@ workoutSub = new Subscription();
       return false;
     }
 
-    //return firstValueFrom(this.storage.getWeekRoutine(collectionName))
+    //1 return firstValueFrom(this.storage.getWeekRoutine(collectionName))
+    //2 return firstValueFrom(this.storage.collectionHaveDocs())
     return firstValueFrom(this.storage.collectionHaveDocs())
       .then(hasData => {
-        console.log(hasData);
-        this.stateManagerService.collectionHasDocs.next(hasData);
-        if (!hasData) {
-          return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
-        } else {
-          // this.workoutSub =  this.storage.getWeekRoutine(collectionName)
-          //   .subscribe(workouts=> this.stateManagerService.getWorkouts((workouts)));
+        if (hasData) {
+          firstValueFrom(this.storage.getWeekRoutine(collectionName))
+            .then(workouts=>{
+              this.stateManagerService.getWorkouts((workouts));
+            });
           return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'select-workout']);
+        } else {
+          return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
         }
+        // if (workouts.length <= 0) {
+        //   this.workoutSub = this.storage.collectionHaveDocs().subscribe(
+        //     hasData =>{
+        //       if (hasData){
+        //         console.log(1);
+        //         return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'select-workout']);
+        //       }
+        //       else {
+        //         console.log(2);
+        //         return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
+        //       }
+        //     }
+        //   );
+        //   console.log(3);
+        //   //return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
+        // } else {
+        //   console.log(4);
+        //   this.stateManagerService.getWorkouts((workouts));
+        //   return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'select-workout']);
+        // }
       });
-  }}
+  }
+}

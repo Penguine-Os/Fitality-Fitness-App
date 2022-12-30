@@ -14,7 +14,7 @@ import {
 import {WorkoutRoutine} from '../../Models/WorkoutRoutine';
 import {Workout} from '../../Models/Workout';
 import {AllWorkouts} from '../../Models/AllWorkouts';
-import {firstValueFrom, map, Observable} from 'rxjs';
+import { map, Observable} from 'rxjs';
 import {WorkoutExerciseStateManagerService} from '../workout-exercise-state-manager.service';
 
 @Injectable({
@@ -34,19 +34,33 @@ export class FireStoreService {
     await addDoc<AllWorkouts>(this.getCollectionRef<AllWorkouts>(collectionName), allWorkouts);
   }
 
-  public getWeekRoutine(collectionName: string): Promise<Workout[]> {
+  public  getWeekRoutine(collectionName: string): Observable<Workout[]>  {
     const today = new Date();
     const oneWeekFromNow = new Date();
     oneWeekFromNow.setDate(today.getDate() + 7);
 
-    return firstValueFrom(collectionData<Workout>(
+    return collectionData<Workout>(
       query<Workout>(this.getCollectionRef(collectionName),
         where('startWorkoutTimeStamp', '>=', today),
         where('startWorkoutTimeStamp', '<=', oneWeekFromNow))
     ).pipe(
-      map((wr) => wr.filter(x => !x.isCompleted))
-    ));
+      map((wr)=> wr.filter(x => !x.isCompleted))
+    );
   }
+  //
+  // public getWeekRoutine(collectionName: string): Promise<Workout[]> {
+  //   const today = new Date();
+  //   const oneWeekFromNow = new Date();
+  //   oneWeekFromNow.setDate(today.getDate() + 7);
+  //
+  //   return firstValueFrom(collectionData<Workout>(
+  //     query<Workout>(this.getCollectionRef(collectionName),
+  //       where('startWorkoutTimeStamp', '>=', today),
+  //       where('startWorkoutTimeStamp', '<=', oneWeekFromNow))
+  //   ).pipe(
+  //     map((wr) => wr.filter(x => !x.isCompleted))
+  //   ));
+  // }
 
   public getAllRoutineWorkouts(collectionName: string): Observable<Workout[]> {
     return collectionData<Workout>(
