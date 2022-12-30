@@ -16,15 +16,25 @@ export class SetsAndRepsComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initialRepVal = this.propertyValue;
   }
+  public setClickHandler(): void {
+    // this.btnFill = 'solid';
+    this.clickedValueChange.emit(true);
 
-  decrease() {
+    if (this.isUnchecked){
+      this.isUnchecked=false;
+      return;
+    }
+    this.decrease();
+  }
+
+  private decrease(): void {
     this.resize(-1);
   }
 
-  resize(stepSize: number) {
+  private resize(stepSize: number): void {
     this.propertyValue = Math.max(-1, this.propertyValue + stepSize);
   //  this.btnFill = this.propertyValue > 0 ? 'solid' : 'outline';
     this.clickedValue = this.propertyValue > 0 ;
@@ -35,14 +45,4 @@ export class SetsAndRepsComponent implements OnInit {
 
   }
 
-  setClickHandler() {
-   // this.btnFill = 'solid';
-    this.clickedValueChange.emit(true);
-
-    if (this.isUnchecked){
-      this.isUnchecked=false;
-      return;
-    }
-    this.decrease();
-  }
 }

@@ -19,17 +19,15 @@ export class ExerciseInfoModalComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.exSub = this.exServiec.observableWorkout.subscribe(exVal=> this.ex = exVal.workoutExercises[this.index].workoutExercise);
   }
-  ngOnDestroy() {
+  ngOnDestroy(): void {
    this.exSub.unsubscribe();
   }
 
-  dismiss() {
-    // using the injected ModalController this page
-    // can "dismiss" itself and optionally pass back data
-    this.modalController.dismiss({
+  public async dismiss(): Promise<void> {
+   await this.modalController.dismiss({
       dismissed: true
     });
 }}

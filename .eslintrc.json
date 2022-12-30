@@ -14,6 +14,8 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "@typescript-eslint/explicit-function-return-type": "error",
+        "quotes": ["error", "single"],
         "@angular-eslint/component-class-suffix": [
           "error",
           {

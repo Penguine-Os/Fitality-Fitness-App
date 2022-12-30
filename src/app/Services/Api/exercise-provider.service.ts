@@ -30,6 +30,7 @@ export class ExerciseProviderService {
           difficulty
         },
         headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           'X-Api-Key': `${environment.exerciseApiKey}`
         },
       }
@@ -53,6 +54,7 @@ export class ExerciseProviderService {
           difficulty
         },
         headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           'X-Api-Key': `${environment.exerciseApiKey}`
         },
       }

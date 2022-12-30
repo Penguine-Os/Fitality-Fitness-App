@@ -20,7 +20,7 @@ export class WorkoutGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     const userId = this.authService.currentUser?.value?.uid;
-    const collectionName=`Workout-Routine-${userId}`
+    const collectionName=`Workout-Routine-${userId}`;
     this.stateManagerService.setUserId(userId);
     this.stateManagerService.setCollectionName(collectionName);
 
@@ -39,25 +39,4 @@ export class WorkoutGuard implements CanActivate {
         }
       });
   }
-
-  //
-  // filteredWorkouts(workouts: Workout[]) {
-  //   const today = new Date().getTime();
-  //   const oneWeekFromNow = today + 7 * 24 * 60 * 60 * 1000;
-  //   const filteredWorkouts = [];
-  //
-  //   for (const workout of workouts) {
-  //     if (workout.isCompleted) {
-  //       continue;
-  //     }
-  //     if (workout.startWorkoutTimeStamp.getTime() <= oneWeekFromNow) {
-  //
-  //       console.log(workout);
-  //       filteredWorkouts.push(workout);
-  //     }
-  //   }
-  //
-  //   return filteredWorkouts;
-  // }
-
 }

@@ -4,21 +4,22 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
     path: 'progress',
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     loadChildren: () => import('./progress/progress.module').then( m => m.ProgressPageModule)
   },
   {
-    path: 'insight',
-    loadChildren: () => import('./insight/insight.module').then( m => m.InsightPageModule)
-  },  {
     path: 'workout-navigator',
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     loadChildren: () => import('./workout-navigator/workout-navigator.module').then( m => m.WorkoutNavigatorPageModule)
   },
   {
     path: 'login',
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   }
 

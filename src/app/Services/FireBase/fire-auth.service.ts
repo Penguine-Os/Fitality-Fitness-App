@@ -1,8 +1,8 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {FirebaseAuthentication} from '@capacitor-firebase/authentication';
 import {Router} from '@angular/router';
-import {Auth, signInWithCredential, signOut, Unsubscribe} from '@angular/fire/auth';
-import {updateProfile, GoogleAuthProvider, GithubAuthProvider, User,getAuth, signInWithPopup,} from 'firebase/auth';
+import {Auth, signInWithCredential, signOut} from '@angular/fire/auth';
+import {updateProfile, GoogleAuthProvider, GithubAuthProvider, User} from 'firebase/auth';
 import {Capacitor} from '@capacitor/core';
 import {BehaviorSubject} from 'rxjs';
 
@@ -21,11 +21,11 @@ export class FireAuthService implements OnDestroy {
     this.currentUser.unsubscribe();
   }
 
-  isLoggedIn(): boolean {
+  public isLoggedIn(): boolean {
     return this.currentUser.value !== null && this.currentUser.value !== undefined;
   }
 
-  getProfilePic(): string {
+  public getProfilePic(): string {
     const placeholder = '/assets/Portrait_Placeholder.png';
     if (!this.isLoggedIn()) {
       return placeholder;
@@ -33,19 +33,19 @@ export class FireAuthService implements OnDestroy {
     return this.currentUser.value.photoURL ? this.currentUser.value.photoURL : placeholder;
   }
 
-  getDisplayName(): string | undefined {
+  public getDisplayName(): string | undefined {
     return this.isLoggedIn() ? this.currentUser.value.displayName : undefined;
   }
 
-  getEmail(): string | undefined {
+  public getEmail(): string | undefined {
     return this.isLoggedIn() ? this.currentUser.value.email : undefined;
   }
 
-  getUserUID(): string  {
+  public getUserUID(): string {
     return this.isLoggedIn() ? this.currentUser.value.uid : '';
   }
 
-  async signOut(): Promise<void> {
+  public async signOut(): Promise<void> {
     await FirebaseAuthentication.signOut();
 
     if (Capacitor.isNativePlatform()) {
@@ -53,7 +53,7 @@ export class FireAuthService implements OnDestroy {
     }
   }
 
-  async signInWithGoogle(): Promise<void> {
+  public async signInWithGoogle(): Promise<void> {
     const {credential: {idToken}} = await FirebaseAuthentication.signInWithGoogle();
 
     if (Capacitor.isNativePlatform()) {
@@ -63,17 +63,17 @@ export class FireAuthService implements OnDestroy {
   }
 
 
-  async signInWithGithub(): Promise<void> {
+  public async signInWithGithub(): Promise<void> {
 
     const {credential: {accessToken}} = await FirebaseAuthentication.signInWithGithub();
 
     if (Capacitor.isNativePlatform()) {
-      const credential = GithubAuthProvider.credential(accessToken );
+      const credential = GithubAuthProvider.credential(accessToken);
       await signInWithCredential(this.auth, credential);
     }
   }
 
-  async updateDisplayName(displayName: string): Promise<void> {
+  public async updateDisplayName(displayName: string): Promise<void> {
     await updateProfile(this.auth.currentUser, {
       displayName
     });

@@ -9,15 +9,17 @@ import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercis
 })
 export class WorkoutCardComponent implements OnInit {
 
- @Input() workout: Workout;
+  @Input() workout: Workout;
   @Input() startDate: number;
-  constructor(private exService: WorkoutExerciseStateManagerService) { }
 
-  ngOnInit() {
+  constructor(private exService: WorkoutExerciseStateManagerService) {
+  }
+
+  ngOnInit(): void {
 
   }
 
-  clickHandler() {
+  public clickHandler(): void {
     this.exService.getWorkout(this.workout);
   }
 }

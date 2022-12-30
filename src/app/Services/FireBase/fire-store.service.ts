@@ -14,7 +14,7 @@ import {
 import {WorkoutRoutine} from '../../Models/WorkoutRoutine';
 import {Workout} from '../../Models/Workout';
 import {AllWorkouts} from '../../Models/AllWorkouts';
-import { map} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {WorkoutExerciseStateManagerService} from '../workout-exercise-state-manager.service';
 
 @Injectable({
@@ -34,7 +34,7 @@ export class FireStoreService {
     await addDoc<AllWorkouts>(this.getCollectionRef<AllWorkouts>(collectionName), allWorkouts);
   }
 
-  getWeekRoutine(collectionName: string) {
+  public getWeekRoutine(collectionName: string): Observable<Workout[]> {
     const today = new Date();
     const oneWeekFromNow = new Date();
     oneWeekFromNow.setDate(today.getDate() + 7);
@@ -44,39 +44,39 @@ export class FireStoreService {
         where('startWorkoutTimeStamp', '>=', today),
         where('startWorkoutTimeStamp', '<=', oneWeekFromNow))
     ).pipe(
-      map((wr)=> {
-        console.log(wr);
-         return wr.filter(x => !x.isCompleted)
-      })
-    )
+      map((wr) => wr.filter(x => !x.isCompleted))
+    );
   }
 
-  getAllRoutineWorkouts(collectionName: string) {
+  public getAllRoutineWorkouts(collectionName: string): Observable<Workout[]>  {
     return collectionData<Workout>(
       query<Workout>(this.getCollectionRef(collectionName)));
   }
 
-  async batchedWrites(workouts: Workout[], collectionName: string) {
+  public async batchedWrites(workouts: Workout[], collectionName: string): Promise<void>  {
     const batch = writeBatch(this.firestore);
     let counter = 0;
     for (const item of workouts) {
       counter++;
       const docRef = doc(this.firestore, collectionName, `${item.workoutRoleNr}`);
       batch.set(docRef, item, {merge: true});
-      // await batch.commit();
     }
     await batch.commit();
   }
-  async batchDelete(workouts: Workout[]){
+
+  public async updateWorkout(collectionName: string, id: string, workout: Workout): Promise<void> {
+    delete workout.id;
+    await updateDoc(this.getDocumentRef(collectionName, id), workout);
+  }
+
+  public async batchDelete(workouts: Workout[]): Promise<void>  {
     const batch = writeBatch(this.firestore);
     const collectionName = this.stateManagerService.getCollectionName();
-    console.log(collectionName)
     let counter = 0;
     for (const item of workouts) {
       counter++;
       const docRef = doc(this.firestore, this.stateManagerService.getCollectionName(), `${item.workoutRoleNr}`);
       batch.delete(docRef);
-      console.log('in batch Delete')
     }
     await batch.commit();
   }
@@ -84,13 +84,11 @@ export class FireStoreService {
   private getCollectionRef<T>(collectionName: string): CollectionReference<T> {
     return collection(this.firestore, collectionName) as CollectionReference<T>;
   }
+
   private getDocumentRef<T>(collectionName: string, id: string): DocumentReference<T> {
     return doc(this.firestore, `${collectionName}`, `${id}`) as DocumentReference<T>;
   }
 
-  async updateWorkout(collectionName: string, id: string, workout: Workout): Promise<void> {
-    delete workout.id;
-    await updateDoc(this.getDocumentRef(collectionName, id), workout);
-  }
+
 }
 

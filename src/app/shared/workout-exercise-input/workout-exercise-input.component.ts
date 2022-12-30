@@ -14,27 +14,30 @@ export class WorkoutExerciseInputComponent implements OnInit {
   // @Input() max = Number.POSITIVE_INFINITY;
   @Input() stepSize = 1;
   @Input() smallerStep = 1;
+
   constructor() {
 
   }
-  ngOnInit() {
+
+  ngOnInit(): void {
   }
 
-  increase() {
+  public increase(): void {
     this.resize(this.stepSize);
   }
 
-  decrease() {
+  public decrease(): void {
     this.resize(-Math.min(this.smallerStep, this.stepSize));
   }
 
-  resize(stepSize: number) {
+  public handleChange($event: any): void {
+    this.propertyValue = Number($event.target.value);
+    this.propertyValueChange.emit(this.propertyValue);
+  }
+
+  private resize(stepSize: number): void {
     this.propertyValue = Math.max(this.min, this.propertyValue + stepSize);
     this.propertyValueChange.emit(this.propertyValue);
   }
 
-  handleChange($event: any) {
-    this.propertyValue = Number($event.target.value);
-    this.propertyValueChange.emit(this.propertyValue);
-  }
 }

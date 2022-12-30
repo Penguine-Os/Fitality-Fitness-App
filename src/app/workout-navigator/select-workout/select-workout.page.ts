@@ -23,32 +23,29 @@ export class SelectWorkout implements OnInit, OnDestroy {
               public stateManagerService: WorkoutExerciseStateManagerService,
               private fireStoreService: FireStoreService,) {
   }
-
-  ionViewWillEnter() {
+  ngOnInit(): void {
   }
-
-  ngOnInit() {
+  ngOnDestroy(): void {
   }
-
-  async deleteAlert() {
+ public async deleteAlert(): Promise<void> {
     const alert = await this.alertController.create({
       message: 'Delete entire Workout-Routine?!',
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
-          handler: () => {
+          handler: (): void => {
           },
         },
         {
           text: 'OK',
           role: 'confirm',
-          handler: () => {
+          handler: (): void => {
             this.deleteRoutineFromFireStore()
               .then(()=>{
                 setTimeout(()=>this.router.navigate(['tabs', 'WorkoutNavTab']), 500);
                 //()=>this.router.navigate(['tabs', 'WorkoutNavTab'])
-              })
+              });
           },
         },
       ],
@@ -57,14 +54,11 @@ export class SelectWorkout implements OnInit, OnDestroy {
     await alert.present();
   }
 
- async deleteRoutineFromFireStore() {
+ private async deleteRoutineFromFireStore(): Promise<void> {
     //batchDelete()
    firstValueFrom(this.fireStoreService.getAllRoutineWorkouts(this.stateManagerService.getCollectionName()))
      .then((workouts)=>{
-       this.fireStoreService.batchDelete(workouts)
-     }).then(()=> this.stateManagerService.resetFieldVariables())
-  }
-
-  ngOnDestroy(): void {
+       this.fireStoreService.batchDelete(workouts);
+     }).then(()=> this.stateManagerService.resetFieldVariables());
   }
 }
