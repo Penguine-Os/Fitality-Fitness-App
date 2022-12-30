@@ -12,6 +12,7 @@ import {Capacitor} from '@capacitor/core';
 import {Workout} from '../../../Models/Workout';
 import {Subscription} from 'rxjs';
 import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
+import {NotepadModalComponent} from '../../../shared/notepad-modal/notepad-modal.component';
 
 @Component({
   selector: 'app-start-workout',
@@ -94,10 +95,22 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   }
 
-  public async presentModal(i: number, action: string): Promise<void> {
-    const modalComp = action === 'info' ? ExerciseInfoModalComponent : EditExerciseInputsComponent;
+  public async presentModal(action: string, i = 0): Promise<void> {
+
+    let modalComponent;
+    switch (action) {
+      case 'edit':
+        modalComponent = EditExerciseInputsComponent;
+        break;
+      case 'info':
+        modalComponent = ExerciseInfoModalComponent;
+        break;
+      case 'note':
+        modalComponent = NotepadModalComponent;
+        break;
+    }
     this.modal = await this.modalController.create({
-      component: modalComp,
+      component: modalComponent,
       componentProps: {
         index: i,
       },

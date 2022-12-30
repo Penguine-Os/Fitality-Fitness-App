@@ -10,6 +10,7 @@ import {WorkoutCardComponent} from './workout-card/workout-card.component';
 import {SetsAndRepsComponent} from './sets-and-reps/sets-and-reps.component';
 import {ExerciseInfoModalComponent} from './exercise-info-modal/exercise-info-modal.component';
 import {EditExerciseInputsComponent} from './edit-exercise-inputs/edit-exercise-inputs.component';
+import {NotepadModalComponent} from './notepad-modal/notepad-modal.component';
 
 
 
@@ -20,7 +21,8 @@ import {EditExerciseInputsComponent} from './edit-exercise-inputs/edit-exercise-
     WorkoutCardComponent,
     SetsAndRepsComponent,
     ExerciseInfoModalComponent,
-    EditExerciseInputsComponent
+    EditExerciseInputsComponent,
+    NotepadModalComponent
   ],
   imports: [
     CommonModule,
@@ -34,6 +36,7 @@ import {EditExerciseInputsComponent} from './edit-exercise-inputs/edit-exercise-
     WorkoutCardComponent,
     SetsAndRepsComponent,
     ExerciseInfoModalComponent,
-    EditExerciseInputsComponent]
+    EditExerciseInputsComponent,
+    NotepadModalComponent]
 })
 export class SharedModule { }

@@ -25,6 +25,11 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+ion-toolbar {
+  --background: rgb(192, 106, 49);
+  --color: white;
+}
+
 @media (max-width: 700px) {
   .classModal {
     --height: 50%;
@@ -42,33 +47,19 @@
     --background: rgba(209, 213, 219);
     opacity: 1;
   }
-
-  //ion-modal {
-  //  --background: rgb(192, 106, 49);
-  //  --color: white;
-  //}
-
-  ion-toolbar {
-    --background: rgb(192, 106, 49);
-    --color: white;
-  }
-
-
 }
 
 
 ion-toast.custom-toast {
-  --background: rgb(192, 106, 49);
+  --background: #21ABDE;
   --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
-  --color: #0f3346;
+  --color: #ffffff;
   --height: 5rem
 }
 
 
 ion-toast.custom-toast::part(button) {
-  color: #971111;
-
-
+  color: rgb(192, 106, 49);
 }
 
 
@@ -76,9 +67,3 @@ ion-toast.custom-toast::part(icon) {
   color: #ffffff;
   font-size: 30px;
 }
-
-//
-//ion-modal ion-toolbar {
-//  --background: rgb(192, 106, 49);
-//  --color: white;
-//}

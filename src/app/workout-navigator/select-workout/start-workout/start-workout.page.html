@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title class="ion-text-center">Workout Name</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="danger"
+      <ion-button color="success"
                   (click)="presentAlert()">Finish</ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -24,7 +24,7 @@
                 <ion-icon name="information-circle-outline"
                           color="warning"
                           class="ion-info"
-                          (click)="presentModal(i, 'info')"></ion-icon>
+                          (click)="presentModal( 'info', i)"></ion-icon>
               </div>
             </ion-col>
             <ion-col  size="5" class="ion-text-end">
@@ -33,7 +33,7 @@
                 <ion-icon name="cog-outline"
                           color="warning"
                           class="ion-info"
-                          (click)="presentModal(i, 'edit')"></ion-icon>
+                          (click)="presentModal( 'edit', i)"></ion-icon>
               </div>
             </ion-col>
           </ion-row>
@@ -49,8 +49,11 @@
           </ion-row>
         </ion-grid>
       </ion-list>
-
-  </ion-list>
-
+    </ion-list>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="presentModal('note')">
+      <ion-icon name="clipboard-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>
