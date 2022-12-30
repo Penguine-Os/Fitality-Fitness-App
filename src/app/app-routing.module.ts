@@ -21,7 +21,13 @@ const routes: Routes = [
     path: 'login',
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
-  }
+  },
+  {
+    path: 'calendar',
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    loadChildren: () => import('./calendar/calendar.module').then( m => m.CalendarPageModule)
+  },
+
 
 ];
 @NgModule({

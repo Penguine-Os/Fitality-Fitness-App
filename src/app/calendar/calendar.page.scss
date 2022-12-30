@@ -1,6 +1,13 @@
+.imgContainer {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
 @media (max-width: 700px) {
   .imgContainer {
-
     margin: 0;
     position: absolute;
     top: 50%;
@@ -12,13 +19,4 @@
   ion-img{
     width: 300px;
   }
-}
-.imgContainer {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-
 }

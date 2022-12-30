@@ -10,15 +10,18 @@ const routes: Routes = [
 
       {
         path: 'WorkoutNavTab',
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         loadChildren: () => import('../workout-navigator/workout-navigator.module').then(m => m.WorkoutNavigatorPageModule)
       },
       {
-        path: 'ProgressTab',
-        loadChildren: () => import('../progress/progress.module').then(m => m.ProgressPageModule)
+        path: 'CalenderTab',
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        loadChildren: () => import('../calendar/calendar.module').then(m => m.CalendarPageModule)
       },
       {
-        path: 'InsightTab',
-        loadChildren: () => import('../insight/insight.module').then(m => m.InsightPageModule)
+        path: 'ProgressTab',
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        loadChildren: () => import('../progress/progress.module').then(m => m.ProgressPageModule)
       },
       {
         path: '',
