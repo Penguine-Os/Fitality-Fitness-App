@@ -60,7 +60,15 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     if (this.toaster === undefined) {
       return;
     }
-   await this.toaster.dismiss();
+    await this.toaster.dismiss();
+  }
+
+  async ionViewDidLeave(): Promise<void> {
+
+    if (this.modal === undefined) {
+      return;
+    }
+    await this.modal.dismiss();
   }
 
   public async presentAlert(): Promise<void> {

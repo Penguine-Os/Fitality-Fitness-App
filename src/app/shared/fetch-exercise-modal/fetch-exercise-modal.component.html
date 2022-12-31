@@ -41,27 +41,27 @@
     <ion-list  class="overlayContainer"
                cdkDropList
                #chosenList="cdkDropList"
-               [cdkDropListData]="chosenExercises"
+               [cdkDropListData]="chosenWorkoutExercises"
                [cdkDropListConnectedTo]="[fetchedList]"
                (cdkDropListDropped)="dropHandler($event)">
 
-      <ion-img *ngIf="chosenExercises.length===0" src="assets/images/drag&drop.png"></ion-img>
+      <ion-img *ngIf="chosenWorkoutExercises.length===0" src="assets/images/drag&drop.png"></ion-img>
 
-      <ion-item  class="overlayList" *ngFor="let exercise of chosenExercises " >
+      <ion-item  class="overlayList" *ngFor="let workoutExercise of chosenWorkoutExercises " >
         <ion-label [color]="lblColorSuccess">
-          {{exercise?.name}}
+          {{workoutExercise.workoutExercise.name}}
         </ion-label>
       </ion-item>
     </ion-list>
   </div>
   <ion-item cdkDropList
-            [cdkDropListData]="fetchedExercises"
+            [cdkDropListData]="fetchedWorkoutExercises"
             [cdkDropListConnectedTo]="[chosenList]"
             #fetchedList="cdkDropList">
     <ion-list style="padding-right: 3rem" >
-      <ion-item class="overlayList" *ngFor="let exercise of fetchedExercises " cdkDrag >
+      <ion-item class="overlayList" *ngFor="let workoutExercise of fetchedWorkoutExercises " cdkDrag >
         <ion-label >
-          {{exercise?.name}}
+          {{workoutExercise.workoutExercise.name}}
         </ion-label>
       </ion-item>
     </ion-list>

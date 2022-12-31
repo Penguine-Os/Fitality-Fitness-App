@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {ExerciseType} from '../Models/ExerciseType';
 import {Workout} from '../Models/Workout';
 import {WorkoutExercise} from '../Models/WorkoutExercise';
 import {WeeklyWorkouts} from '../Models/WeeklyWorkouts';
@@ -12,12 +11,10 @@ import {v4 as uuidv4} from 'uuid';
   providedIn: 'root'
 })
 export class WorkoutExerciseStateManagerService {
-  #exercises: ExerciseType[] = [];
   #workoutExercises: WorkoutExercise[] = [];
   #repVals: number[] = [];
   #collectionName: string;
   #userId: string;
-  observableExercises = new BehaviorSubject<ExerciseType[]>([]);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
   observableIterator = new BehaviorSubject<number[][]>([]);
   observableRepVals = new BehaviorSubject<number[]>([]);
@@ -45,17 +42,13 @@ export class WorkoutExerciseStateManagerService {
   setUserId(value: string): void {
     this.#userId = value;
   }
-  setObservableWorkoutExercises(owe: BehaviorSubject<WorkoutExercise[]>): void{
-     this.observableWorkoutExercises =owe;
-  }
+
   getWorkouts(workouts: Workout[]): void {
     this.observableWorkouts.next(workouts);
-    // this.organizeWeeklyWorkout(wOutRoutine.workoutDays, wOutRoutine);
   }
 
   getWorkout(wOut: Workout): void {
     this.generateIterator(wOut.workoutExercises);
-    //  this.observableWorkout = new BehaviorSubject<Workout>(wOut);
     this.observableWorkout.next(wOut);
     this.observableWorkoutExercises.next(wOut.workoutExercises);
   }
@@ -76,43 +69,22 @@ export class WorkoutExerciseStateManagerService {
   }
 
 
-  deleteExercise(deletedExercise: ExerciseType): void {
-    this.#exercises = this.#exercises.filter(x => x !== deletedExercise);
-    this.#workoutExercises = this.#workoutExercises.filter(x => x.workoutExercise !== deletedExercise);
-    this.observableExercises.next(this.#exercises);
+  deleteExercise(deletedExerciseName: string): void {
+    this.#workoutExercises = this.#workoutExercises.filter(x => x.workoutExercise.name !== deletedExerciseName);
+
     this.observableWorkoutExercises.next(this.#workoutExercises);
   }
 
-  addExercises(data: ExerciseType[]): void {
+  addExercises(data: WorkoutExercise[]): void {
     data.forEach((x, i) => {
-      if (!this.#exercises.find(y => x.name === y.name)) {
-        this.#exercises.push(x);
+      if (!this.#workoutExercises.find(y => x.workoutExercise.name === y.workoutExercise.name)) {
+        this.#workoutExercises.push(x);
         this.#repVals.push(1);
-        this.mapExerciseTypesToWorkoutExercises(x);
       }
     });
     this.observableRepVals.next(this.#repVals);
-    this.observableExercises.next(this.#exercises);
     this.observableWorkoutExercises.next(this.#workoutExercises);
     this.generateIterator(this.#workoutExercises);
-  }
-
-  mapExerciseTypesToWorkoutExercises(exVal: ExerciseType): void {
-
-    const workoutEx: WorkoutExercise = {
-      workoutExercise: exVal,
-      completedSets: [false],
-      setsAndReps: [1],
-      weight: 5,
-      restDuration: 0,
-      startExerciseTimeStamp: 0,
-      endExerciseTimeStamp: 0,
-      isCompleted: false,
-      progressiveOverload: 0
-    };
-
-    this.#workoutExercises.push(workoutEx);
-
   }
 
   public splitPull(workoutEx: WorkoutExercise): WorkoutExercise {
@@ -273,12 +245,12 @@ export class WorkoutExerciseStateManagerService {
   }
 
   resetFieldVariables(): void {
-    this.#exercises = [];
+   // this.#exercises = [];
     this.#workoutExercises = [];
     this.#repVals = [];
     this.#collectionName = undefined;
     this.#userId = undefined;
-    this.observableExercises.next([]);
+   // this.observableExercises.next([]);
     this.observableWorkoutExercises.next([]);
     this.observableIterator.next([]);
     this.observableRepVals.next([]);

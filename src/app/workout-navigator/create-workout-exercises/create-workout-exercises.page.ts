@@ -17,7 +17,6 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   workoutExercises: WorkoutExercise[] = [];
   totalReps = 0;
   repsVal: number[] = [];
-  private ex: ExerciseType[] = [];
   private exerciseSubscription = new Subscription();
   private workoutExerciseSubscription = new Subscription();
   private repsValSubscription = new Subscription();
@@ -29,17 +28,11 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
               public authService: FireAuthService) {
   }
 
-  get exercises(): ExerciseType[] {
-    return this.ex;
-  }
 
-  set exercises(value: ExerciseType[]) {
-    this.ex = value;
-  }
 
   ngOnInit(): void {
-    this.exerciseSubscription = this.stateManagerService.observableExercises
-      .subscribe(value => this.ex = value);
+    // this.exerciseSubscription = this.stateManagerService.observableExercises
+    //   .subscribe(value => this.ex = value);
 
     this.workoutExerciseSubscription = this.stateManagerService.observableWorkoutExercises
       .subscribe(value => this.workoutExercises = value);
@@ -61,23 +54,23 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
     });
     await modal.present();
 
-    const {data, role} = await modal.onWillDismiss();
-
-    if (role === 'confirm') {
-
-      if (data === null) {
-        return;
-      }
-
-      //this.exercises = [...data];
-
-
-    }
+    // const {data, role} = await modal.onWillDismiss();
+    //
+    // if (role === 'confirm') {
+    //
+    //   if (data === null) {
+    //     return;
+    //   }
+    //
+    //   //this.exercises = [...data];
+    //
+    //
+    // }
   }
 
 
-  public removeWorkOutExerciseHandler(ex: ExerciseType): void {
-    this.stateManagerService.deleteExercise(ex);
+  public removeWorkOutExerciseHandler(exerciseName: string): void {
+    this.stateManagerService.deleteExercise(exerciseName);
     //this.workoutExercises = this.workoutExercises.filter(x => x.workoutExercise !== ex);
 
   }

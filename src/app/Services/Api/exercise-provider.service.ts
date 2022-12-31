@@ -15,34 +15,10 @@ export class ExerciseProviderService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getExercises(name: string = '',
+ public getExercises(name: string = '',
                type: string = '',
                muscle: string = '',
-               difficulty: string = ''): Observable<ExerciseType[]> {
-    return this.httpClient.get<ExerciseType[]>(
-      this.baseUrl,
-      {
-        responseType: 'json',
-        params: {
-          name,
-          type,
-          muscle,
-          difficulty
-        },
-        headers: {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          'X-Api-Key': `${environment.exerciseApiKey}`
-        },
-      }
-    );
-
-  }
-
-
-  getExercisesV2(name: string = '',
-                 type: string = '',
-                 muscle: string = '',
-                 difficulty: string = ''): Observable<WorkoutExercise[]> {
+               difficulty: string = ''): Observable<WorkoutExercise[]> {
     return this.httpClient.get<ExerciseType[]>(
       this.baseUrl,
       {
@@ -61,17 +37,17 @@ export class ExerciseProviderService {
     ).pipe(
       map( exercises =>{
         const workoutsEx: WorkoutExercise[]=[];
-        exercises.forEach( e => {
+        exercises.forEach( exType => {
           const wex: WorkoutExercise={
-            completedSets: [],
+            completedSets: [false],
             endExerciseTimeStamp: 0,
             isCompleted: false,
-            progressiveOverload: 0,
-            restDuration: 0,
-            setsAndReps: [],
+            progressiveOverload: 0.5,
+            restDuration: 1,
+            setsAndReps: [1],
             startExerciseTimeStamp: 0,
-            weight: 0,
-            workoutExercise: e
+            weight: 15,
+            workoutExercise: exType
           };
           workoutsEx.push(wex);
         });

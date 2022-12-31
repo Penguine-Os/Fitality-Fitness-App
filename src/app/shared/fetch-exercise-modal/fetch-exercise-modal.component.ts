@@ -8,13 +8,14 @@ import {ExerciseProviderService} from '../../Services/Api/exercise-provider.serv
 import {ExerciseType} from '../../Models/ExerciseType';
 import {moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
+import {WorkoutExercise} from '../../Models/WorkoutExercise';
 
 @Component({
   selector: 'app-fetch-exercise-modal',
   templateUrl: './fetch-exercise-modal.component.html',
   styleUrls: ['./fetch-exercise-modal.component.scss'],
 })
-export class FetchExerciseModalComponent implements OnInit {
+export class FetchExerciseModalComponent implements OnInit, OnDestroy {
   lblColorSuccess = 'success';
   exercisesAreFetched = false;
   name = '';
@@ -26,10 +27,11 @@ export class FetchExerciseModalComponent implements OnInit {
   muscleVal = '';
   difficultyVal = '';
 
-  apiSubscription = new Subscription();
+  apiSubscriptionPiped = new Subscription();
   fetchedExercises: ExerciseType[] = [];
+  chosenWorkoutExercises: WorkoutExercise[] = [];
+  fetchedWorkoutExercises: WorkoutExercise[] = [];
   chosenExercises: ExerciseType[] = [];
-  sub = new Subscription();
 
   constructor(private modalCtrl: ModalController,
               private exerciseProvider: ExerciseProviderService,
@@ -41,30 +43,29 @@ export class FetchExerciseModalComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.apiSubscription.unsubscribe();
+    this.apiSubscriptionPiped.unsubscribe();
   }
 
   public async fetchHandler(): Promise<void> {
-    this.apiSubscription = this.exerciseProvider.getExercises(
+    this.apiSubscriptionPiped = this.exerciseProvider.getExercises(
       '',
       this.activityVal,
       this.muscleVal,
-      this.difficultyVal)
-      .subscribe(value => {
-        this.fetchedExercises = value;
-
-      });
-
-
+      this.difficultyVal
+    ).subscribe(wOutExercises => {
+      this.fetchedWorkoutExercises = wOutExercises;
+      console.log(wOutExercises);
+    });
+    //collectionName
   }
 
   public async cancel(): Promise<void> {
-   await this.modalCtrl.dismiss(null, 'cancel');
+    await this.modalCtrl.dismiss(null, 'cancel');
   }
 
   public async confirm(): Promise<void> {
-    this.stateManagerService.addExercises(this.chosenExercises);
-   await this.modalCtrl.dismiss(this.chosenExercises, 'confirm');
+    this.stateManagerService.addExercises(this.chosenWorkoutExercises);
+    await this.modalCtrl.dismiss(this.chosenExercises, 'confirm');
   }
 
   public onDifficultyChanged(ev: any): void {
