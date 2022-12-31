@@ -5,7 +5,7 @@ import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 import {FireStoreService} from '../../Services/FireBase/fire-store.service';
 import {Router} from '@angular/router';
-import {firstValueFrom} from 'rxjs';
+import {firstValueFrom, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-select-workout',
@@ -15,6 +15,7 @@ import {firstValueFrom} from 'rxjs';
 export class SelectWorkout implements OnInit, OnDestroy {
   btnIsDisabled = false;
   workouts: Workout[];
+  wSubs = new Subscription();
 
 
   constructor(private alertController: AlertController,
@@ -24,6 +25,12 @@ export class SelectWorkout implements OnInit, OnDestroy {
               private fireStoreService: FireStoreService,) {
   }
   ngOnInit(): void {
+    this.wSubs = this.stateManagerService.observableWorkouts
+      .subscribe(
+        wOuts => {
+          this.workouts = wOuts;
+        }
+      );
   }
   ngOnDestroy(): void {
   }

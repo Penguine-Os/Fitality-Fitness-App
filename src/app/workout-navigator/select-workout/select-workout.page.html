@@ -29,11 +29,32 @@
     </ion-fab-list>
   </ion-fab>
 
-  <div *ngFor="let workout of stateManagerService.observableWorkouts |async ">
-      <app-workout-card [workout]="workout"
-                        [startDate]="workout.startWorkoutTimeStamp.toMillis()">
+  <div *ngIf="(stateManagerService.observableWorkouts |async )?.length ===0 ;else other_content">
 
-      </app-workout-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Keep Up The Good Work !
+        </ion-card-title>
+        <ion-card-subtitle>
+          <ion-icon class="charge" name="battery-charging-outline"></ion-icon>
+          <ion-label>&nbsp;&nbsp;Recharge And Come Back Another Day&nbsp;&nbsp;</ion-label>
+          <ion-icon class="work" name="barbell-outline"></ion-icon>
+        </ion-card-subtitle>
+      </ion-card-header>
+
+    </ion-card>
+    <div class="workoutImgContainer">
+      <ion-img  src="assets/images/workouts.png"></ion-img>
+    </div>
+
   </div>
+
+  <ng-template #other_content>
+    <app-workout-card *ngFor="let workout of stateManagerService.observableWorkouts |async "
+                      [workout]="workout"
+                      [startDate]="workout.startWorkoutTimeStamp.toMillis()">
+    </app-workout-card>
+  </ng-template>
 
 </ion-content>

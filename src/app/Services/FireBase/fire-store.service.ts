@@ -9,7 +9,7 @@ import {
   DocumentReference,
   Firestore,
   query,
-  updateDoc, where
+  updateDoc, where, limit
 } from '@angular/fire/firestore';
 import {WorkoutRoutine} from '../../Models/WorkoutRoutine';
 import {Workout} from '../../Models/Workout';
@@ -75,12 +75,20 @@ export class FireStoreService {
     let counter = 0;
     for (const item of workouts) {
       counter++;
-      const docRef = doc(this.firestore, this.stateManagerService.getCollectionName(), `${item.workoutRoleNr}`);
+      const docRef = doc(this.firestore, collectionName, `${item.workoutRoleNr}`);
       batch.delete(docRef);
     }
     await batch.commit();
   }
+  public collectionHaveDocs(): Observable<boolean> {
+    return  collectionData<Workout>(
+      query<Workout>(this.getCollectionRef(this.stateManagerService.getCollectionName()),
+        limit(1)))
+      .pipe(
+        map(w => w.length>0)
+      );
 
+  }
   private getCollectionRef<T>(collectionName: string): CollectionReference<T> {
     return collection(this.firestore, collectionName) as CollectionReference<T>;
   }

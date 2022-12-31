@@ -278,13 +278,13 @@ export class WorkoutExerciseStateManagerService {
     this.#repVals = [];
     this.#collectionName = undefined;
     this.#userId = undefined;
-    this.observableExercises = new BehaviorSubject<ExerciseType[]>(undefined);
-    this.observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
-    this.observableIterator = new BehaviorSubject<number[][]>(undefined);
-    this.observableRepVals = new BehaviorSubject<number[]>(undefined);
-    this.observableWorkout = new BehaviorSubject<Workout>(undefined);
-    this.observableWorkouts = new BehaviorSubject<Workout[]>(undefined);
-    this.observableRoutine = new BehaviorSubject<WorkoutRoutine>(undefined);
+    this.observableExercises.next([]);
+    this.observableWorkoutExercises.next([]);
+    this.observableIterator.next([]);
+    this.observableRepVals.next([]);
+    this.observableWorkout.next(undefined);
+    this.observableWorkouts.next([]);
+    this.observableRoutine.next(undefined);
     this.weekRoutine = new Array<boolean>(7).fill(false);
     this.weeklyWorkout = undefined;
   }

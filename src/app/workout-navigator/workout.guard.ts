@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {firstValueFrom, Observable, Subscription} from 'rxjs';
+import {firstValueFrom, Observable} from 'rxjs';
 import {WorkoutExerciseStateManagerService} from '../Services/workout-exercise-state-manager.service';
 import {FireStoreService} from '../Services/FireBase/fire-store.service';
 import {FireAuthService} from '../Services/FireBase/fire-auth.service';
@@ -28,14 +28,16 @@ export class WorkoutGuard implements CanActivate {
       return false;
     }
 
-    return firstValueFrom(this.storage.getWeekRoutine(collectionName))
-      .then(workouts => {
-        if (workouts.length <= 0) {
-          return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
-        } else {
-
-          this.stateManagerService.getWorkouts((workouts));
+    return firstValueFrom(this.storage.collectionHaveDocs())
+      .then(hasData => {
+        if (hasData) {
+          firstValueFrom(this.storage.getWeekRoutine(collectionName))
+            .then(workouts=>{
+              this.stateManagerService.getWorkouts((workouts));
+            });
           return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'select-workout']);
+        } else {
+          return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);
         }
       });
   }
