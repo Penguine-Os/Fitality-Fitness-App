@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title class="ion-text-center">Workout Name</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="danger"
+      <ion-button color="success"
                   (click)="presentAlert()">Finish</ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -20,16 +20,16 @@
           <ion-row class="ion-margin">
             <ion-col size="7" >
               <div>
-                <ion-label >{{exes.workoutExercise.name}}</ion-label>
                 <ion-icon name="information-circle-outline"
                           color="warning"
                           class="ion-info"
                           (click)="presentModal('info',i)"></ion-icon>
+                <ion-label >{{exes.workoutExercise.name}}</ion-label>
               </div>
             </ion-col>
             <ion-col  size="5" class="ion-text-end">
               <div>
-                <ion-label>{{exes.setsAndReps.length + ' x ' + exes.setsAndReps[0] + ' x ' + exes.weight + 'Kg'}}</ion-label>
+                <ion-label [style]="{'margin-right':'10px'}">{{exes.setsAndReps.length + ' x ' + exes.setsAndReps[0] + ' x ' + exes.weight + 'Kg'}}</ion-label>
                 <ion-icon name="cog-outline"
                           color="warning"
                           class="ion-info"

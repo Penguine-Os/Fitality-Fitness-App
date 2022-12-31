@@ -40,6 +40,8 @@ export class EditExerciseInputsComponent implements OnInit {
     this.editSets = this.wEx.setsAndReps.length;
     this.editReps = this.wEx.setsAndReps[0];
     this.editWeight = this.wEx.weight;
+    this.editRest = this.wEx.restDuration;
+    this.editProgressiveOverload = this.wEx.progressiveOverload;
   }
 
   ngOnDestroy(): void {

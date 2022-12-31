@@ -60,6 +60,10 @@ ion-toast.custom-toast {
 
 ion-toast.custom-toast::part(button) {
   color: rgb(192, 106, 49);
+  width: 60px;
+  height: 60px;
+font-size: 2rem;
+
 }
 
 

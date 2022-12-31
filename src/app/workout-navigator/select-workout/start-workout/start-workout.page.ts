@@ -187,7 +187,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
       buttons: [
         {
           side: 'end',
-          icon: 'close-circle-outline',
+          icon: 'close-circle',
           cssClass: '',
           role: 'cancel',
           handler: (): void => {

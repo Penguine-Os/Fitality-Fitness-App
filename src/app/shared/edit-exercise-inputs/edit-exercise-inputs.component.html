@@ -31,6 +31,7 @@
                                 [(propertyValue)]="editRest"></app-workout-exercise-input>
 
     <ion-range (ionChange)="rangeHandler($event)"
+               value="{{editProgressiveOverload * 100}}"
                [ticks]="true" [snaps]="true" step="50" [min]="0" [max]="250">
 
       <ion-label slot="start">0</ion-label>
