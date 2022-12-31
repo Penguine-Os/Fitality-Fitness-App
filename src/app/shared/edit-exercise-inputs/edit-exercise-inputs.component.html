@@ -43,5 +43,23 @@
       <ion-label >{{editProgressiveOverload}}</ion-label>
     </ion-item>
 
+    <app-workout-exercise-input [propertyName]="('Rest:')"
+                                [stepSize]='0.5'
+                                [min]='1'
+                                [(propertyValue)]="editRest"></app-workout-exercise-input>
+
+    <ion-range (ionChange)="rangeHandler($event)"
+               [ticks]="true" [snaps]="true" step="50" [min]="0" [max]="250">
+
+      <ion-label slot="start">0</ion-label>
+
+      <ion-label slot="end">2.5</ion-label>
+    </ion-range>
+    <ion-item>
+      <ion-label >Progressive Overload:</ion-label>
+
+      <ion-label >{{editProgressiveOverload}}</ion-label>
+    </ion-item>
+
   </ion-list>
 </ion-content>
