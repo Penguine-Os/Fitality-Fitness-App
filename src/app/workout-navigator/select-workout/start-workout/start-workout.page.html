@@ -44,7 +44,7 @@
                                  [(propertyValue)]="exes.setsAndReps[j]"
                           (click)="setClickHandler(exes, j)"
                                  [(clickedValue)]="exes.completedSets[j]"
-                          *ngFor="let sets of exStateManager.observableIterator.getValue()[i]; let j = index" style="margin: 1rem"></app-sets-and-reps>
+                          *ngFor="let sets of (exStateManager.observableIterator | async)?.[i]; let j = index" style="margin: 1rem"></app-sets-and-reps>
             </div>
           </ion-row>
         </ion-grid>

@@ -19,8 +19,6 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
   weekRoutine = new Array<boolean>(7).fill(false);
   progressiveOverload: number;
   duration = 1;
-  workOutExercises: WorkoutExercise[];
-  workOutExercisesSubscription = new Subscription();
   splitStrategies: { [key: string]: string } = {
     pushPull: 'Push-Pull',
     fullBody: 'Full-Body',
@@ -37,13 +35,9 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.workOutExercisesSubscription = this.exService.observableWorkoutExercises.subscribe(
-      xVal => this.workOutExercises = xVal
-    );
   }
 
   ngOnDestroy(): void {
-    this.workOutExercisesSubscription.unsubscribe();
   }
 
   public async checkHandler(): Promise<void> {
