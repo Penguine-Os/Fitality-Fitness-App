@@ -187,7 +187,7 @@ export class WorkoutExerciseStateManagerService {
     const workoutA: Workout = {
       id: uuidv4(),
       workoutRoleNr: '',
-      workoutName: `Workout A:${' ' + workoutNameA}`,
+      workoutName: splitStrategy !== 'fullBody'?`Workout A:${' ' + workoutNameA}` : workoutNameA,
       workoutExercises: workoutExA,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
       endWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -197,7 +197,7 @@ export class WorkoutExerciseStateManagerService {
     const workoutB: Workout = {
       id: uuidv4(),
       workoutRoleNr: '',
-      workoutName: `Workout B:${' ' + workoutNameB}`,
+      workoutName: splitStrategy !== 'fullBody'?`Workout B:${' ' + workoutNameB}` : workoutNameA,
       workoutExercises: workoutExB,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
       endWorkoutTimeStamp: Timestamp.fromDate(new Date()),

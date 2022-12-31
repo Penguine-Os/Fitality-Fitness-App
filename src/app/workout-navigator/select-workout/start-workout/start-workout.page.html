@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">Workout Name</ion-title>
+    <ion-title class="ion-text-center">{{(exStateManager.observableWorkout|async)?.workoutName}}</ion-title>
     <ion-buttons slot="end">
       <ion-button color="success"
                   (click)="presentAlert()">Finish</ion-button>
@@ -51,6 +51,10 @@
       </ion-list>
 
   </ion-list>
-
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="presentModal('note')">
+      <ion-icon name="clipboard-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>
