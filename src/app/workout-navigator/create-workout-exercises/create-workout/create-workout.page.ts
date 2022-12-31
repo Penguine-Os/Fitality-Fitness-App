@@ -3,7 +3,6 @@ import {FireAuthService} from '../../../Services/FireBase/fire-auth.service';
 import {WorkoutRoutine} from '../../../Models/WorkoutRoutine';
 import {WorkoutExerciseStateManagerService} from '../../../Services/workout-exercise-state-manager.service';
 import {WorkoutExercise} from '../../../Models/WorkoutExercise';
-import {Subscription} from 'rxjs';
 import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
 import {Timestamp} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
@@ -54,7 +53,7 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
         categorizedExercises = this.exService.categorizeUpperAndLowerBodyExercises();
         break;
       case 'fullBody':
-        categorizedExercises = [[], [], this.exService.allExercises()];
+        categorizedExercises = [[...this.exService.allExercises()], [...this.exService.allExercises()]];
         break;
       default:
         console.log('Select Split Strategy');

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {ExerciseType} from '../Models/ExerciseType';
 import {Workout} from '../Models/Workout';
 import {WorkoutExercise} from '../Models/WorkoutExercise';
@@ -164,15 +164,30 @@ export class WorkoutExerciseStateManagerService {
   }
 
   public creatWeeklyRoutineWorkouts(allEx: WorkoutExercise[][], splitStrategy: string): void {
-    const [workoutExA, workoutExB, workoutExFull] = allEx;
+    const [workoutExA, workoutExB] = allEx;
 
     // const workouts: Workout[] = [];
-    const workoutNameA = splitStrategy === 'pushPull' ? 'Push' : 'Upper-Body';
-    const workoutNameB = splitStrategy === 'pushPull' ? 'Pull' : 'Lower-Body';
+    let workoutNameA = '';
+    let workoutNameB = '';
+
+    switch (splitStrategy) {
+      case 'pushPull':
+        workoutNameA = 'Push';
+        workoutNameB = 'Pull';
+        break;
+      case 'Upper-Body':
+        workoutNameA = 'Upper-Body';
+        workoutNameB = 'Lower-Body';
+        break;
+      case 'fullBody':
+        workoutNameA = 'Full-Body';
+        workoutNameB = 'Full-Body';
+
+    }
     const workoutA: Workout = {
       id: uuidv4(),
       workoutRoleNr: '',
-      workoutName: `Workout A:${workoutNameA}`,
+      workoutName: `Workout A:${' ' + workoutNameA}`,
       workoutExercises: workoutExA,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
       endWorkoutTimeStamp: Timestamp.fromDate(new Date()),
@@ -182,31 +197,17 @@ export class WorkoutExerciseStateManagerService {
     const workoutB: Workout = {
       id: uuidv4(),
       workoutRoleNr: '',
-      workoutName: `Workout B:${workoutNameB}`,
+      workoutName: `Workout B:${' ' + workoutNameB}`,
       workoutExercises: workoutExB,
       startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
       endWorkoutTimeStamp: Timestamp.fromDate(new Date()),
       isCompleted: false,
       note: 'string'
     };
-
-    const workoutFullBody: Workout = {
-      id: uuidv4(),
-      workoutRoleNr: '',
-      workoutName: 'Full-Body',
-      workoutExercises: workoutExFull,
-      startWorkoutTimeStamp: Timestamp.fromDate(new Date()),
-      endWorkoutTimeStamp: Timestamp.fromDate(new Date()),
-      isCompleted: false,
-      note: 'string'
-    };
-
-
     this.weeklyWorkout = {
       splitName: splitStrategy,
       workoutA,
       workoutB,
-      workoutFullBody
     };
   }
 
@@ -248,36 +249,21 @@ export class WorkoutExerciseStateManagerService {
 
         if (workoutDays[currentDate.getDay()]) {
           counter++;
-          let w = counter % 2 !== 0 ? weeklyW.workoutA : weeklyW.workoutB;
-          if (counter % 2 !== 0) {
-            if (weeklyW.workoutA.workoutExercises.length !== 0) {
-              w = weeklyW.workoutA;
-
-            } else {
-              w = weeklyW.workoutB;
-            }
-
-
-          } else {
-            if (weeklyW.workoutB.workoutExercises.length !== 0) {
-              w = weeklyW.workoutB;
-            } else {
-              w = weeklyW.workoutA;
-            }
-
-
+          const w = counter % 2 !== 0 ? weeklyW.workoutA : weeklyW.workoutB;
+          if (w.workoutExercises.length > 0) {
+            const copy: Workout = {
+              id: w.id,
+              workoutRoleNr: `workout-${counter}`,
+              workoutName: w.workoutName,
+              workoutExercises: w.workoutExercises,
+              startWorkoutTimeStamp: Timestamp.fromDate(currentDate),
+              endWorkoutTimeStamp: Timestamp.fromDate(currentDate),
+              isCompleted: w.isCompleted,
+              note: '',
+            };
+            workouts.push(copy);
           }
-          const copy: Workout = {
-            id: w.id,
-            workoutRoleNr: `workout-${counter}`,
-            workoutName: w.workoutName,
-            workoutExercises: w.workoutExercises,
-            startWorkoutTimeStamp: Timestamp.fromDate(currentDate),
-            endWorkoutTimeStamp: Timestamp.fromDate(currentDate),
-            isCompleted: w.isCompleted,
-            note: w.workoutName,
-          };
-          workouts.push(copy);
+
         }
 
         currentDate.setDate(currentDate.getDate() + 1);
