@@ -19,7 +19,10 @@ export class EditExerciseInputsComponent implements OnInit {
   editSets = 0;
   editReps = 0;
   editWeight = 0;
+  editRest= 0;
+  editProgressiveOverload= 0;
   @Input() index: number;
+
 
   constructor(private modalController: ModalController,
               private fireStoreService: FireStoreService,
@@ -57,11 +60,15 @@ export class EditExerciseInputsComponent implements OnInit {
 
 
   }
-
+  public rangeHandler(event: any): void {
+    this.editProgressiveOverload = event.detail.value / 100;
+  }
   private async updateExercise(): Promise<void> {
     const newSetsAndReps = new Array(this.editSets).fill(this.editReps);
     this.wEx.weight = this.editWeight;
     this.wEx.setsAndReps = newSetsAndReps;
+    this.wEx.restDuration = this.editRest;
+    this.wEx.progressiveOverload = this.editProgressiveOverload;
     this.updateCompletedSets(this.wEx.completedSets, this.wEx.setsAndReps);
     this.exService.generateIterator(this.wExercises);
     await this.fireStoreService.updateWorkout(this.exService.getCollectionName(), this.workout.workoutRoleNr, this.workout);
@@ -75,6 +82,4 @@ export class EditExerciseInputsComponent implements OnInit {
       completedSets.pop();
     }
   }
-
-
 }
