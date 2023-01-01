@@ -61,6 +61,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
       return;
     }
     await this.toaster.dismiss();
+    clearInterval(this.interval);
   }
 
   async ionViewDidLeave(): Promise<void> {
@@ -148,6 +149,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     const seconds = remainingTime % 60;
 
     if (this.toaster !== undefined) {
+      console.log('existing toast');
       await this.toaster.dismiss().then(() => clearInterval(this.interval));
     }
 
@@ -198,11 +200,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
           icon: 'close-circle',
           cssClass: '',
           role: 'cancel',
-          handler: (): void => {
-            this.toaster.onDidDismiss().then(() => {
-              clearInterval(this.interval);
-            });
-          }
+          handler: (): void => clearInterval(this.interval)
         }
       ],
       position: 'top'
@@ -211,6 +209,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
 
   private async playSound(): Promise<void> {
+    //attempt to sync vibrate and sound
     await Promise.all([NativeAudio.play({assetId: 'ring', time: 0}), this.hapticsVibrate(150)]);
 
   }
