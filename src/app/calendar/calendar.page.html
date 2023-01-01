@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">Planed Workouts</ion-title>
+    <ion-title class="ion-text-center">Routine Overview</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -26,24 +26,6 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-<!--      <ion-item slot="content" lines="none"  *ngFor="let workout of gw">-->
-<!--        <ion-label  slot="start" class="dateLabel">-->
-<!--          {{workout.startWorkoutTimeStamp.toMillis() | date : 'cccc'}}-->
-<!--        </ion-label>-->
-<!--        <ion-icon *ngIf='workout.isCompleted' name='checkmark-circle'-->
-<!--                  color='success' slot="end"></ion-icon>-->
-<!--        <label>{{(workout.workoutName)}}</label>-->
-<!--        <ion-icon *ngIf='!workout.isCompleted' name='alert-circle'-->
-<!--                  color='warning' slot="end"></ion-icon>-->
-<!--        <div slot="end"></div>-->
-<!--      </ion-item>-->
-
-<!--      <div class="ion-padding" slot="content" *ngFor="let workout of gw">-->
-<!--        <ion-label>{{(workout.startWorkoutTimeStamp.toMillis() | date : 'cccc') + ' ' +(workout.workoutName)}}-->
-<!--        </ion-label>-->
-<!--       -->
-<!--       -->
-<!--      </div>-->
     </ion-accordion>
   </ion-accordion-group>
 </ion-content>
