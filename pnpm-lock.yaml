@@ -56,6 +56,7 @@ specifiers:
   karma-coverage-istanbul-reporter: ~3.0.2
   karma-jasmine: ~5.1.0
   karma-jasmine-html-reporter: ~2.0.0
+  moment: ^2.29.4
   pnpm: ^7.18.0
   protractor: ^7.0.0
   rxjs: ~7.5.0
@@ -90,6 +91,7 @@ dependencies:
   firebase: 9.15.0
   fixed-size-array: 0.1.1
   ionicons: 6.0.4
+  moment: 2.29.4
   pnpm: 7.18.0
   protractor: 7.0.0
   rxjs: 7.5.7
@@ -7879,6 +7881,10 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dev: true
+
+  /moment/2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    dev: false
 
   /ms/2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}

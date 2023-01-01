@@ -45,6 +45,7 @@
     "firebase": "^9.15.0",
     "fixed-size-array": "^0.1.1",
     "ionicons": "^6.0.3",
+    "moment": "^2.29.4",
     "pnpm": "^7.18.0",
     "protractor": "^7.0.0",
     "rxjs": "~7.5.0",

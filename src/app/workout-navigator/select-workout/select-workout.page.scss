@@ -2,7 +2,9 @@ ion-icon{
   display: inline-block;
   vertical-align: middle;
   font-size: 20px;
-}ion-icon.charge{
+
+}
+ion-icon.charge{
    color: greenyellow;
 
  }
@@ -38,4 +40,8 @@ ion-icon.work{
   ion-img{
     width: 600px;
   }
+}
+.labelStyle{
+  font-size: 10px;
+  font-style: italic;
 }

@@ -10,7 +10,7 @@ export class ProgressPage implements OnInit {
 
   constructor(public authService: FireAuthService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }

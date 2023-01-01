@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {
-  addDoc,
   collection,
   collectionData,
   CollectionReference,
@@ -11,28 +10,22 @@ import {
   query,
   updateDoc, where, limit
 } from '@angular/fire/firestore';
-import {WorkoutRoutine} from '../../Models/WorkoutRoutine';
 import {Workout} from '../../Models/Workout';
-import {AllWorkouts} from '../../Models/AllWorkouts';
-import {map, Observable} from 'rxjs';
+import { firstValueFrom, from, groupBy, map, mergeMap, Observable, of, toArray, zip} from 'rxjs';
 import {WorkoutExerciseStateManagerService} from '../workout-exercise-state-manager.service';
-
+import moment from 'moment';
+import {FireAuthService} from './fire-auth.service';
 @Injectable({
   providedIn: 'root'
 })
 export class FireStoreService {
+  collectionName: string;
   constructor(private firestore: Firestore,
+              private fireAuth: FireAuthService,
               private stateManagerService: WorkoutExerciseStateManagerService,) {
+    this.collectionName = `Workout-Routine-${this.fireAuth.getUserUID()}`;
   }
 
-  async storeWorkoutRoutine(collectionName: string, workoutRoutine: WorkoutRoutine): Promise<void> {
-    console.log(workoutRoutine);
-    await addDoc<WorkoutRoutine>(this.getCollectionRef<WorkoutRoutine>(collectionName), workoutRoutine);
-  }
-
-  async storeWorkouts(collectionName: string, allWorkouts: AllWorkouts): Promise<void> {
-    await addDoc<AllWorkouts>(this.getCollectionRef<AllWorkouts>(collectionName), allWorkouts);
-  }
 
   public getWeekRoutine(collectionName: string): Observable<Workout[]> {
     const today = new Date();
@@ -48,16 +41,29 @@ export class FireStoreService {
     );
   }
 
-  public getAllRoutineWorkouts(collectionName: string): Observable<Workout[]>  {
+  public getAllRoutineWorkouts(collectionName: string): Observable<Workout[]> {
+
     return collectionData<Workout>(
       query<Workout>(this.getCollectionRef(collectionName)));
   }
 
+  public getAllRoutineWorkoutsGroupedByWeek(collectionName: string):  Promise<Observable<[number, Workout[]]>>{
+    ///Niet mijn code
+    ///Bron: => https://stackoverflow.com/questions/50332149/rxjs-groupby-observable-object
+  return  firstValueFrom(collectionData<Workout>(
+    query<Workout>(this.getCollectionRef(collectionName))))
+    .then(x => {
+      const source=from(x);
+      return source.pipe(
+        groupBy(workout => moment(workout.startWorkoutTimeStamp.toDate()).week()),
+        mergeMap(group=> zip(of(group.key), group.pipe(toArray())))
+      );
+    });
+  }
+
   public async batchedWrites(workouts: Workout[], collectionName: string): Promise<void>  {
     const batch = writeBatch(this.firestore);
-    let counter = 0;
     for (const item of workouts) {
-      counter++;
       const docRef = doc(this.firestore, collectionName, `${item.workoutRoleNr}`);
       batch.set(docRef, item, {merge: true});
     }
@@ -72,9 +78,7 @@ export class FireStoreService {
   public async batchDelete(workouts: Workout[]): Promise<void>  {
     const batch = writeBatch(this.firestore);
     const collectionName = this.stateManagerService.getCollectionName();
-    let counter = 0;
     for (const item of workouts) {
-      counter++;
       const docRef = doc(this.firestore, collectionName, `${item.workoutRoleNr}`);
       batch.delete(docRef);
     }

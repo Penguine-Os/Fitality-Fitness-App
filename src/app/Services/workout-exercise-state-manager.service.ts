@@ -15,6 +15,7 @@ export class WorkoutExerciseStateManagerService {
   #repVals: number[] = [];
   #collectionName: string;
   #userId: string;
+  observableGroupedWorkouts = new BehaviorSubject<Workout[][]>([]);
   observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
   observableIterator = new BehaviorSubject<number[][]>([]);
   observableRepVals = new BehaviorSubject<number[]>([]);
@@ -244,7 +245,7 @@ export class WorkoutExerciseStateManagerService {
     return workouts;
   }
 
-  resetFieldVariables(): void {
+  public resetFieldVariables(): void {
    // this.#exercises = [];
     this.#workoutExercises = [];
     this.#repVals = [];
