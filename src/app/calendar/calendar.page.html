@@ -9,23 +9,23 @@
 
 <ion-content>
 
-  <ion-accordion-group  *ngFor="let gw of stateManagerService.observableGroupedWorkouts|async; let i = index">
+  <ion-accordion-group *ngFor="let gw of stateManagerService.observableGroupedWorkouts|async; let i = index">
     <ion-accordion value="first">
       <ion-item slot="header" color="light">
-        <ion-label>{{'Week'+ (' ') + (i+1)}}</ion-label>
+        <ion-label>{{'Week' + (' ') + (i + 1)}}</ion-label>
       </ion-item>
-      <ion-grid slot="content" >
-        <ion-row *ngFor="let workout of gw" >
-          <ion-col  size="4" size-md="2" >{{workout.startWorkoutTimeStamp.toMillis() | date : 'cccc'}}</ion-col>
-          <ion-col size="6" size-md="8">{{workout.workoutName}}</ion-col>
-          <ion-col  class="ion-text-right" >
-            <ion-icon *ngIf='workout.isCompleted' name='checkmark-circle'
-                      color='success'  style="margin-right: 0.65rem"></ion-icon>
-            <ion-icon *ngIf='!workout.isCompleted' name='alert-circle'
-                      color='warning'  style="margin-right: 0.65rem" ></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-item slot="content" lines="none" *ngFor="let workout of gw">
+        <ion-icon *ngIf='workout.isCompleted' name='checkmark-circle'
+                  color='success' ></ion-icon>
+        <ion-icon *ngIf='!workout.isCompleted' name='close-circle'
+                  color='warning' ></ion-icon>
+        <ion-label style="font-style: italic; font-size: 14px" class="ion-margin-start">
+
+          {{workout.startWorkoutTimeStamp.toMillis() | date : 'cccc'}}
+          <span> ~ </span>
+          {{workout.workoutName}}
+        </ion-label>
+      </ion-item>
     </ion-accordion>
   </ion-accordion-group>
 </ion-content>

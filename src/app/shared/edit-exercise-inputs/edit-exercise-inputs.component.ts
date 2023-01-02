@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AlertController, ModalController} from '@ionic/angular';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
-import {Subscription} from 'rxjs';
+import { Subscription} from 'rxjs';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
 import {FireStoreService} from '../../Services/FireBase/fire-store.service';
 import {Workout} from '../../Models/Workout';
@@ -14,34 +14,30 @@ import {Workout} from '../../Models/Workout';
 export class EditExerciseInputsComponent implements OnInit {
   workout: Workout;
   wEx: WorkoutExercise;
-  wExercises: WorkoutExercise[];
   exSub: Subscription;
   editSets = 0;
   editReps = 0;
   editWeight = 0;
-  editRest= 0;
-  editProgressiveOverload= 0;
-  @Input() index: number;
+  editRest = 0;
+  editProgressiveOverload = 0;
+  @Input() exerciseIndex: number;
+  @Input() workoutId: string;
+  @Input() exerciseId: string;
 
 
   constructor(private modalController: ModalController,
               private fireStoreService: FireStoreService,
-              private exService: WorkoutExerciseStateManagerService,
+              private stateManagerService: WorkoutExerciseStateManagerService,
               private alertController: AlertController) {
 
   }
 
   ngOnInit(): void {
-    this.exSub = this.exService.observableWorkout.subscribe(wVal => {
+    this.exSub = this.stateManagerService.observableWorkout.subscribe(wVal => {
       this.workout = wVal;
-      this.wExercises = wVal.workoutExercises;
-      this.wEx = wVal.workoutExercises[this.index];
+      this.wEx = wVal.workoutExercises[this.exerciseIndex];
     });
-    this.editSets = this.wEx.setsAndReps.length;
-    this.editReps = this.wEx.setsAndReps[0];
-    this.editWeight = this.wEx.weight;
-    this.editRest = this.wEx.restDuration;
-    this.editProgressiveOverload = this.wEx.progressiveOverload;
+    this.initializeFromInputs();
   }
 
   ngOnDestroy(): void {
@@ -55,16 +51,26 @@ export class EditExerciseInputsComponent implements OnInit {
 
   }
 
- public async dismissConfirm(): Promise<void> {
+  public async dismissConfirm(): Promise<void> {
     this.modalController.dismiss({
       dismissed: true
     }, 'confirmed').then(() => this.updateExercise());
 
 
   }
+
   public rangeHandler(event: any): void {
     this.editProgressiveOverload = event.detail.value / 100;
   }
+
+  private initializeFromInputs(): void {
+    this.editSets = this.wEx.setsAndReps.length;
+    this.editReps = this.wEx.setsAndReps[0];
+    this.editWeight = this.wEx.weight;
+    this.editRest = this.wEx.restDuration;
+    this.editProgressiveOverload = this.wEx.progressiveOverload;
+  }
+
   private async updateExercise(): Promise<void> {
     const newSetsAndReps = new Array(this.editSets).fill(this.editReps);
     this.wEx.weight = this.editWeight;
@@ -72,8 +78,8 @@ export class EditExerciseInputsComponent implements OnInit {
     this.wEx.restDuration = this.editRest;
     this.wEx.progressiveOverload = this.editProgressiveOverload;
     this.updateCompletedSets(this.wEx.completedSets, this.wEx.setsAndReps);
-    this.exService.generateIterator(this.wExercises);
-    await this.fireStoreService.updateWorkout(this.exService.getCollectionName(), this.workout.workoutRoleNr, this.workout);
+    this.stateManagerService.generateIterator(this.workout.workoutExercises);
+    await this.fireStoreService.updateWorkout(this.stateManagerService.getCollectionName(), this.workout.workoutRoleNr, this.workout);
   }
 
   private updateCompletedSets(completedSets: boolean[], setsAndRepsArr: number[]): void {

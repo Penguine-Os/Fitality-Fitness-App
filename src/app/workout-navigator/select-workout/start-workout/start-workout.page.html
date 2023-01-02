@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">{{(exStateManager.observableWorkout|async)?.workoutName}}</ion-title>
+    <ion-title class="ion-text-center">{{(stateManagerService.observableWorkout|async)?.workoutName}}</ion-title>
     <ion-buttons slot="end">
       <ion-button color="success"
                   (click)="presentAlert()">Finish</ion-button>
@@ -15,7 +15,7 @@
 <ion-content>
   <ion-list>
 
-      <ion-list *ngFor="let exes of exStateManager.observableWorkoutExercises|async; let i = index">
+      <ion-list *ngFor="let exes of stateManagerService.observableWorkoutExercises|async; let i = index">
         <ion-grid>
           <ion-row class="ion-margin">
             <ion-col size="7" >
@@ -33,7 +33,7 @@
                 <ion-icon name="cog-outline"
                           color="warning"
                           class="ion-info"
-                          (click)="presentModal('edit',i)"></ion-icon>
+                          (click)="presentModal('edit',i,exes.id)"></ion-icon>
               </div>
             </ion-col>
           </ion-row>
@@ -42,9 +42,9 @@
 
               <app-sets-and-reps class="customComponent"
                                  [(propertyValue)]="exes.setsAndReps[j]"
-                          (click)="setClickHandler(exes, j)"
+                                 (click)="setClickHandler(exes, j)"
                                  [(clickedValue)]="exes.completedSets[j]"
-                          *ngFor="let sets of (exStateManager.observableIterator | async)?.[i]; let j = index" style="margin: 1rem"></app-sets-and-reps>
+                                 *ngFor="let sets of (stateManagerService.observableIterator | async)?.[i]; let j = index" style="margin: 1rem"></app-sets-and-reps>
             </div>
           </ion-row>
         </ion-grid>

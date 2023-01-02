@@ -4,7 +4,7 @@ import {map, Observable} from 'rxjs';
 import {ExerciseType} from '../../Models/ExerciseType';
 import {environment} from '../../../environments/environment';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
-
+import {v4 as uuidv4} from 'uuid';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,6 +39,7 @@ export class ExerciseProviderService {
         const workoutsEx: WorkoutExercise[]=[];
         exercises.forEach( exType => {
           const wex: WorkoutExercise={
+            id: uuidv4(),
             completedSets: [false],
             endExerciseTimeStamp: 0,
             isCompleted: false,

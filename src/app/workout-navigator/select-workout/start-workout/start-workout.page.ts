@@ -7,7 +7,7 @@ import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {ExerciseInfoModalComponent} from '../../../shared/exercise-info-modal/exercise-info-modal.component';
 import {EditExerciseInputsComponent} from '../../../shared/edit-exercise-inputs/edit-exercise-inputs.component';
 import {NativeAudio} from '@capgo/native-audio';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Capacitor} from '@capacitor/core';
 import {Workout} from '../../../Models/Workout';
 import {Subscription} from 'rxjs';
@@ -30,17 +30,18 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
   constructor(public toastCtrl: ToastController,
               private authService: FireAuthService,
               private fireStoreService: FireStoreService,
-              public exStateManager: WorkoutExerciseStateManagerService,
+              public stateManagerService: WorkoutExerciseStateManagerService,
               private modalController: ModalController,
               private routerOutlet: IonRouterOutlet,
               private router: Router,
+              public activatedRoute: ActivatedRoute,
               private alertController: AlertController) {
 
   }
 
   async ngOnInit(): Promise<void> {
 
-    this.workoutUpdateSub = this.exStateManager.observableWorkout
+    this.workoutUpdateSub = this.stateManagerService.observableWorkout
       .subscribe(wVal => this.workoutUpdate = wVal);
     const path = Capacitor.isNativePlatform() ? 'ring.mp3' : '/assets/ring.mp3';
     await NativeAudio.preload({
@@ -85,7 +86,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
           handler: (): void => this.finishWorkout()
         }],
     });
-    if (this.exStateManager.workoutCompleted(this.workoutUpdate.workoutExercises)) {
+    if (this.stateManagerService.workoutCompleted(this.workoutUpdate.workoutExercises)) {
       this.finishWorkout();
       return;
     }
@@ -104,7 +105,12 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   }
 
-  public async presentModal(action: string, i = 0): Promise<void> {
+  public async presentModal(action: string, i = 0, exerciseId: string=''): Promise<void> {
+    const workoutId = this.activatedRoute.snapshot.paramMap.get('id');
+
+    if (workoutId === null) {
+      return;
+    }
 
     let modalComponent;
     switch (action) {
@@ -121,7 +127,9 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     this.modal = await this.modalController.create({
       component: modalComponent,
       componentProps: {
-        index: i,
+        exerciseIndex: i,
+        workoutId,
+        exerciseId
       },
       cssClass: 'classModal',
       presentingElement: this.routerOutlet.nativeEl
@@ -136,7 +144,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   private finishWorkout(): void {
     this.workoutUpdate.isCompleted = true;
-    this.fireStoreService.updateWorkout(this.exStateManager.getCollectionName(),
+    this.fireStoreService.updateWorkout(this.stateManagerService.getCollectionName(),
       this.workoutUpdate.workoutRoleNr, this.workoutUpdate)
       .then(() => setTimeout(() => this.router.navigate(['tabs', 'WorkoutNavTab']), 500));
   }

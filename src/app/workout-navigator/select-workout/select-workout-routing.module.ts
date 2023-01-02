@@ -10,6 +10,12 @@ const routes: Routes = [
   },
   {
     path: 'start-workout',
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    loadChildren: () => import('./start-workout/start-workout.module').then( m => m.StartWorkoutPageModule)
+  },
+  {
+    path: 'start-workout/:id',
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     loadChildren: () => import('./start-workout/start-workout.module').then( m => m.StartWorkoutPageModule)
   }
 

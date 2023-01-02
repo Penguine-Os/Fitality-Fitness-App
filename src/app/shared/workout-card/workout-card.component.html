@@ -27,7 +27,7 @@
         </ion-accordion-group>
       </ion-grid>
       <ion-item >
-        <ion-button [routerLink]="['start-workout']"
+        <ion-button [routerLink]="['start-workout', workout.id]"
                     (click)="clickHandler()"
                     slot="end" fill="outline">Start</ion-button>
       </ion-item>

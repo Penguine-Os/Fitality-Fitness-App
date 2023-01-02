@@ -13,12 +13,12 @@ export class NotepadModalComponent implements OnInit, OnDestroy {
   workout: Workout;
   wSub: Subscription;
 
-  constructor(public exService: WorkoutExerciseStateManagerService,
+  constructor(public stateManagerService: WorkoutExerciseStateManagerService,
               private modalController: ModalController) {
   }
 
   ngOnInit(): void {
-    this.wSub = this.exService.observableWorkout
+    this.wSub = this.stateManagerService.observableWorkout
       .subscribe(x => this.workout = x);
 
   }
