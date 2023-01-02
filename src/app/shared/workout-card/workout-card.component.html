@@ -1,0 +1,36 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>{{workout.workoutName}}</ion-card-title>
+    <ion-label>{{startDate | date }}</ion-label>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-list lines="none">
+      <ion-grid>
+        <ion-accordion-group>
+          <ion-accordion value="first">
+            <ion-item slot="header" color="light">
+              <ion-label>Exercises</ion-label>
+              <ion-badge slot="start" color="warning">{{workout.workoutExercises.length}}</ion-badge>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <ion-row *ngFor="let ex of workout.workoutExercises">
+                <ion-col size="8">
+                  {{ex.workoutExercise.name}}
+                </ion-col>
+                <ion-col size="4" class="ion-text-end">
+                  {{ex.setsAndReps.length}} x {{ex.setsAndReps[0]}} x {{ex.weight}}Kg
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-grid>
+      <ion-item >
+        <ion-button [routerLink]="['start-workout', workout.id]"
+                    (click)="clickHandler()"
+                    slot="end" fill="outline">Start</ion-button>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>

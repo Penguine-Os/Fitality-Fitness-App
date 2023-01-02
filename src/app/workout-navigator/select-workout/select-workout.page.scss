@@ -1,0 +1,47 @@
+ion-icon{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 20px;
+
+}
+ion-icon.charge{
+   color: greenyellow;
+
+ }
+ion-icon.work{
+  color: #f67518;
+
+}
+.workoutImgContainer {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 700px) {
+  .workoutImgContainer {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+  }
+  ion-img{
+    width: 300px;
+  }
+}
+@media (min-width: 700px) {
+
+  ion-img{
+    width: 600px;
+  }
+}
+.labelStyle{
+  font-size: 10px;
+  font-style: italic;
+}
