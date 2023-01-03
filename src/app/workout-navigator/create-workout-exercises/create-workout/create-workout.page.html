@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Create Workout</ion-title>
+    <ion-buttons slot="end">
+
+      <ion-button [disabled]="btnNextIsDisabled" (click)="splitExercisesAndCreateWeeklyWorkout()" >
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Routine Parameters</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-label>Select your training days!</ion-label>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col *ngFor="let wDay of weekdays; let i =  index">
+                  <ion-list>
+                    <ion-label class="lbl" slot="middle">{{weekdays[i]}}</ion-label>
+                    <ion-checkbox  [(ngModel)]="weekRoutine[i]" (ionChange)="checkHandler()" ></ion-checkbox>
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+      <ion-label>Specify the routineSpan of this routine!</ion-label>
+      <app-workout-exercise-input [propertyName]="('Month')"
+                                  [stepSize]='1'
+                                  [min]='1'
+                                  [(propertyValue)]="duration"></app-workout-exercise-input>
+
+    </ion-card-content>
+
+
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Split Strategy</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-select interface="action-sheet"
+                    placeholder="Select split strategy for your weekly routine"
+                    (ionChange)="selectOptionHandler($event)">
+          <ion-select-option [value]="item.key"
+                             *ngFor="let item of splitStrategies | keyvalue">{{item.value}}</ion-select-option>
+        </ion-select>
+      </ion-list>
+    </ion-card-content>
+
+
+  </ion-card>
+</ion-content>

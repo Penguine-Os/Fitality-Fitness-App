@@ -1,0 +1,21 @@
+ion-checkbox {
+  --size: 25px;
+  --background-checked: #198c93;
+}
+
+ion-checkbox::part(container) {
+  border-radius: 6px;
+  border: 2px solid  #198c93;
+}
+
+.lbl{
+  margin-left: 0.15rem;
+  display: block;
+}
+
+.vertical-align-content > *
+{
+  display: flex!important;
+  align-content: center!important;
+  align-items: center!important;
+}
