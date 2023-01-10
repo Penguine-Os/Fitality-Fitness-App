@@ -17,7 +17,8 @@
     "gen-resources": "pnpm run ios-resources && pnpm run android-resources",
     "android-run": "ionic build --prod && pnpm exec cap sync android && pnpm exec cap run android",
     "android-run-default": "ionic build --prod && pnpm exec cap sync android && pnpm exec cap run android --target f3ceaf2d",
-    "android-live": "ionic cap run android -l --external"
+    "android-live": "ionic cap run android -l --external",
+    "pwa-resources": "pwa-asset-generator ./resources/icon.png ./src/assets/icons -m ./src/manifest.webmanifest -i ./src/index.html"
   },
   "private": true,
   "dependencies": {
@@ -31,6 +32,7 @@
     "@angular/platform-browser": "^15.0.0",
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
+    "@angular/service-worker": "^15.0.0",
     "@capacitor-firebase/authentication": "^1.2.0",
     "@capacitor/android": "4.5.0",
     "@capacitor/app": "4.1.1",
