@@ -54,7 +54,6 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
       this.difficultyVal
     ).subscribe(wOutExercises => {
       this.fetchedWorkoutExercises = wOutExercises;
-      console.log(wOutExercises);
     });
     //collectionName
   }
