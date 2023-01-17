@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ComponentRef, OnDestroy, OnInit} from '@angular/core';
 import {Haptics} from '@capacitor/haptics';
 import {AlertController, IonRouterOutlet, ModalController, ToastController} from '@ionic/angular';
 import {FireAuthService} from '../../../Services/FireBase/fire-auth.service';
@@ -105,7 +105,7 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
   }
 
-  public async presentModal(action: string, i = 0, exerciseId: string=''): Promise<void> {
+  public async presentModal(action: string, i = 0, exerciseId: string = ''): Promise<void> {
     const workoutId = this.activatedRoute.snapshot.paramMap.get('id');
 
     if (workoutId === null) {
@@ -124,21 +124,9 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
         modalComponent = NotepadModalComponent;
         break;
     }
-    console.log('index', i);
-    console.log('workoutId', workoutId);
-    console.log('exerciseId', exerciseId);
-    this.modal = await this.modalController.create({
-      component: modalComponent,
-      componentProps: {
-        exerciseIndex: i,
-        workoutId,
-        exerciseId
-      },
-      cssClass: 'classModal',
-      presentingElement: this.routerOutlet.nativeEl
-    });
-    await this.modal.present();
 
+    this.modal = await this.createNewModal(i, workoutId, exerciseId, modalComponent);
+    await this.modal.present();
   }
 
   private async hapticsVibrate(duration: number): Promise<void> {
@@ -199,6 +187,22 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     }, 1000);
   }
 
+  private async createNewModal(
+    exerciseIndex: number,
+    workoutId: string,
+    exerciseId: string, modalComponent: any): Promise<HTMLIonModalElement> {
+    return await this.modalController.create({
+      component: modalComponent,
+      componentProps: {
+        exerciseIndex,
+        workoutId,
+        exerciseId
+      },
+      cssClass: 'classModal',
+      presentingElement: this.routerOutlet.nativeEl
+    });
+  }
+
   private async createNewToast(minutes: number, seconds: number, duration: number): Promise<HTMLIonToastElement> {
     return this.toastCtrl.create({
       message: `Good Work! Recovery in: ${minutes}:${seconds >= 10 ? seconds : '0' + seconds}`,
@@ -220,7 +224,6 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
 
 
   private async playSound(): Promise<void> {
-    //attempt to sync vibrate and sound
     await Promise.all([NativeAudio.play({assetId: 'ring', time: 0}), this.hapticsVibrate(150)]);
 
   }
