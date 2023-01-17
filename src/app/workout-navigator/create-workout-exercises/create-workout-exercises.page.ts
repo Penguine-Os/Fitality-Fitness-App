@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ExerciseType} from '../../Models/ExerciseType';
 import {ModalController} from '@ionic/angular';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
