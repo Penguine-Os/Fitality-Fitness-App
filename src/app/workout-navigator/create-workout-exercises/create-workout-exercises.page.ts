@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {WorkoutExercise} from '../../Models/WorkoutExercise';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
-import {Subscription} from 'rxjs';
+import {firstValueFrom, map, Subscription} from 'rxjs';
 import {FetchExerciseModalComponent} from '../../shared/fetch-exercise-modal/fetch-exercise-modal.component';
 import {Router} from '@angular/router';
 import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
@@ -13,11 +13,7 @@ import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
   styleUrls: ['./create-workout-exercises.page.scss'],
 })
 export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
-  workoutExercises: WorkoutExercise[] = [];
-  totalReps = 0;
   repsVal: number[] = [];
-  private exerciseSubscription = new Subscription();
-  private workoutExerciseSubscription = new Subscription();
   private repsValSubscription = new Subscription();
 
 
@@ -28,22 +24,13 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   }
 
 
-
   ngOnInit(): void {
-    // this.exerciseSubscription = this.stateManagerService.observableExercises
-    //   .subscribe(value => this.ex = value);
-
-    this.workoutExerciseSubscription = this.stateManagerService.observableWorkoutExercises
-      .subscribe(value => this.workoutExercises = value);
-
     this.repsValSubscription = this.stateManagerService.observableRepVals
       .subscribe(value => this.repsVal = value);
 
   }
 
   ngOnDestroy(): void {
-    this.exerciseSubscription.unsubscribe();
-    this.workoutExerciseSubscription.unsubscribe();
     this.repsValSubscription.unsubscribe();
   }
 
@@ -52,26 +39,11 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
       component: FetchExerciseModalComponent,
     });
     await modal.present();
-
-    // const {data, role} = await modal.onWillDismiss();
-    //
-    // if (role === 'confirm') {
-    //
-    //   if (data === null) {
-    //     return;
-    //   }
-    //
-    //   //this.exercises = [...data];
-    //
-    //
-    // }
   }
 
 
   public removeWorkOutExerciseHandler(exerciseName: string): void {
     this.stateManagerService.deleteExercise(exerciseName);
-    //this.workoutExercises = this.workoutExercises.filter(x => x.workoutExercise !== ex);
-
   }
 
   public async goToNextPage(): Promise<void> {
@@ -82,9 +54,17 @@ export class CreateWorkoutExercisesPage implements OnInit, OnDestroy {
   public rangeHandler(event: any, workoutEx: WorkoutExercise): void {
     workoutEx.progressiveOverload = event.detail.value / 100;
   }
-
-  public editReps(repVal: number, index: number): void {
-    this.workoutExercises[index].setsAndReps = new Array(this.workoutExercises[index].setsAndReps.length).fill(repVal);
-    this.workoutExercises[index].completedSets = new Array(this.workoutExercises[index].setsAndReps.length).fill(false);
+  public async editSetsAndReps(index: number): Promise<void> {
+    await firstValueFrom<WorkoutExercise[]>(
+    this.stateManagerService.observableWorkoutExercises
+      .pipe(
+        map(w => {
+          const length = w[index].setsAndReps.length;
+          const initialVal = this.repsVal[index];
+          w[index].setsAndReps = new Array<number>(length).fill(initialVal);
+          w[index].completedSets = new Array<boolean>(length).fill(false);
+          return w;
+        })
+      )).then(w =>  this.stateManagerService.assignValueToObservable_WorkoutExercises(w));
   }
 }

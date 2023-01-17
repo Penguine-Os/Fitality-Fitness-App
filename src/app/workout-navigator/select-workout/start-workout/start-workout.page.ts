@@ -124,6 +124,9 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
         modalComponent = NotepadModalComponent;
         break;
     }
+    console.log('index', i);
+    console.log('workoutId', workoutId);
+    console.log('exerciseId', exerciseId);
     this.modal = await this.modalController.create({
       component: modalComponent,
       componentProps: {

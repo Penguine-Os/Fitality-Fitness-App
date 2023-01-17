@@ -12,14 +12,17 @@ import {Subscription} from 'rxjs';
 export class ExerciseInfoModalComponent implements OnInit, OnDestroy {
   ex: ExerciseType;
   exSub: Subscription;
-  @Input() index: number;
+  @Input() exerciseIndex: number;
   constructor(private modalController: ModalController,
               private stateManagerService: WorkoutExerciseStateManagerService) {
 
   }
 
   ngOnInit(): void {
-    this.exSub = this.stateManagerService.observableWorkout.subscribe(exVal=> this.ex = exVal.workoutExercises[this.index].workoutExercise);
+    this.exSub = this.stateManagerService.observableWorkout
+      .subscribe(exVal=> {
+         this.ex = exVal.workoutExercises[this.exerciseIndex].workoutExercise;
+      });
   }
   ngOnDestroy(): void {
    this.exSub.unsubscribe();

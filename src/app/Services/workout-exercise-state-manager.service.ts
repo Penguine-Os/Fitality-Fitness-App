@@ -54,6 +54,10 @@ export class WorkoutExerciseStateManagerService {
     this.observableWorkout.next(wOut);
     this.observableWorkoutExercises.next(wOut.workoutExercises);
   }
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  assignValueToObservable_WorkoutExercises(workoutExercises: WorkoutExercise[]): void {
+    this.observableWorkoutExercises.next(workoutExercises);
+  }
 
   deleteExercise(deletedExerciseName: string): void {
     this.#workoutExercises = this.#workoutExercises.filter(x => x.workoutExercise.name !== deletedExerciseName);

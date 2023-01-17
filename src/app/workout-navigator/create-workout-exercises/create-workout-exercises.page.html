@@ -37,12 +37,13 @@
             <app-workout-exercise-input [propertyName]="('Sets:')"
                                         [stepSize]="1"
                                         [min]="1"
-                                        [(propertyValue)]="workoutEx.setsAndReps.length"></app-workout-exercise-input>
+                                        [(propertyValue)]="workoutEx.setsAndReps.length"
+                                        (click)="editSetsAndReps(i)"></app-workout-exercise-input>
 
             <app-workout-exercise-input [propertyName]="('Reps:')"
                                         [stepSize]='1'
                                         [min]='1'
-                                        (click)="editReps(repsVal[i], i)"
+                                        (click)="editSetsAndReps(i)"
                                         [(propertyValue)]="repsVal[i]"></app-workout-exercise-input>
 
             <app-workout-exercise-input [propertyName]="('Weight:')"

@@ -81,7 +81,6 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
       routineStartDate: Timestamp.fromDate(creationDate),
       routineEndDate: Timestamp.fromDate(expirationDate),
       weeklyWorkout: this.exService.getWeeklyWorkout(),
-      // workoutDays: this.weekRoutine
       workoutDays: this.weekRoutine
     };
 
