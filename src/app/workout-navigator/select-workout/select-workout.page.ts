@@ -1,11 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Workout} from '../../Models/Workout';
 import {AlertController} from '@ionic/angular';
 import {FireAuthService} from '../../Services/FireBase/fire-auth.service';
 import {WorkoutExerciseStateManagerService} from '../../Services/workout-exercise-state-manager.service';
 import {FireStoreService} from '../../Services/FireBase/fire-store.service';
 import {Router} from '@angular/router';
-import {firstValueFrom, Subscription} from 'rxjs';
+import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-select-workout',
@@ -14,9 +13,6 @@ import {firstValueFrom, Subscription} from 'rxjs';
 })
 export class SelectWorkout implements OnInit, OnDestroy {
   btnIsDisabled = false;
-  workouts: Workout[];
-  wSubs = new Subscription();
-
 
   constructor(private alertController: AlertController,
               public authService: FireAuthService,
@@ -24,17 +20,14 @@ export class SelectWorkout implements OnInit, OnDestroy {
               public stateManagerService: WorkoutExerciseStateManagerService,
               private fireStoreService: FireStoreService,) {
   }
+
   ngOnInit(): void {
-    this.wSubs = this.stateManagerService.observableWorkouts
-      .subscribe(
-        wOuts => {
-          this.workouts = wOuts;
-        }
-      );
   }
+
   ngOnDestroy(): void {
   }
- public async deleteAlert(): Promise<void> {
+
+  public async deleteAlert(): Promise<void> {
     const alert = await this.alertController.create({
       message: 'Delete entire Workout-Routine?!',
       buttons: [
@@ -49,9 +42,8 @@ export class SelectWorkout implements OnInit, OnDestroy {
           role: 'confirm',
           handler: (): void => {
             this.deleteRoutineFromFireStore()
-              .then(()=>{
-                setTimeout(()=>this.router.navigate(['tabs', 'WorkoutNavTab']), 500);
-                //()=>this.router.navigate(['tabs', 'WorkoutNavTab'])
+              .then(() => {
+                setTimeout(() => this.router.navigate(['tabs', 'WorkoutNavTab']), 500);
               });
           },
         },
@@ -61,11 +53,10 @@ export class SelectWorkout implements OnInit, OnDestroy {
     await alert.present();
   }
 
- private async deleteRoutineFromFireStore(): Promise<void> {
-    //batchDelete()
-   firstValueFrom(this.fireStoreService.getAllRoutineWorkouts(this.stateManagerService.getCollectionName()))
-     .then((workouts)=>{
-       this.fireStoreService.batchDelete(workouts);
-     }).then(()=> this.stateManagerService.resetFieldVariables());
+  private async deleteRoutineFromFireStore(): Promise<void> {
+    firstValueFrom(this.fireStoreService.getAllRoutineWorkouts(this.stateManagerService.getCollectionName()))
+      .then((workouts) => {
+        this.fireStoreService.batchDelete(workouts);
+      }).then(() => this.stateManagerService.resetFieldVariables());
   }
 }

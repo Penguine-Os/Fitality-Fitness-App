@@ -48,27 +48,12 @@ export class WorkoutExerciseStateManagerService {
     this.observableWorkouts.next(workouts);
   }
 
-  getWorkout(wOut: Workout): void {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  assignValueToObservable_Workout_WorkoutExercises(wOut: Workout): void {
     this.generateIterator(wOut.workoutExercises);
     this.observableWorkout.next(wOut);
     this.observableWorkoutExercises.next(wOut.workoutExercises);
   }
-
-  organizeWeeklyWorkout(workoutDays: boolean[], workoutR: WorkoutRoutine): void {
-    const workouts: Workout[] = [];
-    let counter = 0;
-    workoutDays.forEach((v, i) => {
-      if (v) {
-        counter++;
-        const w = counter % 2 !== 0 ? workoutR.weeklyWorkout.workoutA : workoutR.weeklyWorkout.workoutB;
-        if (!w.isCompleted) {
-          workouts.push(w);
-        }
-      }
-    });
-    this.observableWorkouts.next(workouts);
-  }
-
 
   deleteExercise(deletedExerciseName: string): void {
     this.#workoutExercises = this.#workoutExercises.filter(x => x.workoutExercise.name !== deletedExerciseName);

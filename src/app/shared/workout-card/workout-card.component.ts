@@ -12,7 +12,7 @@ export class WorkoutCardComponent implements OnInit {
   @Input() workout: Workout;
   @Input() startDate: number;
 
-  constructor(private exService: WorkoutExerciseStateManagerService) {
+  constructor(private stateManagerService: WorkoutExerciseStateManagerService) {
   }
 
   ngOnInit(): void {
@@ -20,6 +20,6 @@ export class WorkoutCardComponent implements OnInit {
   }
 
   public clickHandler(): void {
-    this.exService.getWorkout(this.workout);
+    this.stateManagerService.assignValueToObservable_Workout_WorkoutExercises(this.workout);
   }
 }
