@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Muscle} from '../../Models/Muscle';
 import {ActivityType} from '../../Models/ActivityType';
 import {Difficulty} from '../../Models/Difficulty';
-import {Subscription} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {ModalController} from '@ionic/angular';
 import {ExerciseProviderService} from '../../Services/Api/exercise-provider.service';
 import {ExerciseType} from '../../Models/ExerciseType';
@@ -19,10 +19,9 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
   lblColorSuccess = 'success';
   exercisesAreFetched = false;
   name = '';
-  muscles = Object.keys(Muscle).map(x => x.charAt(0).toUpperCase() + x.slice(1).split(/(?=[A-Z])/).join(' '));
-  activityType = Object.keys(ActivityType).map(x => x.charAt(0).toUpperCase() + x.slice(1).split(/(?=[A-Z])/).join(' '));
-  difficulties = Object.keys(Difficulty).map(x => x.charAt(0).toUpperCase() + x.slice(1).split(/(?=[A-Z])/).join(' '));
-
+ muscles = new BehaviorSubject(Object.values(Muscle));
+  activityType = new BehaviorSubject(Object.values(ActivityType));
+  difficulties = new  BehaviorSubject(Object.values(Difficulty));
   activityVal = '';
   muscleVal = '';
   difficultyVal = '';
@@ -36,7 +35,6 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
   constructor(private modalCtrl: ModalController,
               private exerciseProvider: ExerciseProviderService,
               private stateManagerService: WorkoutExerciseStateManagerService) {
-
   }
 
   ngOnInit(): void {
@@ -68,16 +66,15 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
   }
 
   public onDifficultyChanged(ev: any): void {
-    this.difficultyVal = Object.values(Difficulty)[ev.detail.value.i];
+    this.difficultyVal = ev.detail.value.difficulty;
   }
 
   public onActivityChanged(ev: any): void {
-    this.activityVal = Object.values(ActivityType)[ev.detail.value.i];
-
+    this.activityVal = ev.detail.value.activity;
   }
 
   public onMuscleChanged(ev: any): void {
-    this.muscleVal = Object.values(Muscle)[ev.detail.value.i];
+   this.muscleVal = ev.detail.value.muscle;
 
   }
 

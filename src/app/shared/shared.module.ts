@@ -11,6 +11,7 @@ import {SetsAndRepsComponent} from './sets-and-reps/sets-and-reps.component';
 import {ExerciseInfoModalComponent} from './exercise-info-modal/exercise-info-modal.component';
 import {EditExerciseInputsComponent} from './edit-exercise-inputs/edit-exercise-inputs.component';
 import {NotepadModalComponent} from './notepad-modal/notepad-modal.component';
+import { ReplaceUnderscorePipe } from './replace-underscore.pipe';
 
 
 
@@ -22,7 +23,8 @@ import {NotepadModalComponent} from './notepad-modal/notepad-modal.component';
     SetsAndRepsComponent,
     ExerciseInfoModalComponent,
     EditExerciseInputsComponent,
-    NotepadModalComponent
+    NotepadModalComponent,
+    ReplaceUnderscorePipe
   ],
   imports: [
     CommonModule,
@@ -31,6 +33,7 @@ import {NotepadModalComponent} from './notepad-modal/notepad-modal.component';
     DragDropModule, FormsModule
   ],
   exports:  [
+    ReplaceUnderscorePipe,
     FetchExerciseModalComponent,
     WorkoutExerciseInputComponent,
     WorkoutCardComponent,

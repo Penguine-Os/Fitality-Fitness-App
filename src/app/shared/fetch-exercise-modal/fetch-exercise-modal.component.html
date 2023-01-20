@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title class="ion-text-center">Select Exercises</ion-title>
     <ion-buttons slot="end">
-      <ion-button  [disabled]="!exercisesAreFetched" (click)="confirm()">Confirm</ion-button>
+      <ion-button [disabled]="!exercisesAreFetched" (click)="confirm()">Confirm</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -15,39 +15,42 @@
     <ion-item>
       <ion-select placeholder="Select a muscle group"
                   (ionChange)="onMuscleChanged($event)">
-        <ion-select-option [value]="{i}" *ngFor="let muscle of muscles; let i = index">{{muscle}}</ion-select-option>
+        <ion-select-option [value]="{muscle}"
+                           *ngFor="let muscle of muscles | async ; let i = index">{{muscle|titlecase | replaceUnderscore : ' - '}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-select placeholder="Select activity type"
                   (ionChange)="onActivityChanged($event)">
-        <ion-select-option [value]="{i}" *ngFor="let activity of activityType; let i = index">{{activity}}</ion-select-option>
+        <ion-select-option [value]="{activity}"
+                           *ngFor="let activity of activityType | async; let i = index">{{activity | titlecase | replaceUnderscore : ' - '}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-select placeholder="Select difficulty level"
                   (ionChange)="onDifficultyChanged($event)">
-        <ion-select-option [value]="{i}"
-                           *ngFor="let difficulty of difficulties; let i = index">{{difficulty}}</ion-select-option>
+        <ion-select-option [value]="{difficulty}"
+                           *ngFor="let difficulty of difficulties | async; let i = index">{{difficulty | titlecase}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-button class="ion-margin"
                 fill="outline"
                 (click)="fetchHandler()"
-                expand="block">Look For Exercises</ion-button>
+                expand="block">Look For Exercises
+    </ion-button>
   </ion-list>
 
   <div class="chosenContainer">
-    <ion-list  class="overlayContainer"
-               cdkDropList
-               #chosenList="cdkDropList"
-               [cdkDropListData]="chosenWorkoutExercises"
-               [cdkDropListConnectedTo]="[fetchedList]"
-               (cdkDropListDropped)="dropHandler($event)">
+    <ion-list class="overlayContainer"
+              cdkDropList
+              #chosenList="cdkDropList"
+              [cdkDropListData]="chosenWorkoutExercises"
+              [cdkDropListConnectedTo]="[fetchedList]"
+              (cdkDropListDropped)="dropHandler($event)">
 
       <ion-img *ngIf="chosenWorkoutExercises.length===0" src="assets/images/drag&drop.png"></ion-img>
 
-      <ion-item  class="overlayList" *ngFor="let workoutExercise of chosenWorkoutExercises " >
+      <ion-item class="overlayList" *ngFor="let workoutExercise of chosenWorkoutExercises ">
         <ion-label [color]="lblColorSuccess">
           {{workoutExercise.workoutExercise.name}}
         </ion-label>
@@ -58,9 +61,9 @@
             [cdkDropListData]="fetchedWorkoutExercises"
             [cdkDropListConnectedTo]="[chosenList]"
             #fetchedList="cdkDropList">
-    <ion-list style="padding-right: 3rem" >
-      <ion-item class="overlayList" *ngFor="let workoutExercise of fetchedWorkoutExercises " cdkDrag >
-        <ion-label >
+    <ion-list style="padding-right: 3rem">
+      <ion-item class="overlayList" *ngFor="let workoutExercise of fetchedWorkoutExercises " cdkDrag>
+        <ion-label>
           {{workoutExercise.workoutExercise.name}}
         </ion-label>
       </ion-item>

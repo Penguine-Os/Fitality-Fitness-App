@@ -35,11 +35,6 @@ export class WorkoutExerciseStateManagerService {
   setCollectionName(value: string): void {
     this.#collectionName = value;
   }
-
-  getUserId(): string {
-    return this.#userId;
-  }
-
   setUserId(value: string): void {
     this.#userId = value;
   }
