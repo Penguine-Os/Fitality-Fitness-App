@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {firstValueFrom, Observable} from 'rxjs';
+import {BehaviorSubject, firstValueFrom, Observable} from 'rxjs';
 import {WorkoutExerciseStateManagerService} from '../Services/workout-exercise-state-manager.service';
 import {FireStoreService} from '../Services/FireBase/fire-store.service';
 import {FireAuthService} from '../Services/FireBase/fire-auth.service';
@@ -34,16 +34,13 @@ export class WorkoutGuard implements CanActivate {
     return firstValueFrom(this.fireStoreService.collectionHaveDocs())
       .then(hasData => {
         if (hasData) {
-          firstValueFrom(this.fireStoreService.getWeekRoutine(collectionName))
-            .then(workouts => this.stateManagerService.getWorkouts((workouts)))
-            .then(() => {
-            this.fireStoreService.getAllRoutineWorkoutsGroupedByWeek(collectionName)
-              .then(x => x.subscribe(y => {
-                const [key, value] = y;
-                groupedWorkouts.push(value);
-              }))
-              .then(() => this.stateManagerService.observableGroupedWorkouts.next(groupedWorkouts));
-          });
+          this.stateManagerService.observableWorkouts =
+            this.fireStoreService.getWeekRoutine(collectionName) as BehaviorSubject<Workout[]>;
+
+          this.fireStoreService.getAllRoutineWorkoutsGroupedByWeek(collectionName)
+            .then(x => x.subscribe(groupedWorkout => groupedWorkouts.push(...groupedWorkout)))
+            .then(() => this.stateManagerService.observableGroupedWorkouts.next(groupedWorkouts));
+
           return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'select-workout']);
         } else {
           return this.router.createUrlTree(['tabs', 'WorkoutNavTab', 'create-workout-exercises']);

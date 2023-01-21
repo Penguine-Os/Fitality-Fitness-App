@@ -148,8 +148,8 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
     const seconds = remainingTime % 60;
 
     if (this.toaster !== undefined) {
-      console.log('existing toast');
-      await this.toaster.dismiss().then(() => clearInterval(this.interval));
+      await this.toaster.dismiss()
+        .then(() => clearInterval(this.interval));
     }
 
     this.toaster = await this.createNewToast(minutes, seconds, duration);
@@ -158,12 +158,14 @@ export class StartWorkoutPage implements OnInit, OnDestroy {
       this.toaster.present().then(() => this.interval = this.countDown(remainingTime, minutes, seconds)),
       this.playSound()
     ]).then(() => {
-      this.toaster.onDidDismiss().then(() => {
+      this.toaster.onDidDismiss()
+        .then(() => {
         clearInterval(this.interval);
       });
     });
 
-    await this.toaster.onDidDismiss().then(() => {
+    await this.toaster.onDidDismiss()
+      .then(() => {
       clearInterval(this.interval);
     });
 

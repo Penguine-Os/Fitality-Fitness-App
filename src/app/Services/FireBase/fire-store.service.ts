@@ -11,7 +11,7 @@ import {
   updateDoc, where, limit
 } from '@angular/fire/firestore';
 import {Workout} from '../../Models/Workout';
-import { firstValueFrom, from, groupBy, map, mergeMap, Observable, of, toArray, zip} from 'rxjs';
+import {firstValueFrom, from, groupBy, map, mergeMap, Observable, toArray, zip} from 'rxjs';
 import {WorkoutExerciseStateManagerService} from '../workout-exercise-state-manager.service';
 import moment from 'moment';
 import {FireAuthService} from './fire-auth.service';
@@ -46,8 +46,7 @@ export class FireStoreService {
     return collectionData<Workout>(
       query<Workout>(this.getCollectionRef(collectionName)));
   }
-
-  public getAllRoutineWorkoutsGroupedByWeek(collectionName: string):  Promise<Observable<[number, Workout[]]>>{
+  public getAllRoutineWorkoutsGroupedByWeek(collectionName: string):  Promise<Observable<[Workout[]]>>{
     ///Niet mijn code
     ///Bron: => https://stackoverflow.com/questions/50332149/rxjs-groupby-observable-object
   return  firstValueFrom(collectionData<Workout>(
@@ -56,7 +55,7 @@ export class FireStoreService {
       const source=from(x);
       return source.pipe(
         groupBy(workout => moment(workout.startWorkoutTimeStamp.toDate()).week()),
-        mergeMap(group=> zip(of(group.key), group.pipe(toArray())))
+        mergeMap(group=> zip( group.pipe(toArray())))
       );
     });
   }

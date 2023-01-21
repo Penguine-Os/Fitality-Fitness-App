@@ -27,7 +27,6 @@ export class FetchExerciseModalComponent implements OnInit, OnDestroy {
   difficultyVal = '';
 
   apiSubscriptionPiped = new Subscription();
-  fetchedExercises: ExerciseType[] = [];
   chosenWorkoutExercises: WorkoutExercise[] = [];
   fetchedWorkoutExercises: WorkoutExercise[] = [];
   chosenExercises: ExerciseType[] = [];

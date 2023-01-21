@@ -39,7 +39,8 @@ export class WorkoutExerciseStateManagerService {
     this.#userId = value;
   }
 
-  getWorkouts(workouts: Workout[]): void {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  assignValueToObservable_WorkoutArray(workouts: Workout[]): void {
     this.observableWorkouts.next(workouts);
   }
 
@@ -230,18 +231,17 @@ export class WorkoutExerciseStateManagerService {
   }
 
   public resetFieldVariables(): void {
-   // this.#exercises = [];
     this.#workoutExercises = [];
     this.#repVals = [];
     this.#collectionName = undefined;
     this.#userId = undefined;
-   // this.observableExercises.next([]);
-    this.observableWorkoutExercises.next([]);
-    this.observableIterator.next([]);
-    this.observableRepVals.next([]);
-    this.observableWorkout.next(undefined);
-    this.observableWorkouts.next([]);
-    this.observableRoutine.next(undefined);
+    this.observableGroupedWorkouts = new BehaviorSubject<Workout[][]>([]);
+    this.observableWorkoutExercises = new BehaviorSubject<WorkoutExercise[]>([]);
+    this.observableIterator = new BehaviorSubject<number[][]>([]);
+    this.observableRepVals = new BehaviorSubject<number[]>([]);
+    this.observableWorkout = new BehaviorSubject<Workout>(undefined);
+    this.observableWorkouts = new BehaviorSubject<Workout[]>(undefined);
+    this.observableRoutine = new BehaviorSubject<WorkoutRoutine>(undefined);
     this.weekRoutine = new Array<boolean>(7).fill(false);
     this.weeklyWorkout = undefined;
   }
