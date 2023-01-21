@@ -6,6 +6,7 @@ import {WorkoutExercise} from '../../../Models/WorkoutExercise';
 import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
 import {Timestamp} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
+import {from, scan} from 'rxjs';
 
 @Component({
   selector: 'app-create-workout',
@@ -83,6 +84,16 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
       weeklyWorkout: this.exService.getWeeklyWorkout(),
       workoutDays: this.weekRoutine
     };
+    //--------------------------------------------Poging------------------------------------------------//
+    //-----------------------om voor elke workoutExercise in een een workoutArray----------------------//
+    //-------------------------------de property weight gelijk te stellen aan-------------------------//
+    //-------------------------------de vorige waarde plus progressiveOverload-------------------------//
+    // from(this.exService.workoutScheduler(creationDate,
+    //   expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays))
+    //   .pipe(
+    //     scan((acc, value) => value.workoutExercises.map((value1, index) => {
+    //       return value1.weight = acc.workoutExercises[index].weight + value1.progressiveOverload;
+    //     }))).subscribe(x => console.log(x));
 
     await this.storage.batchedWrites(this.exService.workoutScheduler(creationDate,
       expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays), collectionName)
