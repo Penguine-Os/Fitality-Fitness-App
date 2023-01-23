@@ -7,6 +7,7 @@ import {FireStoreService} from '../../../Services/FireBase/fire-store.service';
 import {Timestamp} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {from, scan} from 'rxjs';
+import {Workout} from '../../../Models/Workout';
 
 @Component({
   selector: 'app-create-workout',
@@ -84,7 +85,7 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
       weeklyWorkout: this.exService.getWeeklyWorkout(),
       workoutDays: this.weekRoutine
     };
-    //--------------------------------------------Poging------------------------------------------------//
+    //------------------------------------------ Poging 1 ------------------------------------------------//
     //-----------------------om voor elke workoutExercise in een een workoutArray----------------------//
     //-------------------------------de property weight gelijk te stellen aan-------------------------//
     //-------------------------------de vorige waarde plus progressiveOverload-------------------------//
@@ -94,9 +95,34 @@ export class CreateWorkoutPage implements OnInit, OnDestroy {
     //     scan((acc, value) => value.workoutExercises.map((value1, index) => {
     //       return value1.weight = acc.workoutExercises[index].weight + value1.progressiveOverload;
     //     }))).subscribe(x => console.log(x));
+    //------------------------------------------ Poging 2 ------------------------------------------------//
+    const workouts = this.exService.workoutScheduler(creationDate, expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays);
+//     const newArr: Workout[] = [];
+//     let weight: number;
+//     workouts.forEach((workout, i) => {
+//       if (i === 0) {
+//         newArr.push({...workout});
+//         return;
+//       }
+//       const arr: Workout = structuredClone(workout);
+//       arr.workoutExercises.forEach((y,z) => {
+//         const previousWeight =  workouts[i - 1].workoutExercises[z].weight;
+//         weight = previousWeight+ y.progressiveOverload;
+//         workouts[i].workoutExercises[z].weight = weight;
+//         y.weight =  weight;
+//       });
+//     //  console.log(arr);
+//       newArr.push( structuredClone(arr));
+//       // const workoutEx: WorkoutExercise[]=[];
+//       // workout.workoutExercises.forEach((y, z) => {
+//       //   weight = workouts[i - 1].workoutExercises[z].weight;
+//       //   y.weight = y.progressiveOverload + weight;
+//       // });
+//       // newArr.push({workoutExercises:[] ,...workout});
+//     });
+// console.log(newArr);
 
-    await this.storage.batchedWrites(this.exService.workoutScheduler(creationDate,
-      expirationDate, wRoutine.weeklyWorkout, wRoutine.workoutDays), collectionName)
+    await this.storage.batchedWrites(workouts, collectionName)
       .then(() => this.exService.resetFieldVariables());
   }
 
